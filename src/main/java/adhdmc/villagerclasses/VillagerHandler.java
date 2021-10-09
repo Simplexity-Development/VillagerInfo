@@ -9,6 +9,7 @@ import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import static org.bukkit.ChatColor.*;
@@ -18,14 +19,15 @@ public class VillagerHandler implements Listener {
     public void onVillagerClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         Entity clickedEntity = event.getRightClicked();
+        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if (clickedEntity.getType() != EntityType.VILLAGER) {
-            player.sendMessage("Sorry, you must click a villager!");
+            player.sendMessage(RED + "Sorry, you must click a villager.\nYou clicked a " + clickedEntity.getType() + "!");
             return;
         }
         event.setCancelled(true);
         Villager villagerClicked = (Villager) clickedEntity;
         String villagerProfession = villagerClicked.getProfession().toString();
-        Integer villagerRestocks = villagerClicked.getRestocksToday();
+        int villagerRestocks = villagerClicked.getRestocksToday();
         Location villagerJobSite = villagerClicked.getMemory(MemoryKey.JOB_SITE);
         Long villagerWorked = villagerClicked.getMemory(MemoryKey.LAST_WORKED_AT_POI);
         Location villagerHome = villagerClicked.getMemory(MemoryKey.HOME);
@@ -86,17 +88,17 @@ public class VillagerHandler implements Listener {
         }
         if(villagerWorked != null){
             String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
-            Long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
+            long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
             //Remainder after dividing by 72,000 (one hour)
-            Long mathTime2 = mathTime % 72000;
+            long mathTime2 = mathTime % 72000;
             //Normal number from dividing (hours)
-            Long mathTimeB = mathTime / 72000;
+            long mathTimeB = mathTime / 72000;
             //Remainder after dividing by 1200 (1 minute)
-            Long mathTime3 = mathTime2 % 1200;
+            long mathTime3 = mathTime2 % 1200;
             //Normal number from dividing (minutes)
-            Long mathTimeC = mathTime2 / 1200;
+            long mathTimeC = mathTime2 / 1200;
             //Normal number from dividing (seconds)
-            Long mathTimeD = mathTime3 / 20;
+            long mathTimeD = mathTime3 / 20;
             if(mathTimeB == 1) villagerWorkedString += mathTimeB + " Hour, ";
             if(mathTimeB > 1) villagerWorkedString += mathTimeB + " Hours, ";
             if(mathTimeC == 1) villagerWorkedString += mathTimeC + " Minute, ";
@@ -116,17 +118,17 @@ public class VillagerHandler implements Listener {
         }
         if (villagerSlept != null) {
             String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
-            Long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
+            long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
             //Remainder after dividing by 72,000 (one hour)
-            Long mathTime2 = mathTime % 72000;
+            long mathTime2 = mathTime % 72000;
             //Normal number from dividing (hours)
-            Long mathTimeB = mathTime / 72000;
+            long mathTimeB = mathTime / 72000;
             //Remainder after dividing by 1200 (1 minute)
-            Long mathTime3 = mathTime2 % 1200;
+            long mathTime3 = mathTime2 % 1200;
             //Normal number from dividing (minutes)
-            Long mathTimeC = mathTime2 / 1200;
+            long mathTimeC = mathTime2 / 1200;
             //Normal number from dividing (seconds)
-            Long mathTimeD = mathTime3 / 20;
+            long mathTimeD = mathTime3 / 20;
             if(mathTimeB == 1) villagerSleptString += mathTimeB + " Hour, ";
             if(mathTimeB > 1) villagerSleptString += mathTimeB + " Hours, ";
             if(mathTimeC == 1) villagerSleptString += mathTimeC + " Minute, ";
