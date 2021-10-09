@@ -94,9 +94,12 @@ public class VillagerHandler implements Listener {
             Long mathTimeC = mathTime2 / 1200;
             //Normal number from dividing (seconds)
             Long mathTimeD = mathTime3 / 20;
-            if(mathTimeB > 0) villagerWorkedString += mathTimeB + " Hours, ";
-            if(mathTimeC > 0) villagerWorkedString += mathTimeC + " Minutes, ";
-            if(mathTimeD > 0) villagerWorkedString += mathTimeD + " Seconds";
+            if(mathTimeB == 1) villagerWorkedString += mathTimeB + " Hour, ";
+            if(mathTimeB > 1) villagerWorkedString += mathTimeB + " Hours, ";
+            if(mathTimeC == 1) villagerWorkedString += mathTimeC + " Minute, ";
+            if(mathTimeC > 1) villagerWorkedString += mathTimeC + " Minutes, ";
+            if(mathTimeD == 1) villagerWorkedString += mathTimeD + " Second Ago";
+            if(mathTimeD > 1 || mathTimeD == 0) villagerWorkedString += mathTimeD + " Seconds Ago";
             player.sendMessage(villagerWorkedString);
         } else {
             player.sendMessage(GREEN + "LAST WORKED AT WORKSTATION: " + AQUA + "NEVER");
@@ -116,9 +119,12 @@ public class VillagerHandler implements Listener {
             Long mathTimeC = mathTime2 / 1200;
             //Normal number from dividing (seconds)
             Long mathTimeD = mathTime3 / 20;
-            if(mathTimeB > 0) villagerSleptString += mathTimeB + " Hours, ";
-            if(mathTimeC > 0) villagerSleptString += mathTimeC + " Minutes, ";
-            if(mathTimeD > 0) villagerSleptString += mathTimeD + " Seconds";
+            if(mathTimeB == 1) villagerSleptString += mathTimeB + " Hour, ";
+            if(mathTimeB > 1) villagerSleptString += mathTimeB + " Hours, ";
+            if(mathTimeC == 1) villagerSleptString += mathTimeC + " Minute, ";
+            if(mathTimeC > 1) villagerSleptString += mathTimeC + " Minutes, ";
+            if(mathTimeD == 1) villagerSleptString += mathTimeD + " Second Ago";
+            if(mathTimeD > 1 || mathTimeD == 0) villagerSleptString += mathTimeD + " Seconds Ago";
             player.sendMessage(villagerSleptString);
         } else {
             player.sendMessage(GREEN + "LAST SLEPT: " + AQUA + "NEVER");
