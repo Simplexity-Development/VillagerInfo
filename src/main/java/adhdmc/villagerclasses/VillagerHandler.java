@@ -78,6 +78,12 @@ public class VillagerHandler implements Listener {
             }
         }
         player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA  + "• " + villagerProfession);
+        if (villagerJobSite != null) {
+            player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• " + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
+            villagerJobSite.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, (villagerJobSite.getX() + 0.5), (villagerJobSite.getY() + 1.5), (villagerJobSite.getZ() + 0.5), 10);
+        } else {
+            player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
+        }
         if(villagerWorked != null){
             String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
             Long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
@@ -103,6 +109,11 @@ public class VillagerHandler implements Listener {
         }
         player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
             //Raw Time in ticks since sleeping
+        if (villagerHome != null) {
+            player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
+        } else {
+            player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
+        }
         if (villagerSlept != null) {
             String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
             Long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
@@ -124,18 +135,7 @@ public class VillagerHandler implements Listener {
             if(mathTimeD > 1 || mathTimeD == 0) villagerSleptString += mathTimeD + " Seconds Ago";
             player.sendMessage(villagerSleptString);
         } else {
-            player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "- NEVER");
-        }
-        if (villagerJobSite != null) {
-            player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• " + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
-            villagerJobSite.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, (villagerJobSite.getX() + 0.5), (villagerJobSite.getY() + 1.5), (villagerJobSite.getZ() + 0.5), 10);
-        } else {
-            player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
-        }
-        if (villagerHome != null) {
-            player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
-        } else {
-            player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
+            player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
         }
         if(villagerInventoryString.equals(GREEN + "VILLAGER INVENTORY:")){
             player.sendMessage(villagerInventoryString + AQUA + "\n  • EMPTY");
