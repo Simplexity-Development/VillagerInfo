@@ -1,0 +1,4 @@
+name: VillagerClasses
+version: '${project.version}'
+main: adhdmc.villagerclasses.VillagerClasses
+api-version: 1.17
