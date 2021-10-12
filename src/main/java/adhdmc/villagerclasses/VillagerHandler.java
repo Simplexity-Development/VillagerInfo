@@ -12,9 +12,14 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import static org.bukkit.ChatColor.*;
 
 public class VillagerHandler implements Listener {
+    public static HashMap<UUID, Boolean> villagerCheck = new HashMap<UUID,Boolean>();
+
     @EventHandler
     public void onVillagerClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
@@ -72,11 +77,11 @@ public class VillagerHandler implements Listener {
         }
         //Villager Inventory
         ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
-        String villagerInventoryString = GREEN + "VILLAGER INVENTORY:";
+        StringBuilder villagerInventoryString = new StringBuilder(GREEN + "VILLAGER INVENTORY:");
         for (int i = 0; i < villagerInventoryContents.length; i++) {
             ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
             if (villagerInventoryItem != null) {
-                villagerInventoryString += "\n  " + AQUA  + "• " +  villagerInventoryItem.getType() + GRAY + " (" + villagerInventoryItem.getAmount() + ")";
+                villagerInventoryString.append("\n  ").append(AQUA).append("• ").append(villagerInventoryItem.getType()).append(GRAY).append(" (").append(villagerInventoryItem.getAmount()).append(")");
             }
         }
         player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA  + "• " + villagerProfession);
@@ -139,10 +144,10 @@ public class VillagerHandler implements Listener {
         } else {
             player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
         }
-        if(villagerInventoryString.equals(GREEN + "VILLAGER INVENTORY:")){
-            player.sendMessage(villagerInventoryString + AQUA + "\n  • EMPTY");
+        if(villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")){
+            player.sendMessage(villagerInventoryString.toString() + AQUA + "\n  • EMPTY");
         } else {
-            player.sendMessage(villagerInventoryString);
+            player.sendMessage(villagerInventoryString.toString());
         }
         player.sendMessage(playerReputationString);
     }
