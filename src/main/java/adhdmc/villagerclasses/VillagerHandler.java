@@ -22,21 +22,28 @@ public class VillagerHandler implements Listener {
 
     @EventHandler
     public void onVillagerClick(PlayerInteractEntityEvent event) {
+        //DECLARATION OF INDEPENDENCE
+        //Player
         Player player = event.getPlayer();
+        //Get Entity
         Entity clickedEntity = event.getRightClicked();
-        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
-        if (clickedEntity.getType() != EntityType.VILLAGER) {
-            player.sendMessage(RED + "Sorry, you must click a villager.\nYou clicked a " + clickedEntity.getType() + "!");
-            return;
-        }
-        event.setCancelled(true);
+        //Villager
         Villager villagerClicked = (Villager) clickedEntity;
+        //Profession
         String villagerProfession = villagerClicked.getProfession().toString();
+        //Restocks
         int villagerRestocks = villagerClicked.getRestocksToday();
+        //Job Site
         Location villagerJobSite = villagerClicked.getMemory(MemoryKey.JOB_SITE);
+        //Worked
         Long villagerWorked = villagerClicked.getMemory(MemoryKey.LAST_WORKED_AT_POI);
+        //Home
         Location villagerHome = villagerClicked.getMemory(MemoryKey.HOME);
+        //Slept
         Long villagerSlept = villagerClicked.getMemory(MemoryKey.LAST_SLEPT);
+        //Inventory
+        ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
+        //REPUTATION STUFFFFFFFFFFFFFFF
         Reputation playerReputation = villagerClicked.getReputation(player.getUniqueId());
         assert playerReputation != null;
         int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
@@ -44,39 +51,27 @@ public class VillagerHandler implements Listener {
         int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
         int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
         int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
-        //5MP+P+T-N-5MN maxes at -700, 725
+        //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
         int playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
-        // [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
-        String playerReputationString = GREEN + "YOUR REPUTATION\n";
-        if (-550> playerReputationTotal && playerReputationTotal>=-700) {
-            playerReputationString += DARK_RED + "[|||||I|||||I|||||I|||||I|||||" + DARK_GRAY + "[" + RED + playerReputationTotal + DARK_GRAY + "]" + GRAY + "|||||I|||||I|||||I|||||I|||||]";
+        //
+        //
+        //
+        //Stops the stuff from running twice, cause, 2 hands
+        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+            return;
         }
-        if (-350> playerReputationTotal && playerReputationTotal>=-550) {
-            playerReputationString += RED + "[|||||I|||||I" + DARK_RED + "|||||I|||||I|||||" + DARK_GRAY + "[" + RED + playerReputationTotal + DARK_GRAY + "]" + GRAY + "|||||I|||||I|||||I|||||I|||||]";
+        //Checks if they're shift-clicking or not
+        if(!player.isSneaking()) {
+            return;
         }
-        if (-150> playerReputationTotal && playerReputationTotal>=-350) {
-            playerReputationString += RED + "[|||||I|||||I|||||I|||||I|||||" + DARK_GRAY + "[" + RED + playerReputationTotal + DARK_GRAY + "]" + GRAY + "|||||I|||||I|||||I|||||I|||||]";
+        //Checks if the thing is a villager
+        if (clickedEntity.getType() != EntityType.VILLAGER) {
+            player.sendMessage(RED + "Sorry, you must click a villager.\nYou clicked a " + clickedEntity.getType() + "!");
+            return;
         }
-        if (0> playerReputationTotal && playerReputationTotal>=-150) {
-            playerReputationString += GRAY + "[|||||I|||||I" + RED + "|||||I|||||I|||||" + DARK_GRAY + "[" + RED + playerReputationTotal + DARK_GRAY + "]" + GRAY +"|||||I|||||I|||||I|||||I|||||]";
-        }
-        if (playerReputationTotal == 0){
-            playerReputationString += GRAY + "[|||||I|||||I|||||I|||||I|||||" + DARK_GRAY + "[" + GRAY + playerReputationTotal + DARK_GRAY + "]" + GRAY + "|||||I|||||I|||||I|||||I|||||]";
-        }
-        if (0< playerReputationTotal && playerReputationTotal<=150) {
-            playerReputationString += GRAY + "[|||||I|||||I|||||I|||||I|||||" + DARK_GRAY + "[" + GREEN + playerReputationTotal + DARK_GRAY +"]" + GREEN + "|||||I|||||I|||||" + GRAY + "I|||||I|||||]";
-        }
-        if (150<playerReputationTotal && playerReputationTotal<=350){
-            playerReputationString += GRAY + "[|||||I|||||I|||||I|||||I|||||" + DARK_GRAY + "[" + GREEN + playerReputationTotal + DARK_GRAY +"]" + GREEN + "|||||I|||||I|||||I|||||I|||||]";
-        }
-        if (350< playerReputationTotal && playerReputationTotal<=550) {
-            playerReputationString += GRAY + "[|||||I|||||I|||||I|||||I|||||" + DARK_GRAY + "[" + GREEN + playerReputationTotal + DARK_GRAY +"]" + DARK_GREEN + "|||||I|||||I|||||" + GREEN + "I|||||I|||||]";
-        }
-        if (550<playerReputationTotal && playerReputationTotal<=700){
-            playerReputationString += GRAY + "[|||||I|||||I|||||I|||||I|||||" + DARK_GRAY + "[" + GREEN + playerReputationTotal + DARK_GRAY +"]" + DARK_GREEN + "|||||I|||||I|||||I|||||I|||||]";
-        }
+        //Cancels the event cause, opening trade window
+        event.setCancelled(true);
         //Villager Inventory
-        ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
         StringBuilder villagerInventoryString = new StringBuilder(GREEN + "VILLAGER INVENTORY:");
         for (int i = 0; i < villagerInventoryContents.length; i++) {
             ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
@@ -84,6 +79,7 @@ public class VillagerHandler implements Listener {
                 villagerInventoryString.append("\n  ").append(AQUA).append("• ").append(villagerInventoryItem.getType()).append(GRAY).append(" (").append(villagerInventoryItem.getAmount()).append(")");
             }
         }
+        //Profession
         player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA  + "• " + villagerProfession);
         if (villagerJobSite != null) {
             player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• " + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
@@ -91,64 +87,61 @@ public class VillagerHandler implements Listener {
         } else {
             player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
         }
+        //Worked
         if(villagerWorked != null){
             String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
             long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
-            //Remainder after dividing by 72,000 (one hour)
-            long mathTime2 = mathTime % 72000;
-            //Normal number from dividing (hours)
-            long mathTimeB = mathTime / 72000;
-            //Remainder after dividing by 1200 (1 minute)
-            long mathTime3 = mathTime2 % 1200;
-            //Normal number from dividing (minutes)
-            long mathTimeC = mathTime2 / 1200;
-            //Normal number from dividing (seconds)
-            long mathTimeD = mathTime3 / 20;
-            if(mathTimeB == 1) villagerWorkedString += mathTimeB + " Hour, ";
-            if(mathTimeB > 1) villagerWorkedString += mathTimeB + " Hours, ";
-            if(mathTimeC == 1) villagerWorkedString += mathTimeC + " Minute, ";
-            if(mathTimeC > 1) villagerWorkedString += mathTimeC + " Minutes, ";
-            if(mathTimeD == 1) villagerWorkedString += mathTimeD + " Second Ago";
-            if(mathTimeD > 1 || mathTimeD == 0) villagerWorkedString += mathTimeD + " Seconds Ago";
-            player.sendMessage(villagerWorkedString);
+            player.sendMessage(villagerWorkedString + timeMath(mathTime));
         } else {
             player.sendMessage(GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• NEVER");
         }
+        //Restocks
         player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
-            //Raw Time in ticks since sleeping
+        //Home
         if (villagerHome != null) {
             player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
         } else {
             player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
         }
+        //Slept
         if (villagerSlept != null) {
             String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
             long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
-            //Remainder after dividing by 72,000 (one hour)
-            long mathTime2 = mathTime % 72000;
-            //Normal number from dividing (hours)
-            long mathTimeB = mathTime / 72000;
-            //Remainder after dividing by 1200 (1 minute)
-            long mathTime3 = mathTime2 % 1200;
-            //Normal number from dividing (minutes)
-            long mathTimeC = mathTime2 / 1200;
-            //Normal number from dividing (seconds)
-            long mathTimeD = mathTime3 / 20;
-            if(mathTimeB == 1) villagerSleptString += mathTimeB + " Hour, ";
-            if(mathTimeB > 1) villagerSleptString += mathTimeB + " Hours, ";
-            if(mathTimeC == 1) villagerSleptString += mathTimeC + " Minute, ";
-            if(mathTimeC > 1) villagerSleptString += mathTimeC + " Minutes, ";
-            if(mathTimeD == 1) villagerSleptString += mathTimeD + " Second Ago";
-            if(mathTimeD > 1 || mathTimeD == 0) villagerSleptString += mathTimeD + " Seconds Ago";
-            player.sendMessage(villagerSleptString);
+            player.sendMessage(villagerSleptString + timeMath(mathTime));
         } else {
             player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
         }
+        //Inventory
         if(villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")){
             player.sendMessage(villagerInventoryString.toString() + AQUA + "\n  • EMPTY");
         } else {
             player.sendMessage(villagerInventoryString.toString());
         }
+        //Reputation
+        // [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
+        String playerReputationString = GREEN + "YOUR REPUTATION\n";
+        //FUTURE REPUTATION STUFF YEET
         player.sendMessage(playerReputationString);
+    }
+    //Math
+    private String timeMath(long mathTime){
+        String mathResult = "";
+        //Remainder after dividing by 72,000 (one hour)
+        long mathTime2 = mathTime % 72000;
+        //Normal number from dividing (hours)
+        long mathTimeB = mathTime / 72000;
+        //Remainder after dividing by 1200 (1 minute)
+        long mathTime3 = mathTime2 % 1200;
+        //Normal number from dividing (minutes)
+        long mathTimeC = mathTime2 / 1200;
+        //Normal number from dividing (seconds)
+        long mathTimeD = mathTime3 / 20;
+        if(mathTimeB == 1) mathResult += mathTimeB + " Hour, ";
+        if(mathTimeB > 1) mathResult += mathTimeB + " Hours, ";
+        if(mathTimeC == 1) mathResult += mathTimeC + " Minute, ";
+        if(mathTimeC > 1) mathResult += mathTimeC + " Minutes, ";
+        if(mathTimeD == 1) mathResult += mathTimeD + " Second Ago";
+        if(mathTimeD > 1 || mathTimeD == 0) mathResult += mathTimeD + " Seconds Ago";
+        return mathResult;
     }
 }
