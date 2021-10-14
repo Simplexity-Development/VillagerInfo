@@ -1,6 +1,6 @@
-name: VillagerClasses
+name: VillagerInfo
 version: '${project.version}'
-main: adhdmc.villagerclasses.VillagerClasses
+main: adhdmc.villagerinfo.VillagerInfo
 api-version: 1.17
 commands:
   vill:

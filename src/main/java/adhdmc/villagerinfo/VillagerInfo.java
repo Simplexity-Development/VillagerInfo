@@ -1,10 +1,10 @@
-package adhdmc.villagerclasses;
+package adhdmc.villagerinfo;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
-public final class VillagerClasses extends JavaPlugin {
+public final class VillagerInfo extends JavaPlugin {
 
     @Override
     public void onEnable(){

@@ -1,4 +1,4 @@
-package adhdmc.villagerclasses;
+package adhdmc.villagerinfo;
 
 import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
