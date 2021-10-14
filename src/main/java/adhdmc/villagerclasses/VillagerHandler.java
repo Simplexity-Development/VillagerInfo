@@ -25,6 +25,8 @@ public class VillagerHandler implements Listener {
         //DECLARATION OF INDEPENDENCE
         //Player
         Player player = event.getPlayer();
+        //Player UUID
+        UUID pUUID = player.getUniqueId();
         //Get Entity
         Entity clickedEntity = event.getRightClicked();
         //Villager
@@ -44,7 +46,7 @@ public class VillagerHandler implements Listener {
         //Inventory
         ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
         //REPUTATION STUFFFFFFFFFFFFFFF
-        Reputation playerReputation = villagerClicked.getReputation(player.getUniqueId());
+        Reputation playerReputation = villagerClicked.getReputation(pUUID);
         assert playerReputation != null;
         int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
         int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
@@ -63,6 +65,12 @@ public class VillagerHandler implements Listener {
         //Checks if they're shift-clicking or not
         if(!player.isSneaking()) {
             return;
+        }
+        //Checks if they've toggled it off *HOPEFULLY*
+        if(villagerCheck.containsKey(pUUID)){
+            if (!villagerCheck.get(pUUID)){
+                return;
+            }
         }
         //Checks if the thing is a villager
         if (clickedEntity.getType() != EntityType.VILLAGER) {

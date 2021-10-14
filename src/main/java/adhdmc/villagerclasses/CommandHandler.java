@@ -45,7 +45,6 @@ public class CommandHandler implements CommandExecutor {
         }
         return false;
     }
-
     private boolean toggleSetting(Player p) {
         UUID uuid = p.getUniqueId();
         if (VillagerHandler.villagerCheck.containsKey(uuid)) {
