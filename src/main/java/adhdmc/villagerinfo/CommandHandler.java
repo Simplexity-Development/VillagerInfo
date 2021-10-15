@@ -38,11 +38,10 @@ public class CommandHandler implements CommandExecutor {
                     } else {
                         user.sendMessage(translateAlternateColorCodes('&', "&cVillager Info Toggled &nOFF"));
                     }
-                    return true;
                 } else {
                     user.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
-                    return true;
                 }
+                return true;
             }
             if (args[0].equalsIgnoreCase("help")) {
                 if(user.hasPermission("villagerinfo.use")) {

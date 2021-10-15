@@ -2,9 +2,11 @@ package adhdmc.villagerinfo;
 
 import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
@@ -46,6 +48,7 @@ public class VillagerHandler implements Listener {
         Long villagerSlept = villagerClicked.getMemory(MemoryKey.LAST_SLEPT);
         //Inventory
         ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
+        /*
         //REPUTATION STUFFFFFFFFFFFFFFF
         Reputation playerReputation = villagerClicked.getReputation(pUUID);
         assert playerReputation != null;
@@ -56,6 +59,8 @@ public class VillagerHandler implements Listener {
         int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
         int playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+        */
+
         //
 
         //
@@ -93,65 +98,104 @@ public class VillagerHandler implements Listener {
 
         player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
 
+        //Checks if ALL the toggles are off?
+        if(!VillagerInfo.plugin.getConfig().getBoolean("Profession")
+            &&
+                !VillagerInfo.plugin.getConfig().getBoolean("Job Site")
+            &&
+                !VillagerInfo.plugin.getConfig().getBoolean("Last Worked")
+            &&
+                !VillagerInfo.plugin.getConfig().getBoolean("Number of Restocks")
+            &&
+                !VillagerInfo.plugin.getConfig().getBoolean("Bed Location")
+            &&
+                !VillagerInfo.plugin.getConfig().getBoolean("Last Slept")
+            &&
+                !VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents")) {
+            player.sendMessage(GOLD + "Why is this plugin even installed if it's not gonna be used?");
+            return;
+        }
+
         //Villager Inventory
+
         StringBuilder villagerInventoryString = new StringBuilder(GREEN + "VILLAGER INVENTORY:");
-        for (int i = 0; i < villagerInventoryContents.length; i++) {
-            ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
-            if (villagerInventoryItem != null) {
-                villagerInventoryString.append("\n  ").append(AQUA).append("• ").append(villagerInventoryItem.getType()).append(GRAY).append(" (").append(villagerInventoryItem.getAmount()).append(")");
+        if(VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents", true)){
+            for (int i = 0; i < villagerInventoryContents.length; i++) {
+                ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
+                if (villagerInventoryItem != null) {
+                    villagerInventoryString.append("\n  ").append(AQUA).append("• ").append(villagerInventoryItem.getType()).append(GRAY).append(" (").append(villagerInventoryItem.getAmount()).append(")");
+                }
             }
         }
 
         //Profession
-        player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA  + "• " + villagerProfession);
-        if (villagerJobSite != null) {
-            player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• " + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
-            villagerJobSite.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, (villagerJobSite.getX() + 0.5), (villagerJobSite.getY() + 1.5), (villagerJobSite.getZ() + 0.5), 10);
-        } else {
-            player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
+        if(VillagerInfo.plugin.getConfig().getBoolean("Profession", true)) {
+            player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA + "• " + villagerProfession);
+        }
+
+        //Job Site
+        if(VillagerInfo.plugin.getConfig().getBoolean("Job Site", true)){
+            if (villagerJobSite != null) {
+                player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• " + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
+                villagerJobSite.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, (villagerJobSite.getX() + 0.5), (villagerJobSite.getY() + 1.5), (villagerJobSite.getZ() + 0.5), 10);
+            } else {
+                player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
+            }
         }
 
         //Worked
-        if(villagerWorked != null){
-            String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
-            long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
-            player.sendMessage(villagerWorkedString + timeMath(mathTime));
-        } else {
-            player.sendMessage(GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• NEVER");
+        if(VillagerInfo.plugin.getConfig().getBoolean("Last Worked", true)) {
+            if (villagerWorked != null) {
+                String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
+                long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
+                player.sendMessage(villagerWorkedString + timeMath(mathTime));
+            } else {
+                player.sendMessage(GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• NEVER");
+            }
         }
 
         //Restocks
-        player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
+        if(VillagerInfo.plugin.getConfig().getBoolean("Number of Restocks", true)) {
+            player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
+        }
 
         //Home
-        if (villagerHome != null) {
-            player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
-        } else {
-            player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
+        if(VillagerInfo.plugin.getConfig().getBoolean("Bed Location", true)) {
+            if (villagerHome != null) {
+                player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
+            } else {
+                player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
+            }
         }
 
         //Slept
-        if (villagerSlept != null) {
-            String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
-            long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
-            player.sendMessage(villagerSleptString + timeMath(mathTime));
-        } else {
-            player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
+        if(VillagerInfo.plugin.getConfig().getBoolean("Last Slept", true)) {
+            if (villagerSlept != null) {
+                String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
+                long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
+                player.sendMessage(villagerSleptString + timeMath(mathTime));
+            } else {
+                player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
+            }
         }
 
         //Inventory
-        if(villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")){
-            player.sendMessage(villagerInventoryString.toString() + AQUA + "\n  • EMPTY");
-        } else {
-            player.sendMessage(villagerInventoryString.toString());
+        if(VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents", true)) {
+            if (villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")) {
+                player.sendMessage(villagerInventoryString.toString() + AQUA + "\n  • EMPTY");
+            } else {
+                player.sendMessage(villagerInventoryString.toString());
+            }
         }
 
-        //Reputation
-        // [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
+        ///Reputation
+
+        /* [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
         String playerReputationString = GREEN + "YOUR REPUTATION\n" + AQUA + "  • " + playerReputationTotal + "/725";
 
-        //FUTURE REPUTATION STUFF YEET
+        ///FUTURE REPUTATION STUFF YEET
         player.sendMessage(playerReputationString);
+        */
     }
 
     //Math

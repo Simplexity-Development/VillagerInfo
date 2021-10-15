@@ -1,0 +1,17 @@
+#Villager Info
+
+#Information Toggles
+#True to enable the information to display when requested, false for it not to display
+Profession: true
+
+Job Site: true
+
+Last Worked: true
+
+Number of Restocks: true
+
+Bed Location: true
+
+Last Slept: true
+
+Villager Inventory Contents: true
