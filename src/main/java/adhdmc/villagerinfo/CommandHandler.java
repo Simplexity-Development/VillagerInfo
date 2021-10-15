@@ -22,29 +22,56 @@ public class CommandHandler implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "&cYou must be a player to run this command");
             return true;
         }
+
         //checking for arguments
-        if (args.length < 1) {
+        if (args.length == 0) {
             user.sendMessage("FILLER FOR VERSION NUMBER AND AUTHOR");
             return true;
         }
+
         //aaaaaaaaaaaaaaaaaaaaaaa
-        if(args.length >= 1) {
+        if(args.length == 1) {
             if (args[0].equalsIgnoreCase("toggle")) {
-                if (toggleSetting(user)) {
-                    user.sendMessage(translateAlternateColorCodes('&', "&aVillager Info Toggled &nON"));
+                if(user.hasPermission("villagerinfo.toggle")) {
+                    if (toggleSetting(user)) {
+                        user.sendMessage(translateAlternateColorCodes('&', "&aVillager Info Toggled &nON"));
+                    } else {
+                        user.sendMessage(translateAlternateColorCodes('&', "&cVillager Info Toggled &nOFF"));
+                    }
+                    return true;
                 } else {
-                    user.sendMessage(translateAlternateColorCodes('&', "&cVillager Info Toggled &nOFF"));
+                    user.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                    return true;
+                }
+            }
+            if (args[0].equalsIgnoreCase("help")) {
+                if(user.hasPermission("villagerinfo.use")) {
+                    user.sendMessage(ChatColor.AQUA + "• /vill toggle" + ChatColor.GRAY + "\n  Toggle on or off, then shift right-click a villager to access it's information!");
+                } else {
+                    user.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
                 }
                 return true;
             }
-            if (args[0].equalsIgnoreCase("help")) {
-                user.sendMessage(ChatColor.AQUA + "• /vill toggle" + ChatColor.GRAY + "\n  Toggle on or off, shift right-click a villager to access it's information!");
+            if(args[0].equalsIgnoreCase("reload")){
+                if(user.hasPermission("villagerinfo.reload")){
+                    VillagerInfo.plugin.reloadConfig();
+                    user.sendMessage(ChatColor.GOLD + "VillagerInfo Config Reloaded!");
+                } else {
+                    user.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                }
                 return true;
             }
             user.sendMessage(ChatColor.RED + "No subcommand by that name!");
+            return true;
         }
-        return false;
+        //why ppl tryina put too many words tho
+        if(args.length > 1){
+            user.sendMessage(ChatColor.RED + "No subcommand by that name!");
+            return true;
+        }
+        return true;
     }
+    //Toggle
     private boolean toggleSetting(Player p) {
         UUID uuid = p.getUniqueId();
         if (VillagerHandler.villagerCheck.containsKey(uuid)) {
@@ -56,7 +83,7 @@ public class CommandHandler implements CommandExecutor {
                 return true;
             }
         }
-        VillagerHandler.villagerCheck.put(p.getUniqueId(), true);
-        return true;
+        VillagerHandler.villagerCheck.put(p.getUniqueId(), false);
+        return false;
     }
 }

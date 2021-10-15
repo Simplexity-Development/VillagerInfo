@@ -7,3 +7,10 @@ commands:
     description: ""
     usage: ""
     permission: ""
+permissions:
+  villagerinfo.reload:
+    description: reload plugin config
+  villagerinfo.use:
+    description: get the villager info from shift-right-clicking on a villager
+  villagerinfo.toggle:
+    description: allows toggling on/off

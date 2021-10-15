@@ -4,6 +4,7 @@ import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
@@ -56,29 +57,42 @@ public class VillagerHandler implements Listener {
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
         int playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
         //
+
         //
+
         //
-        //Stops the stuff from running twice, cause, 2 hands
-        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        //Checks permission
+        if(!player.hasPermission("villagerinfo.use")){
             return;
         }
-        //Checks if they're shift-clicking or not
-        if(!player.isSneaking()) {
-            return;
-        }
+
         //Checks if they've toggled it off *HOPEFULLY*
         if(villagerCheck.containsKey(pUUID)){
             if (!villagerCheck.get(pUUID)){
                 return;
             }
         }
-        //Checks if the thing is a villager
-        if (clickedEntity.getType() != EntityType.VILLAGER) {
-            player.sendMessage(RED + "Sorry, you must click a villager.\nYou clicked a " + clickedEntity.getType() + "!");
+
+        //Checks if they're shift-clicking or not
+        if(!player.isSneaking()) {
             return;
         }
+
+        //Stops the stuff from running twice, cause, 2 hands
+        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+            return;
+        }
+
+        //Checks if the thing is a villager
+        if (clickedEntity.getType() != EntityType.VILLAGER) {
+            return;
+        }
+
         //Cancels the event cause, opening trade window
         event.setCancelled(true);
+
+        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
+
         //Villager Inventory
         StringBuilder villagerInventoryString = new StringBuilder(GREEN + "VILLAGER INVENTORY:");
         for (int i = 0; i < villagerInventoryContents.length; i++) {
@@ -87,6 +101,7 @@ public class VillagerHandler implements Listener {
                 villagerInventoryString.append("\n  ").append(AQUA).append("• ").append(villagerInventoryItem.getType()).append(GRAY).append(" (").append(villagerInventoryItem.getAmount()).append(")");
             }
         }
+
         //Profession
         player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA  + "• " + villagerProfession);
         if (villagerJobSite != null) {
@@ -95,6 +110,7 @@ public class VillagerHandler implements Listener {
         } else {
             player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
         }
+
         //Worked
         if(villagerWorked != null){
             String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
@@ -103,14 +119,17 @@ public class VillagerHandler implements Listener {
         } else {
             player.sendMessage(GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• NEVER");
         }
+
         //Restocks
         player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
+
         //Home
         if (villagerHome != null) {
             player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
         } else {
             player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
         }
+
         //Slept
         if (villagerSlept != null) {
             String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
@@ -119,18 +138,22 @@ public class VillagerHandler implements Listener {
         } else {
             player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
         }
+
         //Inventory
         if(villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")){
             player.sendMessage(villagerInventoryString.toString() + AQUA + "\n  • EMPTY");
         } else {
             player.sendMessage(villagerInventoryString.toString());
         }
+
         //Reputation
         // [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
-        String playerReputationString = GREEN + "YOUR REPUTATION\n";
+        String playerReputationString = GREEN + "YOUR REPUTATION\n" + AQUA + "  • " + playerReputationTotal + "/725";
+
         //FUTURE REPUTATION STUFF YEET
         player.sendMessage(playerReputationString);
     }
+
     //Math
     private String timeMath(long mathTime){
         String mathResult = "";
