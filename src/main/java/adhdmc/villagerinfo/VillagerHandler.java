@@ -48,6 +48,17 @@ public class VillagerHandler implements Listener {
         Long villagerSlept = villagerClicked.getMemory(MemoryKey.LAST_SLEPT);
         //Inventory
         ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
+        //Config option variables
+        boolean configProfession = VillagerInfo.plugin.getConfig().getBoolean("Profession");
+        boolean configJobSite = VillagerInfo.plugin.getConfig().getBoolean("Job Site");
+        boolean configLastWorked = VillagerInfo.plugin.getConfig().getBoolean("Last Worked");
+        boolean configRestocks = VillagerInfo.plugin.getConfig().getBoolean("Number of Restocks");
+        boolean configHome = VillagerInfo.plugin.getConfig().getBoolean("Bed Location");
+        boolean configLastSlept = VillagerInfo.plugin.getConfig().getBoolean("Last Slept");
+        boolean configInventory = VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents");
+        //Prefix
+        String villInfoPrefix = String.valueOf(DARK_AQUA) + BOLD + "[" + AQUA + "Villager Info" + DARK_AQUA + BOLD + "]";
+
         /*
         //REPUTATION STUFFFFFFFFFFFFFFF
         Reputation playerReputation = villagerClicked.getReputation(pUUID);
@@ -93,33 +104,22 @@ public class VillagerHandler implements Listener {
             return;
         }
 
-        //Cancels the event cause, opening trade window
-        event.setCancelled(true);
-
-        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
-
         //Checks if ALL the toggles are off?
-        if(!VillagerInfo.plugin.getConfig().getBoolean("Profession")
-            &&
-                !VillagerInfo.plugin.getConfig().getBoolean("Job Site")
-            &&
-                !VillagerInfo.plugin.getConfig().getBoolean("Last Worked")
-            &&
-                !VillagerInfo.plugin.getConfig().getBoolean("Number of Restocks")
-            &&
-                !VillagerInfo.plugin.getConfig().getBoolean("Bed Location")
-            &&
-                !VillagerInfo.plugin.getConfig().getBoolean("Last Slept")
-            &&
-                !VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents")) {
-            player.sendMessage(GOLD + "Why is this plugin even installed if it's not gonna be used?");
+        if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory) {
+            player.sendMessage(villInfoPrefix);
+            player.sendMessage(GOLD + "Why is this plugin even installed if every option is turned off?");
             return;
         }
+
+        //Cancels the event cause, opening trade window
+        event.setCancelled(true);
+        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
+        player.sendMessage(villInfoPrefix);
 
         //Villager Inventory
 
         StringBuilder villagerInventoryString = new StringBuilder(GREEN + "VILLAGER INVENTORY:");
-        if(VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents", true)){
+        if(configInventory){
             for (int i = 0; i < villagerInventoryContents.length; i++) {
                 ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
                 if (villagerInventoryItem != null) {
@@ -129,22 +129,21 @@ public class VillagerHandler implements Listener {
         }
 
         //Profession
-        if(VillagerInfo.plugin.getConfig().getBoolean("Profession", true)) {
+        if(configProfession) {
             player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA + "• " + villagerProfession);
         }
 
         //Job Site
-        if(VillagerInfo.plugin.getConfig().getBoolean("Job Site", true)){
+        if(configJobSite){
             if (villagerJobSite != null) {
                 player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• " + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
-                villagerJobSite.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, (villagerJobSite.getX() + 0.5), (villagerJobSite.getY() + 1.5), (villagerJobSite.getZ() + 0.5), 10);
             } else {
                 player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
             }
         }
 
         //Worked
-        if(VillagerInfo.plugin.getConfig().getBoolean("Last Worked", true)) {
+        if(configLastWorked) {
             if (villagerWorked != null) {
                 String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
                 long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
@@ -155,12 +154,12 @@ public class VillagerHandler implements Listener {
         }
 
         //Restocks
-        if(VillagerInfo.plugin.getConfig().getBoolean("Number of Restocks", true)) {
+        if(configRestocks) {
             player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
         }
 
         //Home
-        if(VillagerInfo.plugin.getConfig().getBoolean("Bed Location", true)) {
+        if(configHome) {
             if (villagerHome != null) {
                 player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
             } else {
@@ -169,7 +168,7 @@ public class VillagerHandler implements Listener {
         }
 
         //Slept
-        if(VillagerInfo.plugin.getConfig().getBoolean("Last Slept", true)) {
+        if(configLastSlept) {
             if (villagerSlept != null) {
                 String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
                 long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
@@ -180,7 +179,7 @@ public class VillagerHandler implements Listener {
         }
 
         //Inventory
-        if(VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents", true)) {
+        if(configInventory) {
             if (villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")) {
                 player.sendMessage(villagerInventoryString.toString() + AQUA + "\n  • EMPTY");
             } else {

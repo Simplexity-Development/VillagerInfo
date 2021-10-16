@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+import static org.bukkit.ChatColor.AQUA;
 import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 public class CommandHandler implements CommandExecutor {
@@ -25,7 +26,7 @@ public class CommandHandler implements CommandExecutor {
 
         //checking for arguments
         if (args.length == 0) {
-            user.sendMessage("FILLER FOR VERSION NUMBER AND AUTHOR");
+            user.sendMessage(AQUA + "Villager Info \nVersion: BETA\nAuthor: IllogicalSong, special thanks to Peashooter101");
             return true;
         }
 
