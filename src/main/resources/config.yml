@@ -15,3 +15,18 @@ Bed Location: true
 Last Slept: true
 
 Villager Inventory Contents: true
+
+#Messages
+#Customize the messages you want displayed to the user
+
+Prefix: "&#3256a8&l[&#03fcd7Villager Info&#3256a8&l]"
+
+Toggle On: "&aVillager Info Toggled &nON"
+
+Toggle Off: "&cVillager Info Toggled &nOFF"
+
+No Permission: "&cYou don't have permission to use this command!"
+
+No Command: "&cNo subcommand by that name!"
+
+Config Reloaded: "&6VillagerInfo Config Reloaded!"

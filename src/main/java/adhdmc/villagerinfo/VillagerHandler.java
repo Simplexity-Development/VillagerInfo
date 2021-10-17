@@ -57,7 +57,7 @@ public class VillagerHandler implements Listener {
         boolean configLastSlept = VillagerInfo.plugin.getConfig().getBoolean("Last Slept");
         boolean configInventory = VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents");
         //Prefix
-        String villInfoPrefix = String.valueOf(DARK_AQUA) + BOLD + "[" + AQUA + "Villager Info" + DARK_AQUA + BOLD + "]";
+        String villInfoPrefix = MessageHandler.prefix;
 
         /*
         //REPUTATION STUFFFFFFFFFFFFFFF

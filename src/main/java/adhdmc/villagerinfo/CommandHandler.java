@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+import static net.md_5.bungee.api.ChatColor.GREEN;
 import static org.bukkit.ChatColor.AQUA;
 import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
@@ -20,13 +21,20 @@ public class CommandHandler implements CommandExecutor {
         if (sender instanceof Player) {
             user = (Player) sender;
         } else {
+            if(args[0].equalsIgnoreCase("reload")) {
+                VillagerInfo.plugin.reloadConfig();
+                MessageHandler.loadConfigMsgs();
+                sender.sendMessage(MessageHandler.configReload);
+                return true;
+            } else {
             sender.sendMessage(ChatColor.RED + "&cYou must be a player to run this command");
             return true;
+            }
         }
 
         //checking for arguments
         if (args.length == 0) {
-            user.sendMessage(AQUA + "Villager Info \nVersion: BETA\nAuthor: IllogicalSong, special thanks to Peashooter101");
+            user.sendMessage(MessageHandler.prefix + ChatColor.translateAlternateColorCodes('&', "\n&aAuthor: &6Illogicalsong\n&aVersion:&7 BETA\n&aSpecial Thanks to Peashooter101"));
             return true;
         }
 
@@ -35,12 +43,12 @@ public class CommandHandler implements CommandExecutor {
             if (args[0].equalsIgnoreCase("toggle")) {
                 if(user.hasPermission("villagerinfo.toggle")) {
                     if (toggleSetting(user)) {
-                        user.sendMessage(translateAlternateColorCodes('&', "&aVillager Info Toggled &nON"));
+                        user.sendMessage(MessageHandler.toggleOn);
                     } else {
-                        user.sendMessage(translateAlternateColorCodes('&', "&cVillager Info Toggled &nOFF"));
+                        user.sendMessage(MessageHandler.toggleOff);
                     }
                 } else {
-                    user.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                    user.sendMessage(MessageHandler.noPermission);
                 }
                 return true;
             }
@@ -48,25 +56,26 @@ public class CommandHandler implements CommandExecutor {
                 if(user.hasPermission("villagerinfo.use")) {
                     user.sendMessage(ChatColor.AQUA + "• /vill toggle" + ChatColor.GRAY + "\n  Toggle on or off, then shift right-click a villager to access it's information!");
                 } else {
-                    user.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                    user.sendMessage(MessageHandler.noPermission);
                 }
                 return true;
             }
             if(args[0].equalsIgnoreCase("reload")){
                 if(user.hasPermission("villagerinfo.reload")){
                     VillagerInfo.plugin.reloadConfig();
-                    user.sendMessage(ChatColor.GOLD + "VillagerInfo Config Reloaded!");
+                    MessageHandler.loadConfigMsgs();
+                    user.sendMessage(MessageHandler.configReload);
                 } else {
-                    user.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                    user.sendMessage(MessageHandler.noPermission);
                 }
                 return true;
             }
-            user.sendMessage(ChatColor.RED + "No subcommand by that name!");
+            user.sendMessage(MessageHandler.noCommand);
             return true;
         }
         //why ppl tryina put too many words tho
         if(args.length > 1){
-            user.sendMessage(ChatColor.RED + "No subcommand by that name!");
+            user.sendMessage(MessageHandler.noCommand);
             return true;
         }
         return true;
