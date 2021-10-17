@@ -14,6 +14,9 @@ public class MessageHandler {
     public static String noPermission;
     public static String noCommand;
     public static String configReload;
+    public static String helpMain;
+    public static String helpToggle;
+    public static String helpReload;
 
     public static String colorParse(String s) {
         Matcher matcher = hexPattern.matcher(s);
@@ -34,5 +37,8 @@ public class MessageHandler {
     noPermission = colorParse(VillagerInfo.plugin.getConfig().getString("No Permission"));
     noCommand = colorParse(VillagerInfo.plugin.getConfig().getString("No Command"));
     configReload = colorParse(VillagerInfo.plugin.getConfig().getString("Config Reloaded"));
+    helpMain =  colorParse("&#4dd5ff• How to use Villager Info\n&7Shift-right-click a villager while toggle is on to have a villager's information displayed");
+    helpToggle = colorParse("&#4dd5ff•/vill toggle\n&7Toggles the ability to receive villager information on or off.");
+    helpReload = colorParse("&#4dd5ff•/vill reload\n&7Reloads the plugin, applies config values");
     }
 }

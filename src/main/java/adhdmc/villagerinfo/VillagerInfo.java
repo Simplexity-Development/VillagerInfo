@@ -19,7 +19,7 @@ public final class VillagerInfo extends JavaPlugin {
         getConfig().addDefault("Bed Location", true);
         getConfig().addDefault("Last Slept", true);
         getConfig().addDefault("Villager Inventory Contents", true);
-        getConfig().addDefault("Prefix", "&#3256a8&l[&#03fcd7Villager Info&#3256a8&l]");
+        getConfig().addDefault("Prefix", "&#3256a8&l[&#4dd5ffVillager Info&#3256a8&l]");
         getConfig().addDefault("Toggle On", "&aVillager Info Toggled &nON");
         getConfig().addDefault("Toggle Off", "&cVillager Info Toggled &nOFF");
         getConfig().addDefault("No Permission", "&cYou don't have permission to use this command!");

@@ -1,12 +1,7 @@
 package adhdmc.villagerinfo;
 
-import com.destroystokyo.paper.entity.villager.Reputation;
-import com.destroystokyo.paper.entity.villager.ReputationType;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
