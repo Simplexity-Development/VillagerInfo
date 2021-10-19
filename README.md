@@ -5,10 +5,12 @@ This is a plugin to allow easy access to information from villager's brains that
 I don't know about you but, for me, most of the stuff in /data isn't generally applicable in normal MC stuff.
 
 **Default minecraft /data get**
+
 ![image](https://user-images.githubusercontent.com/45906780/137825819-6356126f-5c16-49f3-94de-73757a515620.png)
 
 
 **Default list provided through VillagerInfo**
+
 ![image](https://user-images.githubusercontent.com/45906780/137825649-ad168b7d-c502-4202-8280-bc08a4d0e43b.png)
 
 Current permissions are:
