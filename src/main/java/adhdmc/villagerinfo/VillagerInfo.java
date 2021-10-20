@@ -1,5 +1,6 @@
 package adhdmc.villagerinfo;
 
+import adhdmc.villagerinfo.commands.CommandHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
