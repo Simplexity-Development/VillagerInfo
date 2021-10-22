@@ -20,6 +20,10 @@ public class VillagerHandler implements Listener {
 
     @EventHandler
     public void onVillagerClick(PlayerInteractEntityEvent event) {
+        //Checks if the thing is a villager
+        if (event.getRightClicked().getType() != EntityType.VILLAGER) {
+            return;
+        }
         //DECLARATION OF INDEPENDENCE
         //Player
         Player player = event.getPlayer();
@@ -91,11 +95,6 @@ public class VillagerHandler implements Listener {
 
         //Stops the stuff from running twice, cause, 2 hands
         if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {
-            return;
-        }
-
-        //Checks if the thing is a villager
-        if (clickedEntity.getType() != EntityType.VILLAGER) {
             return;
         }
 
