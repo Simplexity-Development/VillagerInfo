@@ -1,7 +1,7 @@
 name: VillagerInfo
 author: IllogicalSong (Special thanks to Peashooter101)
 description: Easy access to information from villager's brains generally only accessable through the /data command.
-version: '1.1.1'
+version: '1.2'
 main: adhdmc.villagerinfo.VillagerInfo
 api-version: 1.13
 commands:
