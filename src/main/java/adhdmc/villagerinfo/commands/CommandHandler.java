@@ -55,13 +55,16 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
         //aaaaaaaaaaaaaaaaaaaaaaa
         if(args.length == 1) {
             if (args[0].equalsIgnoreCase("toggle")) {
-                if(user.hasPermission("villagerinfo.toggle")) {
+                if(user.hasPermission("villagerinfo.toggle") && user.hasPermission("villagerinfo.use")) {
                     if (toggleSetting(user)) {
                         user.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOn);
                     } else {
                         user.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOff);
                     }
-                } else {
+                } else if(user.hasPermission("villagerinfo.toggle") && !user.hasPermission("villagerinfo.use")){
+                    user.sendMessage(MessageHandler.noPermissionToggle);
+                }
+                else {
                     user.sendMessage(MessageHandler.noPermission);
                 }
                 return true;

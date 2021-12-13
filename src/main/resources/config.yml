@@ -27,6 +27,8 @@ Toggle Off: "&cVillager Info Toggled &nOFF"
 
 No Permission: "&cYou don't have permission to use this command!"
 
+No Permission Vill Toggle: "&cYou are missing the permission villagerinfo.use"
+
 No Command: "&cNo subcommand by that name!"
 
 Config Reloaded: "&6VillagerInfo Config Reloaded!"

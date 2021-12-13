@@ -12,6 +12,7 @@ public class MessageHandler {
     public static String toggleOn;
     public static String toggleOff;
     public static String noPermission;
+    public static String noPermissionToggle;
     public static String noCommand;
     public static String configReload;
     public static String helpMain;
@@ -35,6 +36,7 @@ public class MessageHandler {
     toggleOn = colorParse(VillagerInfo.plugin.getConfig().getString("Toggle On"));
     toggleOff = colorParse(VillagerInfo.plugin.getConfig().getString("Toggle Off"));
     noPermission = colorParse(VillagerInfo.plugin.getConfig().getString("No Permission"));
+    noPermissionToggle = colorParse(VillagerInfo.plugin.getConfig().getString("No Permission Vill Toggle"));
     noCommand = colorParse(VillagerInfo.plugin.getConfig().getString("No Command"));
     configReload = colorParse(VillagerInfo.plugin.getConfig().getString("Config Reloaded"));
     helpMain =  colorParse("&#4dd5ff• How to use Villager Info\n&7Shift-right-click a villager while toggle is on to have a villager's information displayed");
