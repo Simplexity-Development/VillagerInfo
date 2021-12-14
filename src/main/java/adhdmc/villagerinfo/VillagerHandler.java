@@ -1,6 +1,7 @@
 package adhdmc.villagerinfo;
 
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
@@ -36,7 +37,7 @@ public class VillagerHandler implements Listener {
         //Profession
         String villagerProfession = villagerClicked.getProfession().toString();
         //Restocks
-        int villagerRestocks = villagerClicked.getRestocksToday();
+        int villagerRestocks = VillagerInfo.isPaper ? villagerClicked.getRestocksToday() : Integer.MIN_VALUE;
         //Job Site
         Location villagerJobSite = villagerClicked.getMemory(MemoryKey.JOB_SITE);
         //Worked
@@ -55,6 +56,7 @@ public class VillagerHandler implements Listener {
         boolean configHome = VillagerInfo.plugin.getConfig().getBoolean("Bed Location");
         boolean configLastSlept = VillagerInfo.plugin.getConfig().getBoolean("Last Slept");
         boolean configInventory = VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents");
+        boolean debugData = true;
         //Prefix
         String villInfoPrefix = MessageHandler.prefix;
 
@@ -148,7 +150,7 @@ public class VillagerHandler implements Listener {
         }
 
         //Restocks
-        if(configRestocks) {
+        if(configRestocks && villagerRestocks != Integer.MIN_VALUE) {
             player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
         }
 

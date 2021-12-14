@@ -8,7 +8,7 @@ Job Site: true
 
 Last Worked: true
 
-Number of Restocks: true
+Number of Restocks: true # This only works on Paper or Paper Forks.
 
 Bed Location: true
 
