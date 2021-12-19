@@ -1,7 +1,6 @@
 package adhdmc.villagerinfo;
 
 import adhdmc.villagerinfo.commands.CommandHandler;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
