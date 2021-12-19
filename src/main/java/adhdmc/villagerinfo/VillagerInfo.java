@@ -1,6 +1,7 @@
 package adhdmc.villagerinfo;
 
 import adhdmc.villagerinfo.commands.CommandHandler;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +14,8 @@ public final class VillagerInfo extends JavaPlugin {
     @Override
     public void onEnable(){
         plugin = this;
+        int pluginId = 13653; // bStats ID
+        Metrics metrics = new Metrics(this, pluginId);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
         Objects.requireNonNull(this.getCommand("vill")).setExecutor(new CommandHandler());
         configDefaults();
