@@ -1,9 +1,11 @@
 package adhdmc.villagerinfo;
 
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -109,7 +111,19 @@ public class VillagerHandler implements Listener {
 
         //Cancels the event cause, opening trade window
         event.setCancelled(true);
-        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
+        Sound configSound = null;
+        if(VillagerInfo.plugin.getConfig().getBoolean("Sound Toggle")) {
+            try {
+                configSound = Sound.valueOf(VillagerInfo.plugin.getConfig().getString("Sound"));
+            } catch (IllegalArgumentException e) {
+                player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
+            }
+            if (configSound != null) {
+                player.playSound(player.getLocation(), configSound, 2, 2);
+            }
+        }
+
+        // Plugin Prefix
         player.sendMessage(villInfoPrefix);
 
         //Villager Inventory

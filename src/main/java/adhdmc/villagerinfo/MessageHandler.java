@@ -1,6 +1,7 @@
 package adhdmc.villagerinfo;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ public class MessageHandler {
     public static String helpMain;
     public static String helpToggle;
     public static String helpReload;
+    public static String soundError;
 
     public static String colorParse(String s) {
         Matcher matcher = hexPattern.matcher(s);
@@ -42,5 +44,19 @@ public class MessageHandler {
     helpMain =  colorParse("&#4dd5ff• How to use Villager Info\n&7Shift-right-click a villager while toggle is on to have a villager's information displayed");
     helpToggle = colorParse("&#4dd5ff•/vill toggle\n&7Toggles the ability to receive villager information on or off.");
     helpReload = colorParse("&#4dd5ff•/vill reload\n&7Reloads the plugin, applies config values");
+    soundError = soundErrorMsg("");
+    }
+
+    public static String soundErrorMsg(String s){
+        Sound configSound = null;
+        try {
+            configSound = Sound.valueOf(VillagerInfo.plugin.getConfig().getString("Sound"));
+        } catch (IllegalArgumentException e) {
+            s = ChatColor.RED + "Configuration Error: Invalid Sound. Please choose from these options.\nhttps://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html";
+        }
+        if (configSound != null) {
+            s=null;
+        }
+        return s;
     }
 }

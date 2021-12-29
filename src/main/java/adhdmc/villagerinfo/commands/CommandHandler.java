@@ -39,6 +39,9 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
                 VillagerInfo.plugin.reloadConfig();
                 MessageHandler.loadConfigMsgs();
                 sender.sendMessage(MessageHandler.configReload);
+                if(MessageHandler.soundErrorMsg("") != null){
+                    sender.sendMessage(MessageHandler.soundErrorMsg(""));
+                }
             } else {
             sender.sendMessage(ChatColor.RED + "You must be a player to run this command");
             }
@@ -84,6 +87,9 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
                     VillagerInfo.plugin.reloadConfig();
                     MessageHandler.loadConfigMsgs();
                     user.sendMessage(MessageHandler.prefix + " " + MessageHandler.configReload);
+                    if(MessageHandler.soundErrorMsg("") != null){
+                        user.sendMessage(MessageHandler.soundErrorMsg(""));
+                    }
                 } else {
                     user.sendMessage(MessageHandler.noPermission);
                 }

@@ -32,3 +32,12 @@ No Permission Vill Toggle: "&cYou are missing the permission villagerinfo.use"
 No Command: "&cNo subcommand by that name!"
 
 Config Reloaded: "&6VillagerInfo Config Reloaded!"
+
+#Other
+#Whether sounds should be enabled at all
+
+Sound Toggle: true
+
+#Sound must be from this list https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+
+Sound: BLOCK_AMETHYST_BLOCK_BREAK

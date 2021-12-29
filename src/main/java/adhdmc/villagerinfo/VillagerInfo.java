@@ -47,5 +47,7 @@ public final class VillagerInfo extends JavaPlugin {
         getConfig().addDefault("No Permission", "&cYou don't have permission to use this command!");
         getConfig().addDefault("No Command", "&cNo subcommand by that name!");
         getConfig().addDefault("Config Reload", "&6VillagerInfo Config Reloaded!");
+        getConfig().addDefault("Sound Toggle", true);
+        getConfig().addDefault("Sound","BLOCK_AMETHYST_BLOCK_BREAK");
     }
 }
