@@ -8,13 +8,15 @@ Job Site: true
 
 Last Worked: true
 
-Number of Restocks: true # This only works on Paper or Paper Forks.
-
 Bed Location: true
 
 Last Slept: true
 
 Villager Inventory Contents: true
+
+Number of Restocks: true # This only works on Paper or Paper Forks.
+
+Player Reputation: true # This only works on Paper or Paper Forks
 
 #Messages
 #Customize the messages you want displayed to the user

@@ -1,5 +1,7 @@
 package adhdmc.villagerinfo;
 
+import com.destroystokyo.paper.entity.villager.Reputation;
+import com.destroystokyo.paper.entity.villager.ReputationType;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -58,11 +60,12 @@ public class VillagerHandler implements Listener {
         boolean configHome = VillagerInfo.plugin.getConfig().getBoolean("Bed Location");
         boolean configLastSlept = VillagerInfo.plugin.getConfig().getBoolean("Last Slept");
         boolean configInventory = VillagerInfo.plugin.getConfig().getBoolean("Villager Inventory Contents");
+        boolean configReputation = VillagerInfo.plugin.getConfig().getBoolean("Player Reputation");
         boolean debugData = true;
         //Prefix
         String villInfoPrefix = MessageHandler.prefix;
 
-        /*
+
         //REPUTATION STUFFFFFFFFFFFFFFF
         Reputation playerReputation = villagerClicked.getReputation(pUUID);
         assert playerReputation != null;
@@ -73,7 +76,7 @@ public class VillagerHandler implements Listener {
         int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
         int playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
-        */
+
 
         //
 
@@ -103,7 +106,7 @@ public class VillagerHandler implements Listener {
         }
 
         //Checks if ALL the toggles are off?
-        if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory) {
+        if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory && !configReputation) {
             player.sendMessage(villInfoPrefix);
             player.sendMessage(GOLD + "Why is this plugin even installed if every option is turned off?");
             return;
@@ -199,12 +202,13 @@ public class VillagerHandler implements Listener {
 
         ///Reputation
 
-        /* [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
-        String playerReputationString = GREEN + "YOUR REPUTATION\n" + AQUA + "  • " + playerReputationTotal + "/725";
+        // [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
 
         ///FUTURE REPUTATION STUFF YEET
-        player.sendMessage(playerReputationString);
-        */
+        if(configReputation){
+            player.sendMessage(GREEN + "PLAYER REPUTATION:" + "\n" + ReputationHandler.villagerReputation(playerReputationTotal));
+        }
+
     }
 
     //Math
