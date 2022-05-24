@@ -42,6 +42,8 @@ public class VillagerHandler implements Listener {
         String villagerProfession = villagerClicked.getProfession().toString();
         //Restocks
         int villagerRestocks = VillagerInfo.isPaper ? villagerClicked.getRestocksToday() : Integer.MIN_VALUE;
+        // Reputation
+        int playerReputationTotal = 0;
         //Job Site
         Location villagerJobSite = villagerClicked.getMemory(MemoryKey.JOB_SITE);
         //Worked
@@ -67,15 +69,17 @@ public class VillagerHandler implements Listener {
 
 
         //REPUTATION STUFFFFFFFFFFFFFFF
-        Reputation playerReputation = villagerClicked.getReputation(pUUID);
-        assert playerReputation != null;
-        int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
-        int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
-        int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
-        int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
-        int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
+        if (VillagerInfo.isPaper) {
+            Reputation playerReputation = villagerClicked.getReputation(pUUID);
+            assert playerReputation != null;
+            int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
+            int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
+            int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
+            int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
+            int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
-        int playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+            playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+        }
 
 
         //
