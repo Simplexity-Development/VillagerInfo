@@ -67,7 +67,6 @@ public class VillagerHandler implements Listener {
         //Prefix
         String villInfoPrefix = MessageHandler.prefix;
 
-
         //REPUTATION STUFFFFFFFFFFFFFFF
         if (VillagerInfo.isPaper) {
             Reputation playerReputation = villagerClicked.getReputation(pUUID);
@@ -80,42 +79,22 @@ public class VillagerHandler implements Listener {
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
             playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
         }
-
-
-        //
-
-        //
-
-        //
         //Checks permission
         if(!player.hasPermission("villagerinfo.use")){
             return;
         }
-
         //Checks if they've toggled it off *HOPEFULLY*
-        if(villagerCheck.containsKey(pUUID)){
-            if (!villagerCheck.get(pUUID)){
-                return;
-            }
-        }
-
+        if(villagerCheck.containsKey(pUUID) && !villagerCheck.get(pUUID)){return;}
         //Checks if they're shift-clicking or not
-        if(!player.isSneaking()) {
-            return;
-        }
-
+        if(!player.isSneaking()) { return;}
         //Stops the stuff from running twice, cause, 2 hands
-        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {
-            return;
-        }
-
+        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {return;}
         //Checks if ALL the toggles are off?
         if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory && !configReputation) {
             player.sendMessage(villInfoPrefix);
             player.sendMessage(GOLD + "Why is this plugin even installed if every option is turned off?");
             return;
         }
-
         //Cancels the event cause, opening trade window
         event.setCancelled(true);
         Sound configSound = null;
@@ -129,12 +108,9 @@ public class VillagerHandler implements Listener {
                 player.playSound(player.getLocation(), configSound, 2, 2);
             }
         }
-
         // Plugin Prefix
         player.sendMessage(villInfoPrefix);
-
         //Villager Inventory
-
         StringBuilder villagerInventoryString = new StringBuilder(GREEN + "VILLAGER INVENTORY:");
         if(configInventory){
             for (int i = 0; i < villagerInventoryContents.length; i++) {
@@ -144,12 +120,10 @@ public class VillagerHandler implements Listener {
                 }
             }
         }
-
         //Profession
         if(configProfession) {
             player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA + "• " + villagerProfession);
         }
-
         //Job Site
         if(configJobSite){
             if (villagerJobSite != null) {
@@ -158,7 +132,6 @@ public class VillagerHandler implements Listener {
                 player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
             }
         }
-
         //Worked
         if(configLastWorked) {
             if (villagerWorked != null) {
@@ -169,12 +142,10 @@ public class VillagerHandler implements Listener {
                 player.sendMessage(GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• NEVER");
             }
         }
-
         //Restocks
         if(configRestocks && villagerRestocks != Integer.MIN_VALUE) {
             player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
         }
-
         //Home
         if(configHome) {
             if (villagerHome != null) {
@@ -183,7 +154,6 @@ public class VillagerHandler implements Listener {
                 player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
             }
         }
-
         //Slept
         if(configLastSlept) {
             if (villagerSlept != null) {
@@ -194,7 +164,6 @@ public class VillagerHandler implements Listener {
                 player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
             }
         }
-
         //Inventory
         if(configInventory) {
             if (villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")) {
@@ -203,18 +172,11 @@ public class VillagerHandler implements Listener {
                 player.sendMessage(villagerInventoryString.toString());
             }
         }
-
         ///Reputation
-
-        // [|||||I|||||I|||||I|||||I|||||["+ playerReputationTotal +"]|||||I|||||I|||||I|||||I|||||]
-
-        ///FUTURE REPUTATION STUFF YEET
         if(configReputation){
             player.sendMessage(GREEN + "PLAYER REPUTATION:" + "\n" + ReputationHandler.villagerReputation(playerReputationTotal));
         }
-
     }
-
     //Math
     private String timeMath(long mathTime){
         String mathResult = "";

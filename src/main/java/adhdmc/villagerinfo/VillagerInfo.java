@@ -1,6 +1,9 @@
 package adhdmc.villagerinfo;
 
 import adhdmc.villagerinfo.commands.CommandHandler;
+import adhdmc.villagerinfo.commands.subcommands.HelpCommand;
+import adhdmc.villagerinfo.commands.subcommands.ReloadCommand;
+import adhdmc.villagerinfo.commands.subcommands.ToggleCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +23,7 @@ public final class VillagerInfo extends JavaPlugin {
         configDefaults();
         MessageHandler.loadConfigMsgs();
         paperCheck();
+        registerCommands();
     }
 
     private void paperCheck() {
@@ -50,5 +54,10 @@ public final class VillagerInfo extends JavaPlugin {
         getConfig().addDefault("Config Reload", "&6VillagerInfo Config Reloaded!");
         getConfig().addDefault("Sound Toggle", true);
         getConfig().addDefault("Sound","BLOCK_AMETHYST_BLOCK_BREAK");
+    }
+    private void registerCommands() {
+        CommandHandler.subcommandList.put("help", new HelpCommand());
+        CommandHandler.subcommandList.put("toggle", new ToggleCommand());
+        CommandHandler.subcommandList.put("reload", new ReloadCommand());
     }
 }

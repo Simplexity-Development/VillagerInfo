@@ -1,22 +1,20 @@
 package adhdmc.villagerinfo.commands;
 
 import adhdmc.villagerinfo.MessageHandler;
-import adhdmc.villagerinfo.VillagerHandler;
-import adhdmc.villagerinfo.VillagerInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 public class CommandHandler implements CommandExecutor, TabExecutor {
 
+    public static HashMap<String, SubCommand> subcommandList = new HashMap<String, SubCommand>();
     //TY Peashooter101
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
@@ -30,91 +28,18 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Player user;
-        //checking if player, error if not
-        if (sender instanceof Player) {
-            user = (Player) sender;
+        //Checking for arguments
+        if (args.length == 0){
+            sender.sendMessage(MessageHandler.prefix + ChatColor.translateAlternateColorCodes('&', "\n&aAuthor: &6IllogicalSong\n&aVersion:&7 ALPHA\n&aSpecial Thanks to Peashooter101"));
+            return true;
+        }
+        //if has an argument, check to see if it's contained in the list of arguments
+        String command = args[0].toLowerCase();
+        if (subcommandList.containsKey(command)) {
+            subcommandList.get(command).doThing(sender, Arrays.copyOfRange(args, 1, args.length));
         } else {
-            if(args[0].equalsIgnoreCase("reload")) {
-                VillagerInfo.plugin.reloadConfig();
-                MessageHandler.loadConfigMsgs();
-                sender.sendMessage(MessageHandler.configReload);
-                if(MessageHandler.soundErrorMsg("") != null){
-                    sender.sendMessage(MessageHandler.soundErrorMsg(""));
-                }
-            } else {
-            sender.sendMessage(ChatColor.RED + "You must be a player to run this command");
-            }
-            return true;
+            sender.sendMessage("Sorry, you input the command incorrectly. Please use /vill help to see proper usage");
         }
-
-        //checking for arguments
-        if (args.length == 0) {
-            user.sendMessage(MessageHandler.prefix + ChatColor.translateAlternateColorCodes('&', "\n&aAuthor: &6IllogicalSong\n&aVersion:&7 ALPHA\n&aSpecial Thanks to Peashooter101"));
-            return true;
-        }
-
-        //aaaaaaaaaaaaaaaaaaaaaaa
-        if(args.length == 1) {
-            if (args[0].equalsIgnoreCase("toggle")) {
-                if(user.hasPermission("villagerinfo.toggle") && user.hasPermission("villagerinfo.use")) {
-                    if (toggleSetting(user)) {
-                        user.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOn);
-                    } else {
-                        user.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOff);
-                    }
-                } else if(user.hasPermission("villagerinfo.toggle") && !user.hasPermission("villagerinfo.use")){
-                    user.sendMessage(MessageHandler.noPermissionToggle);
-                }
-                else {
-                    user.sendMessage(MessageHandler.noPermission);
-                }
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("help")) {
-                if(user.hasPermission("villagerinfo.use")) {
-                    user.sendMessage(MessageHandler.prefix);
-                    user.sendMessage(MessageHandler.helpMain);
-                    user.sendMessage(MessageHandler.helpToggle);
-                    user.sendMessage(MessageHandler.helpReload);
-                } else {
-                    user.sendMessage(MessageHandler.noPermission);
-                }
-                return true;
-            }
-            if(args[0].equalsIgnoreCase("reload")){
-                if(user.hasPermission("villagerinfo.reload")){
-                    VillagerInfo.plugin.reloadConfig();
-                    MessageHandler.loadConfigMsgs();
-                    user.sendMessage(MessageHandler.prefix + " " + MessageHandler.configReload);
-                    if(MessageHandler.soundErrorMsg("") != null){
-                        user.sendMessage(MessageHandler.soundErrorMsg(""));
-                    }
-                } else {
-                    user.sendMessage(MessageHandler.noPermission);
-                }
-                return true;
-            }
-            user.sendMessage(MessageHandler.prefix + " " + MessageHandler.noCommand);
-            return true;
-        }
-        //why ppl tryina put too many words tho
-        user.sendMessage(MessageHandler.prefix + " " + MessageHandler.noCommand);
         return true;
-    }
-    //Toggle
-    private boolean toggleSetting(Player p) {
-        UUID uuid = p.getUniqueId();
-        if (VillagerHandler.villagerCheck.containsKey(uuid)) {
-            if (VillagerHandler.villagerCheck.get(uuid)) {
-                VillagerHandler.villagerCheck.put(uuid, false);
-                return false;
-            } else {
-                VillagerHandler.villagerCheck.put(uuid, true);
-                return true;
-            }
-        }
-        VillagerHandler.villagerCheck.put(p.getUniqueId(), false);
-        return false;
     }
 }
