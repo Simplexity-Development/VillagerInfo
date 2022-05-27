@@ -11,7 +11,7 @@ I don't know about you but, for me, most of the stuff in /data isn't generally a
 
 **Default list provided through VillagerInfo**
 
-![image](https://user-images.githubusercontent.com/45906780/170634856-5b733bf6-7b2a-4a1c-9ae3-05e316df9bdb.png)
+![image](https://user-images.githubusercontent.com/45906780/170635149-71c305db-c3f6-4e7f-a9d8-00e4e45924d0.png)
 
 Current permissions are:
 
