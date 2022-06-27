@@ -2,11 +2,13 @@ package adhdmc.villagerinfo;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageHandler {
+    public static FileConfiguration config = VillagerInfo.plugin.getConfig();
     private static final Pattern hexPattern = Pattern.compile("(&#[a-fA-F0-9]{6})");
 
     public static String prefix;
@@ -35,13 +37,13 @@ public class MessageHandler {
     }
 
     public static void loadConfigMsgs(){
-    prefix = colorParse(VillagerInfo.plugin.getConfig().getString("Prefix"));
-    toggleOn = colorParse(VillagerInfo.plugin.getConfig().getString("Toggle On"));
-    toggleOff = colorParse(VillagerInfo.plugin.getConfig().getString("Toggle Off"));
-    noPermission = colorParse(VillagerInfo.plugin.getConfig().getString("No Permission"));
-    noPermissionToggle = colorParse(VillagerInfo.plugin.getConfig().getString("No Permission Vill Toggle"));
-    noCommand = colorParse(VillagerInfo.plugin.getConfig().getString("No Command"));
-    configReload = colorParse(VillagerInfo.plugin.getConfig().getString("Config Reloaded"));
+    prefix = colorParse(config.getString("Prefix"));
+    toggleOn = colorParse(config.getString("Toggle On"));
+    toggleOff = colorParse(config.getString("Toggle Off"));
+    noPermission = colorParse(config.getString("No Permission"));
+    noPermissionToggle = colorParse(config.getString("No Permission Vill Toggle"));
+    noCommand = colorParse(config.getString("No Command"));
+    configReload = colorParse(config.getString("Config Reloaded"));
     helpMain =  colorParse("&#4dd5ff• How to use Villager Info\n&7Shift-right-click a villager while toggle is on to have a villager's information displayed");
     helpToggle = colorParse("&#4dd5ff•/vill toggle\n&7Toggles the ability to receive villager information on or off.");
     helpReload = colorParse("&#4dd5ff•/vill reload\n&7Reloads the plugin, applies config values");
@@ -52,7 +54,7 @@ public class MessageHandler {
     public static String soundErrorMsg(String s){
         Sound configSound = null;
         try {
-            configSound = Sound.valueOf(VillagerInfo.plugin.getConfig().getString("Sound"));
+            configSound = Sound.valueOf(config.getString("Sound"));
         } catch (IllegalArgumentException e) {
             s = ChatColor.RED + "Configuration Error: Invalid Sound. Please choose from these options.\nhttps://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html";
         }

@@ -4,11 +4,6 @@ description: Easy access to information from villager's brains generally only ac
 version: '1.2.3'
 main: adhdmc.villagerinfo.VillagerInfo
 api-version: 1.13
-commands:
-  vill:
-    description: ""
-    usage: ""
-    permission: ""
 permissions:
   villagerinfo.reload:
     description: reload plugin config
