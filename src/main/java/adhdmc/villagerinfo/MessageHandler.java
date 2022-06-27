@@ -12,17 +12,10 @@ public class MessageHandler {
     private static final Pattern hexPattern = Pattern.compile("(&#[a-fA-F0-9]{6})");
 
     public static String prefix;
-    public static String toggleOn;
-    public static String toggleOff;
-    public static String noPermission;
-    public static String noPermissionToggle;
-    public static String noCommand;
-    public static String configReload;
-    public static String helpMain;
-    public static String helpToggle;
-    public static String helpReload;
-    public static String soundError;
-    public static String notAPlayer;
+    public static String toggleOn, toggleOff, configReload;
+    public static String noPermission, noPermissionToggle, noCommand, soundError, notAPlayer;
+    public static String helpMain, helpToggle, helpReload;
+
 
     public static String colorParse(String s) {
         Matcher matcher = hexPattern.matcher(s);
