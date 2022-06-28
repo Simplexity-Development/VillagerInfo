@@ -1,8 +1,8 @@
-package adhdmc.villagerinfo.commands.subcommands;
+package adhdmc.villagerinfo.Commands.SubCommands;
 
-import adhdmc.villagerinfo.MessageHandler;
+import adhdmc.villagerinfo.MiscHandling.MessageHandler;
 import adhdmc.villagerinfo.VillagerInfo;
-import adhdmc.villagerinfo.commands.SubCommand;
+import adhdmc.villagerinfo.Commands.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,6 +25,9 @@ public class ReloadCommand extends SubCommand {
             sender.sendMessage(MessageHandler.soundErrorMsg(""));
             }
         }
+        //if(MessageHandler.timeErrorMsg("") != null){
+        //    sender.sendMessage(MessageHandler.timeErrorMsg(""));
+        //}
     }
 
     @Override

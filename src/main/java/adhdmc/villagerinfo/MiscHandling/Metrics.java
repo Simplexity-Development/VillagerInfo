@@ -1,4 +1,4 @@
-package adhdmc.villagerinfo;
+package adhdmc.villagerinfo.MiscHandling;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

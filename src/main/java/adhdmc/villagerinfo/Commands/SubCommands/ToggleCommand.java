@@ -1,13 +1,15 @@
-package adhdmc.villagerinfo.commands.subcommands;
+package adhdmc.villagerinfo.Commands.SubCommands;
 
-import adhdmc.villagerinfo.MessageHandler;
-import adhdmc.villagerinfo.VillagerHandler;
-import adhdmc.villagerinfo.commands.SubCommand;
+import adhdmc.villagerinfo.Commands.SubCommand;
+import adhdmc.villagerinfo.MiscHandling.MessageHandler;
+import adhdmc.villagerinfo.VillagerInfo;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ToggleCommand extends SubCommand {
 
@@ -33,19 +35,16 @@ public class ToggleCommand extends SubCommand {
         }
 
     private boolean toggleSetting(Player p) {
-        UUID uuid = p.getUniqueId();
-        if (VillagerHandler.villagerCheck.containsKey(uuid)) {
-            if (VillagerHandler.villagerCheck.get(uuid)) {
-                VillagerHandler.villagerCheck.put(uuid, false);
+        PersistentDataContainer playerPDC = p.getPersistentDataContainer();
+        if (playerPDC.get(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER) == null ||
+            playerPDC.get(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER).equals(0)){
+                playerPDC.set(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER, 1);
                 return false;
-            } else {
-                VillagerHandler.villagerCheck.put(uuid, true);
+            }
+                playerPDC.set(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER, 0);
                 return true;
             }
-        }
-        VillagerHandler.villagerCheck.put(p.getUniqueId(), false);
-        return false;
-    }
+
     @Override
     public List<String> getSubcommandArguments(CommandSender sender, String[] args) {
         return null;

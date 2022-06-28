@@ -18,6 +18,10 @@ Number of Restocks: true # This only works on Paper or Paper Forks.
 
 Player Reputation: true # This only works on Paper or Paper Forks
 
+Highlight Workstation: true
+#in seconds
+Length of time to highlight workstation: 10
+
 #Messages
 #Customize the messages you want displayed to the user
 

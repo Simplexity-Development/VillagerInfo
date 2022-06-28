@@ -1,4 +1,4 @@
-package adhdmc.villagerinfo.commands;
+package adhdmc.villagerinfo.Commands;
 
 import org.bukkit.command.CommandSender;
 

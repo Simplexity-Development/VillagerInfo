@@ -1,5 +1,6 @@
-package adhdmc.villagerinfo;
+package adhdmc.villagerinfo.MiscHandling;
 
+import adhdmc.villagerinfo.VillagerInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -41,6 +42,7 @@ public class MessageHandler {
     helpToggle = colorParse("&#4dd5ff•/vill toggle\n&7Toggles the ability to receive villager information on or off.");
     helpReload = colorParse("&#4dd5ff•/vill reload\n&7Reloads the plugin, applies config values");
     soundError = soundErrorMsg("");
+    //timeError = timeErrorMsg("");
     notAPlayer = colorParse("&cSorry, you must be a player to use this command");
     }
 
@@ -56,4 +58,12 @@ public class MessageHandler {
         }
         return s;
     }
+
+/*    public static String timeErrorMsg(String s){
+        int configTime = config.getInt("Length of time to highlight workstation");
+        if (configTime <= 0){
+            s = ChatColor.RED + "Configuration Error: Invalid highlight time. \nIf you would like to disable this feature please turn 'highlight workstation' to false. \nOtherwise please use an integer greater than zero";
+        }
+        return s;
+    }*/
 }

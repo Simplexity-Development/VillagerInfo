@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ADHDMC</groupId>
-    <artifactId>VillagerClasses</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>VillagerInfo</artifactId>
+    <version>1.3</version>
     <packaging>jar</packaging>
 
-    <name>VillagerClasses</name>
+    <name>VillagerInfo</name>
 
     <properties>
         <java.version>1.8</java.version>

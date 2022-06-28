@@ -1,4 +1,4 @@
-package adhdmc.villagerinfo;
+package adhdmc.villagerinfo.VillagerHandling;
 
 import org.bukkit.ChatColor;
 

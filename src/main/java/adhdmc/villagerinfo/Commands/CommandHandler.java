@@ -1,6 +1,6 @@
-package adhdmc.villagerinfo.commands;
+package adhdmc.villagerinfo.Commands;
 
-import adhdmc.villagerinfo.MessageHandler;
+import adhdmc.villagerinfo.MiscHandling.MessageHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

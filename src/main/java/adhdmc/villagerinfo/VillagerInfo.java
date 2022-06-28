@@ -1,14 +1,17 @@
 package adhdmc.villagerinfo;
 
-import adhdmc.villagerinfo.commands.CommandHandler;
-import adhdmc.villagerinfo.commands.subcommands.HelpCommand;
-import adhdmc.villagerinfo.commands.subcommands.ReloadCommand;
-import adhdmc.villagerinfo.commands.subcommands.ToggleCommand;
+import adhdmc.villagerinfo.MiscHandling.MessageHandler;
+import adhdmc.villagerinfo.MiscHandling.Metrics;
+import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
+import adhdmc.villagerinfo.Commands.CommandHandler;
+import adhdmc.villagerinfo.Commands.SubCommands.HelpCommand;
+import adhdmc.villagerinfo.Commands.SubCommands.ReloadCommand;
+import adhdmc.villagerinfo.Commands.SubCommands.ToggleCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Objects;
 
 public final class VillagerInfo extends JavaPlugin {
     public static VillagerInfo plugin;
@@ -19,11 +22,20 @@ public final class VillagerInfo extends JavaPlugin {
         int pluginId = 13653; // bStats ID
         Metrics metrics = new Metrics(this, pluginId);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
-        Objects.requireNonNull(this.getCommand("vill")).setExecutor(new CommandHandler());
+        this.getCommand("vill").setExecutor(new CommandHandler());
         configDefaults();
         MessageHandler.loadConfigMsgs();
         paperCheck();
         registerCommands();
+    }
+    public void onDisable(){
+        VillagerHandler.workstationShulker.forEach((uuid, shulker) -> {
+            shulker.remove();
+        });
+        VillagerHandler.villagerPDC.forEach((uuid, persistentDataContainer) -> {
+            persistentDataContainer.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER, 0);
+        });
+        VillagerHandler.workstationShulker.clear();
     }
 
     private void paperCheck() {
@@ -54,10 +66,13 @@ public final class VillagerInfo extends JavaPlugin {
         getConfig().addDefault("Config Reload", "&6VillagerInfo Config Reloaded!");
         getConfig().addDefault("Sound Toggle", true);
         getConfig().addDefault("Sound","BLOCK_AMETHYST_BLOCK_BREAK");
+        getConfig().addDefault("Highlight Workstation", true);
+        getConfig().addDefault("Length of time to highlight workstation", 10);
     }
     private void registerCommands() {
         CommandHandler.subcommandList.put("help", new HelpCommand());
         CommandHandler.subcommandList.put("toggle", new ToggleCommand());
         CommandHandler.subcommandList.put("reload", new ReloadCommand());
     }
+
 }
