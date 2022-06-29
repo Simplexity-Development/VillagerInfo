@@ -25,9 +25,9 @@ public class ReloadCommand extends SubCommand {
             sender.sendMessage(MessageHandler.soundErrorMsg(""));
             }
         }
-        //if(MessageHandler.timeErrorMsg("") != null){
-        //    sender.sendMessage(MessageHandler.timeErrorMsg(""));
-        //}
+        if(MessageHandler.timeErrorMsg("") != null){
+            sender.sendMessage(MessageHandler.timeErrorMsg(""));
+        }
     }
 
     @Override

@@ -19,6 +19,7 @@ public final class VillagerInfo extends JavaPlugin {
     @Override
     public void onEnable(){
         plugin = this;
+
         int pluginId = 13653; // bStats ID
         Metrics metrics = new Metrics(this, pluginId);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
@@ -74,5 +75,4 @@ public final class VillagerInfo extends JavaPlugin {
         CommandHandler.subcommandList.put("toggle", new ToggleCommand());
         CommandHandler.subcommandList.put("reload", new ReloadCommand());
     }
-
 }

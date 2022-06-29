@@ -9,7 +9,10 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,11 +30,10 @@ import java.util.UUID;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.entity.EntityType.SHULKER;
 
-public class VillagerHandler implements Listener {
+public class VillagerHandler extends MessageHandler implements Listener {
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<UUID, Shulker>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<UUID, PersistentDataContainer>();
     public static Location villagerJobsiteLocation;
-    public static FileConfiguration config = VillagerInfo.plugin.getConfig();
 
 
     @EventHandler
@@ -53,6 +55,7 @@ public class VillagerHandler implements Listener {
         if(!player.hasPermission("villagerinfo.use")){
             return;
         }
+        FileConfiguration config = VillagerInfo.plugin.getConfig();
         boolean configProfession = config.getBoolean("Profession");
         boolean configJobSite = config.getBoolean("Job Site");
         boolean configLastWorked = config.getBoolean("Last Worked");
@@ -63,7 +66,13 @@ public class VillagerHandler implements Listener {
         boolean configReputation = config.getBoolean("Player Reputation");
         boolean configHighlight = config.getBoolean("Highlight Workstation");
         int configTime = config.getInt("Length of time to highlight workstation");
-        if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory && !configReputation) {
+        int highlightTime;
+        if (!(configTime > 0)){
+            highlightTime = 10;
+        } else {
+            highlightTime = configTime;
+        }
+        if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory && !configReputation && !configHighlight) {
             player.sendMessage(MessageHandler.prefix);
             player.sendMessage(GOLD + "Why is this plugin even installed if every option is turned off?");
             return;
@@ -104,21 +113,21 @@ public class VillagerHandler implements Listener {
             }
         }
         player.sendMessage(villInfoPrefix);
-        StringBuilder villagerInventoryString = new StringBuilder(GREEN + "VILLAGER INVENTORY:");
+        StringBuilder villagerInventoryString = new StringBuilder(villagerInventoryMsg);
         if(configInventory){
             for (int i = 0; i < villagerInventoryContents.length; i++) {
                 ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
                 if (villagerInventoryItem != null) {
-                    villagerInventoryString.append("\n  ").append(AQUA).append("• ").append(villagerInventoryItem.getType()).append(GRAY).append(" (").append(villagerInventoryItem.getAmount()).append(")");
+                    villagerInventoryString.append("\n  ").append(AQUA).append(villagerSeparatorMsg).append(villagerInventoryItem.getType()).append(GRAY).append(" (").append(villagerInventoryItem.getAmount()).append(")");
                 }
             }
         }
         if(configProfession) {
-            player.sendMessage(GREEN + "PROFESSION:\n  " + AQUA + "• " + villagerProfession);
+            player.sendMessage(villagerProfessionMsg + villagerSeparatorMsg + villagerProfession);
         }
         if(configJobSite){
             if (villagerJobSite != null) {
-                player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• " + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
+                player.sendMessage(villagerJobsiteMsg + villagerSeparatorMsg + villagerJobSite.getBlockX() + "x, " + villagerJobSite.getBlockY() + "y, " + villagerJobSite.getBlockZ() + "z");
                 villagerJobsiteLocation = villagerJobSite;
                 if(configHighlight){
                     if (villPDC.get(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER) == null ||
@@ -133,50 +142,55 @@ public class VillagerHandler implements Listener {
                                 villPDC.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER, 0);
                                 villagerPDC.put(villUUID, villPDC);
                                 }
-                        }.runTaskLater(VillagerInfo.plugin, 20L * configTime);
+                        }.runTaskLater(VillagerInfo.plugin, 20L * highlightTime);
                     }
                 }
             } else {
-            player.sendMessage(GREEN + "JOB SITE:\n  " + AQUA + "• NONE");
+            player.sendMessage(villagerJobsiteMsg + villagerSeparatorMsg + villagerNoneMsg);
             }
         }
         if(configLastWorked) {
             if (villagerWorked != null) {
-                String villagerWorkedString = GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• ";
+                String villagerWorkedString = villagerLastWorkedMsg + villagerSeparatorMsg;
                 long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
                 player.sendMessage(villagerWorkedString + TimeFormatting.timeMath(mathTime));
             } else {
-                player.sendMessage(GREEN + "LAST WORKED AT WORKSTATION:\n  " + AQUA + "• NEVER");
+                player.sendMessage(villagerLastWorkedMsg + villagerSeparatorMsg + villagerNeverMsg);
             }
         }
         if(configRestocks && villagerRestocks != Integer.MIN_VALUE) {
-            player.sendMessage(GREEN + "RESTOCKS TODAY:\n  " + AQUA + "• " + villagerRestocks);
+            if (villagerRestocks == 0){
+                player.sendMessage(villagerNumRestocksMsg + villagerSeparatorMsg + GRAY + villagerRestocks);
+            } else {
+                player.sendMessage(villagerNumRestocksMsg + villagerSeparatorMsg + villagerRestocks);
+            }
+
         }
         if(configHome) {
             if (villagerHome != null) {
-                player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• " + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
+                player.sendMessage(villagerHomeMsg + villagerSeparatorMsg + villagerHome.getBlockX() + "x, " + villagerHome.getBlockY() + "y, " + villagerHome.getBlockZ() + "z");
             } else {
-                player.sendMessage(GREEN + "HOME:\n  " + AQUA + "• NONE");
+                player.sendMessage(villagerHomeMsg + villagerSeparatorMsg + villagerNoneMsg);
             }
         }
         if(configLastSlept) {
             if (villagerSlept != null) {
-                String villagerSleptString = GREEN + "LAST SLEPT:\n  " + AQUA + "• ";
+                String villagerSleptString = villagerSleptMsg + villagerSeparatorMsg;
                 long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
                 player.sendMessage(villagerSleptString + TimeFormatting.timeMath(mathTime));
             } else {
-                player.sendMessage(GREEN + "LAST SLEPT:\n  " + AQUA + "• NEVER");
+                player.sendMessage(villagerSleptMsg + villagerSeparatorMsg + villagerNeverMsg);
             }
         }
         if(configInventory) {
-            if (villagerInventoryString.toString().equals(GREEN + "VILLAGER INVENTORY:")) {
-                player.sendMessage(villagerInventoryString.toString() + AQUA + "\n  • EMPTY");
+            if (villagerInventoryString.toString().equals(villagerInventoryMsg)) {
+                player.sendMessage(villagerInventoryString + "\n" + villagerSeparatorMsg + villagerEmptyMsg);
             } else {
                 player.sendMessage(villagerInventoryString.toString());
             }
         }
         if(configReputation){
-            player.sendMessage(GREEN + "PLAYER REPUTATION:" + "\n" + ReputationHandler.villagerReputation(playerReputationTotal));
+            player.sendMessage(playerReputationMsg + ReputationHandler.villagerReputation(playerReputationTotal));
         }
     }
     public void spawnShulker(UUID uuid){
