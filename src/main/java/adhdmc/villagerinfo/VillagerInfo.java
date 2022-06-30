@@ -41,7 +41,8 @@ public final class VillagerInfo extends JavaPlugin {
 
     private void paperCheck() {
         try {
-            Class.forName("com.destroystokyo.paper.VersionHistoryManager$VersionData");
+            Class.forName("com.destroystokyo.paper.entity.villager.Reputation");
+            Class.forName("com.destroystokyo.paper.entity.villager.ReputationType");
             isPaper = true;
         } catch (ClassNotFoundException e) {
             isPaper = false;
@@ -59,16 +60,34 @@ public final class VillagerInfo extends JavaPlugin {
         getConfig().addDefault("Villager Inventory Contents", true);
         getConfig().addDefault("Number of Restocks", true);
         getConfig().addDefault("Player Reputation", true);
-        getConfig().addDefault("Prefix", "&#3256a8&l[&#4dd5ffVillager Info&#3256a8&l]");
-        getConfig().addDefault("Toggle On", "&aVillager Info Toggled &nON");
-        getConfig().addDefault("Toggle Off", "&cVillager Info Toggled &nOFF");
-        getConfig().addDefault("No Permission", "&cYou don't have permission to use this command!");
-        getConfig().addDefault("No Command", "&cNo subcommand by that name!");
-        getConfig().addDefault("Config Reload", "&6VillagerInfo Config Reloaded!");
-        getConfig().addDefault("Sound Toggle", true);
+        getConfig().addDefault("configReload", "&6VillagerInfo Config Reloaded!");
+        getConfig().addDefault("soundToggle", true);
         getConfig().addDefault("Sound","BLOCK_AMETHYST_BLOCK_BREAK");
         getConfig().addDefault("Highlight Workstation", true);
         getConfig().addDefault("Length of time to highlight workstation", 10);
+        getConfig().addDefault("prefix", "&#3256a8&l[&#4dd5ffVillager Info&#3256a8&l]");
+        getConfig().addDefault("toggleOn", "&aVillager Info Toggled &nON");
+        getConfig().addDefault("toggleOff", "&cVillager Info Toggled &nOFF");
+        getConfig().addDefault("noPermission", "&cYou don't have permission to use this command!");
+        getConfig().addDefault("noCommand", "&cNo subcommand by that name!");
+        getConfig().addDefault("configReload", "&6VillagerInfo Config Reloaded!");
+        getConfig().addDefault("helpMain", "&#4dd5ff• How to use Villager Info\n&7Shift-right-click a villager while toggle is on to have a villager's information displayed");
+        getConfig().addDefault("helpToggle", "&#4dd5ff•/vill toggle\n&7Toggles the ability to receive villager information on or off.");
+        getConfig().addDefault("helpReload", "&#4dd5ff•/vill reload\n&7Reloads the plugin, applies config values");
+        getConfig().addDefault("notAPlayer", "&cSorry, you must be a player to use this command");
+        getConfig().addDefault("VillagerProfession", "&aPROFESSION:\n");
+        getConfig().addDefault("villagerJobsiteMsg", "&aJOB SITE:\n");
+        getConfig().addDefault("villagerLastWorkedMsg", "&aLAST WORKED AT WORKSTATION:\n");
+        getConfig().addDefault("villagerNumRestocksMsg", "&aRESTOCKS TODAY:\n");
+        getConfig().addDefault("villagerHomeMsg", "&aHOME:\n");
+        getConfig().addDefault("villagerSleptMsg", "&aLAST SLEPT:\n");
+        getConfig().addDefault("villagerInventoryMsg", "&aVILLAGER INVENTORY:");
+        getConfig().addDefault("villagerSeparatorMsg", "&b  • ");
+        getConfig().addDefault("villagerNoneMsg", "&7NONE");
+        getConfig().addDefault("villagerNeverMsg", "&7NEVER");
+        getConfig().addDefault("villagerEmptyMsg", "&7EMPTY");
+        getConfig().addDefault("playerReputationMsg", "&aPLAYER REPUTATION:\n");
+
     }
     private void registerCommands() {
         CommandHandler.subcommandList.put("help", new HelpCommand());

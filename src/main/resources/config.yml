@@ -29,20 +29,27 @@ Sound: BLOCK_AMETHYST_BLOCK_BREAK
 #in seconds
 Length of time to highlight workstation: 10
 
-#Messages
-#Customize the messages you want displayed to the user
-
-Prefix: "&#3256a8&l[&#4dd5ffVillager Info&#3256a8&l]"
-
-Toggle On: "&aVillager Info Toggled &nON"
-
-Toggle Off: "&cVillager Info Toggled &nOFF"
-
-No Permission: "&cYou don't have permission to use this command!"
-
-No Permission Vill Toggle: "&cYou are missing the permission villagerinfo.use"
-
-No Command: "&cNo subcommand by that name!"
-
-Config Reloaded: "&6VillagerInfo Config Reloaded!"
-
+#Language Options
+prefix: "&#3256a8&l[&#4dd5ffVillager Info&#3256a8&l]"
+toggleOn: "&aVillager Info Toggled &nON"
+toggleOff: "&cVillager Info Toggled &nOFF"
+noPermission: "&cYou don't have permission to use this command!"
+noPermissionToggle: "&cYou are missing the permission villagerinfo.use"
+noCommand: "&cNo subcommand by that name!"
+configReload: "&6VillagerInfo Config Reloaded!"
+helpMain: "&#4dd5ff• How to use Villager Info\n&7Shift-right-click a villager while toggle is on to have a villager's information displayed"
+helpToggle: "&#4dd5ff•/vill toggle\n&7Toggles the ability to receive villager information on or off."
+helpReload: "&#4dd5ff•/vill reload\n&7Reloads the plugin, applies config values"
+notAPlayer: "&cSorry, you must be a player to use this command"
+VillagerProfession: "&aPROFESSION:\n"
+villagerJobsiteMsg: "&aJOB SITE:\n"
+villagerLastWorkedMsg: "&aLAST WORKED AT WORKSTATION:\n"
+villagerNumRestocksMsg: "&aRESTOCKS TODAY:\n"
+villagerHomeMsg: "&aHOME:\n"
+villagerSleptMsg: "&aLAST SLEPT:\n"
+villagerInventoryMsg: "&aVILLAGER INVENTORY:"
+villagerSeparatorMsg: "&b  • "
+villagerNoneMsg: "&7NONE"
+villagerNeverMsg: "&7NEVER"
+villagerEmptyMsg: "&7EMPTY"
+playerReputationMsg: "&aPLAYER REPUTATION:\n"
