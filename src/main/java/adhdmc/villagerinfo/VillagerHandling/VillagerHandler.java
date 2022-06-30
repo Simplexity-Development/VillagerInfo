@@ -24,7 +24,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -37,8 +36,6 @@ public class VillagerHandler implements Listener {
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<UUID, PersistentDataContainer>();
     public static Location villagerJobsiteLocation;
     public static boolean SillyResult;
-
-
 
     @EventHandler
     public void onVillagerClick(PlayerInteractEntityEvent event) {

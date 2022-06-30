@@ -19,7 +19,6 @@ public final class VillagerInfo extends JavaPlugin {
     @Override
     public void onEnable(){
         plugin = this;
-
         int pluginId = 13653; // bStats ID
         Metrics metrics = new Metrics(this, pluginId);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
@@ -38,7 +37,6 @@ public final class VillagerInfo extends JavaPlugin {
         });
         VillagerHandler.workstationShulker.clear();
     }
-
     private void paperCheck() {
         try {
             Class.forName("com.destroystokyo.paper.entity.villager.Reputation");
@@ -49,7 +47,6 @@ public final class VillagerInfo extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[VillagerInfo] This version does not run on Paper, some features may be disabled.");
         }
     }
-
     private void configDefaults() {
         this.saveDefaultConfig();
         getConfig().addDefault("Profession", true);
