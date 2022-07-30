@@ -1,30 +1,45 @@
 package adhdmc.villagerinfo;
 
-import adhdmc.villagerinfo.MiscHandling.MessageHandler;
-import adhdmc.villagerinfo.MiscHandling.Metrics;
-import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
 import adhdmc.villagerinfo.Commands.CommandHandler;
 import adhdmc.villagerinfo.Commands.SubCommands.HelpCommand;
 import adhdmc.villagerinfo.Commands.SubCommands.ReloadCommand;
 import adhdmc.villagerinfo.Commands.SubCommands.ToggleCommand;
+import adhdmc.villagerinfo.Config.ConfigDefaults;
+import adhdmc.villagerinfo.Config.LocaleConfig;
+import adhdmc.villagerinfo.Config.LocaleDefaults;
+import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 public final class VillagerInfo extends JavaPlugin {
     public static VillagerInfo plugin;
+    public static LocaleConfig localeConfig;
     public static boolean isPaper;
+    YamlConfiguration langConfig = new YamlConfiguration();
     @Override
     public void onEnable(){
         plugin = this;
+        localeConfig = new LocaleConfig(this);
         int pluginId = 13653; // bStats ID
-        Metrics metrics = new Metrics(this, pluginId);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
         this.getCommand("vill").setExecutor(new CommandHandler());
-        configDefaults();
-        MessageHandler.loadConfigMsgs();
+        this.saveDefaultConfig();
+        ConfigDefaults.mainConfigDefaults();
+        try {
+            LocaleDefaults.langConfigDefaults();
+        } catch (IOException | InvalidConfigurationException e) {
+            plugin.getLogger().severe("Could not save config");
+        }
+        getLogger().info( localeConfig.getlocaleConfig().getString("debug-message"));
+        this.saveResource("locale.yml", false);
+
         paperCheck();
         registerCommands();
     }
@@ -47,7 +62,7 @@ public final class VillagerInfo extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[VillagerInfo] This version does not run on Paper, some features may be disabled.");
         }
     }
-    private void configDefaults() {
+/*    private void configDefaults() {
         this.saveDefaultConfig();
         getConfig().addDefault("Profession", true);
         getConfig().addDefault("Job Site", true);
@@ -85,7 +100,7 @@ public final class VillagerInfo extends JavaPlugin {
         getConfig().addDefault("villagerEmptyMsg", "&7EMPTY");
         getConfig().addDefault("playerReputationMsg", "&aPLAYER REPUTATION:\n");
 
-    }
+    }*/
     private void registerCommands() {
         CommandHandler.subcommandList.put("help", new HelpCommand());
         CommandHandler.subcommandList.put("toggle", new ToggleCommand());

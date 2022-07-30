@@ -1,7 +1,5 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
-import adhdmc.villagerinfo.MiscHandling.MessageHandler;
-import adhdmc.villagerinfo.MiscHandling.MessageHandler.MESSAGE_TYPE;
 import adhdmc.villagerinfo.MiscHandling.TimeFormatting;
 import adhdmc.villagerinfo.VillagerInfo;
 import com.destroystokyo.paper.entity.villager.Reputation;
@@ -24,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -78,7 +77,6 @@ public class VillagerHandler implements Listener {
             return;
         }
         event.setCancelled(true);
-        HashMap<MESSAGE_TYPE, String> mMap = MessageHandler.getMessages();
         UUID pUUID = player.getUniqueId();
         Villager villagerClicked = (Villager) event.getRightClicked();
         String villagerProfession = villagerClicked.getProfession().toString();
@@ -113,7 +111,6 @@ public class VillagerHandler implements Listener {
                 player.playSound(player.getLocation(), configSound, 2, 2);
             }
         }
-        villOutput.append(mMap.get(MESSAGE_TYPE.PREFIX));
         StringBuilder villagerInventoryString = new StringBuilder("");
         if(configInventory){
             for (int i = 0; i < villagerInventoryContents.length; i++) {
@@ -121,7 +118,6 @@ public class VillagerHandler implements Listener {
                 if (villagerInventoryItem != null) {
                     villagerInventoryString.append("\n")
                             .append(AQUA)
-                            .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
                             .append(villagerInventoryItem.getType())
                             .append(GRAY)
                             .append(" (")
@@ -132,21 +128,15 @@ public class VillagerHandler implements Listener {
         }
         if(configProfession) {
             if (villagerProfession.equals("NONE")) {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.PROFESSION_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NONE_MSG));
+                villOutput.append("\n");
             } else {
                 villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.PROFESSION_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
                         .append(villagerProfession);
             }
         }
         if(configJobSite){
             if (villagerJobSite != null) {
-                villOutput.append("\n").append(mMap.get(MESSAGE_TYPE.JOBSITE_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
+                villOutput.append("\n")
                         .append(villagerJobSite.getBlockX())
                         .append("x, ")
                         .append(villagerJobSite.getBlockY())
@@ -171,36 +161,24 @@ public class VillagerHandler implements Listener {
                     }
                 }
             } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.JOBSITE_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NONE_MSG));
+                villOutput.append("\n");
             }
         }
         if(configLastWorked) {
             if (villagerWorked != null) {
                 long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
                 villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_WORKED_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
                         .append(TimeFormatting.timeMath(mathTime));
             } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_WORKED_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NEVER_MSG));
+                villOutput.append("\n");
             }
         }
         if(configRestocks && villagerRestocks != Integer.MIN_VALUE) {
             if (villagerRestocks != 0){
                 villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.RESTOCK_NUMBER_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
                         .append(villagerRestocks);
             } else {
                 villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.RESTOCK_NUMBER_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
                         .append(GRAY)
                         .append("0");
             }
@@ -208,8 +186,6 @@ public class VillagerHandler implements Listener {
         if(configHome) {
             if (villagerHome != null) {
                 villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.HOME_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
                         .append(villagerHome.getBlockX())
                         .append("x, ")
                         .append(villagerHome.getBlockY())
@@ -217,41 +193,27 @@ public class VillagerHandler implements Listener {
                         .append(villagerHome.getBlockZ())
                         .append("z");
             } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.HOME_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NONE_MSG));
+                villOutput.append("\n");
             }
         }
         if(configLastSlept) {
             if (villagerSlept != null) {
                 long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
                 villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_SLEPT_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
                         .append(mathTime);
             } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_SLEPT_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NEVER_MSG));
+                villOutput.append("\n");
             }
         }
         if(configInventory) {
             if(villagerInventoryString.toString().equals("")){
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.INVENTORY_MSG))
-                        .append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.EMPTY_MSG));
+                villOutput.append("\n");
             } else {
             villOutput.append("\n")
-                    .append(mMap.get(MESSAGE_TYPE.INVENTORY_MSG))
                     .append(villagerInventoryString);
         }
         if(configReputation){
             villOutput.append("\n")
-                  .append(mMap.get(MESSAGE_TYPE.REPUTATION_MSG))
                   .append(ReputationHandler.villagerReputation(playerReputationTotal));
             }
         }
