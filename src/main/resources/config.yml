@@ -2,29 +2,17 @@
 
 #Information Toggles
 #True to enable the information to display when requested, false for it not to display
-Profession: true
-
-Job Site: true
-
-Last Worked: true
-
-Bed Location: true
-
-Last Slept: true
-
-Villager Inventory Contents: true
-
-Number of Restocks: true # This only works on Paper or Paper Forks.
-
-Player Reputation: true # This only works on Paper or Paper Forks
-
-Highlight Workstation: true
-
-Sound Toggle: true
-
+profession: true
+job-site: true
+last-worked: true
+bed-location: true
+last-slept: true
+inventory: true
+restocks: true
+reputation: true
+highlight-workstation: true
+sound-toggle: true
 #Sound must be from this list https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-
-Sound: BLOCK_AMETHYST_BLOCK_BREAK
-
-#in seconds
-Length of time to highlight workstation: 10
+sound: BLOCK_AMETHYST_BLOCK_BREAK
+#Length of time to highlight the villager's workstation (if enabled)
+highlight-time: 10

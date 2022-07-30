@@ -7,17 +7,16 @@ public class ConfigDefaults {
 
         public static void mainConfigDefaults() {
             FileConfiguration config = VillagerInfo.plugin.getConfig();
-            config.addDefault("Profession", true);
-            config.addDefault("Job Site", true);
-            config.addDefault("Last Worked", true);
-            config.addDefault("Bed Location", true);
-            config.addDefault("Last Slept", true);
-            config.addDefault("Villager Inventory Contents", true);
-            config.addDefault("Number of Restocks", true);
-            config.addDefault("Player Reputation", true);
-            config.addDefault("configReload", "&6VillagerInfo Config Reloaded!");
-            config.addDefault("soundToggle", true);
-            config.addDefault("Sound","BLOCK_AMETHYST_BLOCK_BREAK");
-            config.addDefault("Highlight Workstation", true);
-            config.addDefault("Length of time to highlight workstation", 10);}
+            config.addDefault("profession", true);
+            config.addDefault("job-site", true);
+            config.addDefault("last-worked", true);
+            config.addDefault("bed-location", true);
+            config.addDefault("last-slept", true);
+            config.addDefault("inventory", true);
+            config.addDefault("restocks", true);
+            config.addDefault("reputation", true);
+            config.addDefault("sound-toggle", true);
+            config.addDefault("sound","BLOCK_AMETHYST_BLOCK_BREAK");
+            config.addDefault("highlight-workstation", true);
+            config.addDefault("highlight-time", 10);}
 }
