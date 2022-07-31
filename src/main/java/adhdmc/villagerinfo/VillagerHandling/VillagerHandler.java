@@ -1,14 +1,13 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
+import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.MiscHandling.TimeFormatting;
 import adhdmc.villagerinfo.VillagerInfo;
 import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Villager;
@@ -18,7 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -26,200 +24,92 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static org.bukkit.ChatColor.AQUA;
-import static org.bukkit.ChatColor.GRAY;
 import static org.bukkit.entity.EntityType.SHULKER;
 
 public class VillagerHandler implements Listener {
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<UUID, Shulker>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<UUID, PersistentDataContainer>();
     public static Location villagerJobsiteLocation;
-    public static boolean SillyResult;
+    NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
+    NamespacedKey isHighlighted = new NamespacedKey(VillagerInfo.plugin, "isHighlighted");
+
+    byte f = 0;
+    byte t = 1;
 
     @EventHandler
     public void onVillagerClick(PlayerInteractEntityEvent event) {
+        HashMap<String, String> messages = ConfigValidator.localeMap;
+        FileConfiguration config = VillagerInfo.plugin.getConfig();
         Player player = event.getPlayer();
         PersistentDataContainer playerPDC = player.getPersistentDataContainer();
-        if (event.getRightClicked().getType() != EntityType.VILLAGER) {
+        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        if (!event.getPlayer().isSneaking()) {
             return;
         }
-        if(!event.getPlayer().isSneaking()) {
+        if (!(event.getRightClicked() instanceof Villager villager)) {
             return;
         }
-        if(playerPDC.get(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER) != null && playerPDC.get(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER).equals(1)){
+        if (playerPDC.get(infoToggle, PersistentDataType.BYTE) != null
+                && playerPDC.get(infoToggle, PersistentDataType.BYTE).equals(t)) {
             return;
         }
-        if(!player.hasPermission("villagerinfo.use")){
-            return;
-        }
-        FileConfiguration config = VillagerInfo.plugin.getConfig();
-        boolean configProfession = config.getBoolean("Profession");
-        boolean configJobSite = config.getBoolean("Job Site");
-        boolean configLastWorked = config.getBoolean("Last Worked");
-        boolean configRestocks = config.getBoolean("Number of Restocks");
-        boolean configHome = config.getBoolean("Bed Location");
-        boolean configLastSlept = config.getBoolean("Last Slept");
-        boolean configInventory = config.getBoolean("Villager Inventory Contents");
-        boolean configReputation = config.getBoolean("Player Reputation");
-        boolean configHighlight = config.getBoolean("Highlight Workstation");
-        int configTime = config.getInt("Length of time to highlight workstation");
-        int highlightTime;
-        if (!(configTime > 0)){
-            highlightTime = 10;
-        } else {
-            highlightTime = configTime;
-        }
-        if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory && !configReputation && !configHighlight) {
-            SillyResult = true;
+        if (!player.hasPermission("villagerinfo.use")) {
             return;
         }
         event.setCancelled(true);
-        UUID pUUID = player.getUniqueId();
-        Villager villagerClicked = (Villager) event.getRightClicked();
-        String villagerProfession = villagerClicked.getProfession().toString();
-        int villagerRestocks = VillagerInfo.isPaper ? villagerClicked.getRestocksToday() : Integer.MIN_VALUE;
-        int playerReputationTotal = 0;
-        Location villagerJobSite = villagerClicked.getMemory(MemoryKey.JOB_SITE);
-        Long villagerWorked = villagerClicked.getMemory(MemoryKey.LAST_WORKED_AT_POI);
-        Location villagerHome = villagerClicked.getMemory(MemoryKey.HOME);
-        Long villagerSlept = villagerClicked.getMemory(MemoryKey.LAST_SLEPT);
-        ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
-        PersistentDataContainer villPDC =  villagerClicked.getPersistentDataContainer();
-        UUID villUUID = villagerClicked.getUniqueId();
-        StringBuilder villOutput = new StringBuilder("");
-        if (VillagerInfo.isPaper) {
-            Reputation playerReputation = villagerClicked.getReputation(pUUID);
-            int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
-            int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
-            int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
-            int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
-            int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
-            //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
-            playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+        long worldTimeTotal = villager.getWorld().getFullTime();
+        String villagerProfession = villager.getProfession().toString();
+        Location villagerJobLocation = villager.getMemory(MemoryKey.JOB_SITE);
+        if (villagerJobLocation != null){
+        int villagerJobsiteX = villagerJobLocation.getBlockX();
+        int villagerJobsiteY = villagerJobLocation.getBlockY();
+        int villagerJobsiteZ = villagerJobLocation.getBlockZ();
+        } else {
+            String villagerJobSite = messages.get("none-msg");
         }
-        Sound configSound = null;
-        if(VillagerInfo.plugin.getConfig().getBoolean("Sound Toggle")) {
-            try {
-                configSound = Sound.valueOf(VillagerInfo.plugin.getConfig().getString("Sound"));
-            } catch (IllegalArgumentException e) {
-                player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
-            }
-            if (configSound != null) {
-                player.playSound(player.getLocation(), configSound, 2, 2);
-            }
+
+        if (villager.getMemory(MemoryKey.LAST_WORKED_AT_POI) != null) {
+            String villagerLastWorked = TimeFormatting.timeMath(worldTimeTotal - villager.getMemory(MemoryKey.LAST_WORKED_AT_POI));
+        } else {
+            String villagerLastWorked = messages.get("never-msg");
         }
-        StringBuilder villagerInventoryString = new StringBuilder("");
-        if(configInventory){
-            for (int i = 0; i < villagerInventoryContents.length; i++) {
-                ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
-                if (villagerInventoryItem != null) {
-                    villagerInventoryString.append("\n")
-                            .append(AQUA)
-                            .append(villagerInventoryItem.getType())
-                            .append(GRAY)
-                            .append(" (")
-                            .append(villagerInventoryItem.getAmount())
-                            .append(")");
-                }
-            }
-        }
-        if(configProfession) {
-            if (villagerProfession.equals("NONE")) {
-                villOutput.append("\n");
-            } else {
-                villOutput.append("\n")
-                        .append(villagerProfession);
-            }
-        }
-        if(configJobSite){
-            if (villagerJobSite != null) {
-                villOutput.append("\n")
-                        .append(villagerJobSite.getBlockX())
-                        .append("x, ")
-                        .append(villagerJobSite.getBlockY())
-                        .append("y, ")
-                        .append(villagerJobSite.getBlockZ())
-                        .append("z");
-                villagerJobsiteLocation = villagerJobSite;
-                if(configHighlight){
-                    if (villPDC.get(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER) == null ||
-                        villPDC.get(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER).equals(0)){
-                        villPDC.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER, 1);
-                        villagerPDC.put(villUUID, villPDC);
-                        spawnShulker(villagerClicked.getUniqueId());
-                            new BukkitRunnable() {
-                        @Override
-                        public void run(){
-                                killShulker(villagerClicked.getUniqueId());
-                                villPDC.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER, 0);
-                                villagerPDC.put(villUUID, villPDC);
-                                }
-                        }.runTaskLater(VillagerInfo.plugin, 20L * highlightTime);
-                    }
-                }
-            } else {
-                villOutput.append("\n");
-            }
-        }
-        if(configLastWorked) {
-            if (villagerWorked != null) {
-                long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
-                villOutput.append("\n")
-                        .append(TimeFormatting.timeMath(mathTime));
-            } else {
-                villOutput.append("\n");
-            }
-        }
-        if(configRestocks && villagerRestocks != Integer.MIN_VALUE) {
-            if (villagerRestocks != 0){
-                villOutput.append("\n")
-                        .append(villagerRestocks);
-            } else {
-                villOutput.append("\n")
-                        .append(GRAY)
-                        .append("0");
-            }
-        }
-        if(configHome) {
-            if (villagerHome != null) {
-                villOutput.append("\n")
-                        .append(villagerHome.getBlockX())
-                        .append("x, ")
-                        .append(villagerHome.getBlockY())
-                        .append("y, ")
-                        .append(villagerHome.getBlockZ())
-                        .append("z");
-            } else {
-                villOutput.append("\n");
-            }
-        }
-        if(configLastSlept) {
-            if (villagerSlept != null) {
-                long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
-                villOutput.append("\n")
-                        .append(mathTime);
-            } else {
-                villOutput.append("\n");
-            }
-        }
-        if(configInventory) {
-            if(villagerInventoryString.toString().equals("")){
-                villOutput.append("\n");
-            } else {
-            villOutput.append("\n")
-                    .append(villagerInventoryString);
-        }
-        if(configReputation){
-            villOutput.append("\n")
-                  .append(ReputationHandler.villagerReputation(playerReputationTotal));
-            }
-        }
-        player.sendMessage(String.valueOf(villOutput));
+        Location bedLocation = villager.getMemory(MemoryKey.HOME);
+
+
+
+
     }
-    public void spawnShulker(UUID uuid){
+    }
+    private void villagerJobsiteHighlight(PersistentDataContainer villPDC, UUID villUUID){
+        if (villPDC.get(isHighlighted, PersistentDataType.BYTE) == null ||
+            villPDC.get(isHighlighted, PersistentDataType.BYTE).equals(f)){
+                villPDC.set(isHighlighted,PersistentDataType.BYTE,t);
+                villagerPDC.put(villUUID,villPDC);
+                spawnShulker(villUUID);
+                new BukkitRunnable(){
+                @Override
+                public void run(){
+                    killShulker(villUUID);
+                    villPDC.set(isHighlighted,PersistentDataType.BYTE,f);
+                    villagerPDC.put(villUUID,villPDC);
+                }
+            }.runTaskLater(VillagerInfo.plugin,20L* ConfigValidator.configTime);
+        }
+    }
+    private int reputationTotal(Villager vil, UUID p){
+        Reputation playerReputation = vil.getReputation(p);
+        if(playerReputation == null) return 0;
+        int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
+        int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
+        int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
+        int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
+        int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
+        //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
+        return (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+    }
+    private void spawnShulker(UUID uuid){
         Shulker spawnedShulker = (Shulker) villagerJobsiteLocation.getWorld().spawnEntity(villagerJobsiteLocation, SHULKER, CreatureSpawnEvent.SpawnReason.CUSTOM, (Entity) ->{
             Shulker highlightbox = (Shulker) Entity;
             highlightbox.setAI(false);

@@ -1,7 +1,6 @@
 package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
-import adhdmc.villagerinfo.MiscHandling.MessageHandler;
 import adhdmc.villagerinfo.VillagerInfo;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;

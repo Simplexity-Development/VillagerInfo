@@ -1,9 +1,9 @@
 package adhdmc.villagerinfo.Commands.SubCommands;
 
-import adhdmc.villagerinfo.Config.ConfigValidator;
-import adhdmc.villagerinfo.MiscHandling.MessageHandler;
-import adhdmc.villagerinfo.VillagerInfo;
 import adhdmc.villagerinfo.Commands.SubCommand;
+import adhdmc.villagerinfo.Config.ConfigValidator;
+import adhdmc.villagerinfo.VillagerInfo;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,14 +19,11 @@ public class ReloadCommand extends SubCommand {
     @Override
     public void doThing(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)|| sender.hasPermission("villagerinfo.reload")) {
-        VillagerInfo.plugin.reloadConfig();
-        sender.sendMessage(MessageHandler.configReload);
-        if(ConfigValidator.soundErrorMsg("") != null){
-            sender.sendMessage(ConfigValidator.soundErrorMsg(""));
-            }
-        }
-        if(ConfigValidator.timeErrorMsg("") != null){
-            sender.sendMessage(ConfigValidator.timeErrorMsg(""));
+            VillagerInfo.plugin.reloadConfig();
+            VillagerInfo.localeConfig.reloadConfig();
+            ConfigValidator.configValidator();
+            String configReload = ConfigValidator.localeMap.get("configReloadedString");
+            sender.sendMessage(MiniMessage.miniMessage().deserialize(configReload));
         }
     }
 

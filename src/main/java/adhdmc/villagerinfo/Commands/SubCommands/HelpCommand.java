@@ -1,6 +1,5 @@
 package adhdmc.villagerinfo.Commands.SubCommands;
 
-import adhdmc.villagerinfo.MiscHandling.MessageHandler;
 import adhdmc.villagerinfo.Commands.SubCommand;
 import org.bukkit.command.CommandSender;
 

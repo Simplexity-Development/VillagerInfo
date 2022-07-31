@@ -32,5 +32,17 @@ public class LocaleDefaults {
         config.addDefault("empty-msg", "&7EMPTY");
         config.addDefault("player-reputation-msg", "&aPLAYER REPUTATION:\n<reputation>");
         config.addDefault("debug-message", "CONFIG HAS BEEN LOADED");
+        config.addDefault("hour", "Hour, ");
+        config.addDefault("hours", "Hours, ");
+        config.addDefault("minute", "Minute, ");
+        config.addDefault("minutes", "Minutes, ");
+        config.addDefault("second-ago", "Second Ago");
+        config.addDefault("seconds-ago", "Seconds Ago");
+        config.addDefault("location-x", "<int>x, ");
+        config.addDefault("location-y", "<int>y, ");
+        config.addDefault("location-z", "<int>z");
+
+
+
     }
 }

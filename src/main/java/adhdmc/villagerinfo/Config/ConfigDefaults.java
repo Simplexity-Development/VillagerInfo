@@ -18,5 +18,6 @@ public class ConfigDefaults {
             config.addDefault("sound-toggle", true);
             config.addDefault("sound","BLOCK_AMETHYST_BLOCK_BREAK");
             config.addDefault("highlight-workstation", true);
-            config.addDefault("highlight-time", 10);}
+            config.addDefault("highlight-time", 10);
+        }
 }
