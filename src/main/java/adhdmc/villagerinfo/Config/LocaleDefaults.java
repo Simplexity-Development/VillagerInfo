@@ -26,7 +26,7 @@ public class LocaleDefaults {
         config.addDefault("villager-num-restocks-msg", "&aRESTOCKS TODAY:\n <restockcount>");
         config.addDefault("villager-home-msg", "&aHOME:\n <homelocation>");
         config.addDefault("villager-slept-msg", "&aLAST SLEPT:\n <sleeptime>");
-        config.addDefault("villager-inventory-msg", "&aVILLAGER INVENTORY:");
+        config.addDefault("villager-inventory-msg", "&aVILLAGER INVENTORY: <contents>");
         config.addDefault("none-msg", "&7NONE");
         config.addDefault("never-msg", "&7NEVER");
         config.addDefault("empty-msg", "&7EMPTY");

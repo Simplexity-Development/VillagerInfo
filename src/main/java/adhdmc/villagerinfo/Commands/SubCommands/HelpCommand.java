@@ -1,26 +1,30 @@
 package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
+import adhdmc.villagerinfo.Config.ConfigValidator;
 import org.bukkit.command.CommandSender;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class HelpCommand extends SubCommand {
 
     public HelpCommand(){
-        super ("help","Villager Info help", "/vill help");
+        super ("help","VillagerInfo help", "/vill help");
     }
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
+        HashMap<String, String> msgs = ConfigValidator.localeMap;
+
         if(sender.hasPermission("villagerinfo.use")) {
-            sender.sendMessage(MessageHandler.prefix);
-            sender.sendMessage(MessageHandler.helpMain);
-            sender.sendMessage(MessageHandler.helpToggle);
-            sender.sendMessage(MessageHandler.helpReload);
+            sender.sendMessage(msgs.get("prefix"));
+            sender.sendMessage(msgs.get("help-main"));
+            sender.sendMessage(msgs.get("help-toggle"));
+            sender.sendMessage(msgs.get("help-reload"));
             return;
         }
-        sender.sendMessage(MessageHandler.noPermission);
+        sender.sendMessage(msgs.get("no-permission"));
     }
 
     @Override

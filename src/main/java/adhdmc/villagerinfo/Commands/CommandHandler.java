@@ -1,6 +1,6 @@
 package adhdmc.villagerinfo.Commands;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,7 +29,7 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //Checking for arguments
         if (args.length == 0){
-            sender.sendMessage(MessageHandler.prefix + ChatColor.translateAlternateColorCodes('&', "\n&aAuthor: &6IllogicalSong\n&aVersion:&7 ALPHA\n&aSpecial Thanks to Peashooter101"));
+            sender.sendMessage(MiniMessage.miniMessage().deserialize("\n&aAuthor: &6IllogicalSong\n&aVersion:&7 ALPHA\n&aSpecial Thanks to Peashooter101"));
             return true;
         }
         //if has an argument, check to see if it's contained in the list of arguments

@@ -19,18 +19,18 @@ public class ToggleCommand extends SubCommand {
     @Override
     public void doThing(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageHandler.notAPlayer);
+            //sender.sendMessage(MessageHandler.notAPlayer);
             return;
         }
         if(!(sender.hasPermission("villagerinfo.toggle")) || !(sender.hasPermission("villagerinfo.use"))) {
-            sender.sendMessage(MessageHandler.noPermission);
+            //sender.sendMessage(MessageHandler.noPermission);
             return;
         }
         if (toggleSetting((Player) sender)) {
-            sender.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOn);
+            //sender.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOn);
             return;
         }
-        sender.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOff);
+        //sender.sendMessage(MessageHandler.prefix + " " + MessageHandler.toggleOff);
         }
 
     private boolean toggleSetting(Player p) {
