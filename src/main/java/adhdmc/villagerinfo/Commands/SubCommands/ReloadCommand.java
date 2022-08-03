@@ -22,7 +22,7 @@ public class ReloadCommand extends SubCommand {
             VillagerInfo.plugin.reloadConfig();
             VillagerInfo.localeConfig.reloadConfig();
             ConfigValidator.configValidator();
-            String configReload = ConfigValidator.localeMap.get("configReloadedString");
+            String configReload = ConfigValidator.localeMap.get("config-reloaded");
             sender.sendMessage(MiniMessage.miniMessage().deserialize(configReload));
         }
     }

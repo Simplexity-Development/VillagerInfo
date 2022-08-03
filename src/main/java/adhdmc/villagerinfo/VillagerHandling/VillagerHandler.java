@@ -33,8 +33,8 @@ import java.util.UUID;
 import static org.bukkit.entity.EntityType.SHULKER;
 
 public class VillagerHandler implements Listener {
-    public static HashMap<UUID, Shulker> workstationShulker = new HashMap<UUID, Shulker>();
-    public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<UUID, PersistentDataContainer>();
+    public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
+    public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
     public static Location villagerJobsiteLocation;
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
     NamespacedKey isHighlighted = new NamespacedKey(VillagerInfo.plugin, "isHighlighted");
@@ -71,9 +71,16 @@ public class VillagerHandler implements Listener {
         UUID villagerUUID = villager.getUniqueId();
         PersistentDataContainer villagerPDC = villager.getPersistentDataContainer();
         //profession
-        String villagerProfession = villager.getProfession().toString();
+        String villagerProfessionString;
+        Villager.Profession villagerProfession = villager.getProfession();
+        if (villagerProfession == Villager.Profession.NONE) {
+            villagerProfessionString = messages.get("noneString");
+        } else {
+            villagerProfessionString = villagerProfession.toString();
+        }
         //job-site
         Location villagerJobLocation = villager.getMemory(MemoryKey.JOB_SITE);
+        String villagerJobSite = null;
         int villagerJobSiteX = 0;
         int villagerJobSiteY = 0;
         int villagerJobSiteZ = 0;
@@ -82,18 +89,21 @@ public class VillagerHandler implements Listener {
          villagerJobSiteY = villagerJobLocation.getBlockY();
          villagerJobSiteZ = villagerJobLocation.getBlockZ();
         } else {
-            String villagerJobSite = messages.get("none-msg");
+            //villagerJobSite = messages.get("noneString");
+            villagerJobSite = "debug: none";
         }
         //last-worked
         Long lastWorked = villager.getMemory(MemoryKey.LAST_WORKED_AT_POI);
-        String villagerLastWorked = "";
+        String villagerLastWorked;
         if ( lastWorked != null) {
             villagerLastWorked = TimeFormatting.timeMath(worldTimeTotal - lastWorked);
         } else {
-            villagerLastWorked = messages.get("never-msg");
+            //villagerLastWorked = messages.get("neverString");
+            villagerLastWorked = "debug: never";
         }
         //bed-location
         Location bedLocation = villager.getMemory(MemoryKey.HOME);
+        String villagerBed = null;
         int villagerBedX = 0;
         int villagerBedY = 0;
         int villagerBedZ = 0;
@@ -103,21 +113,24 @@ public class VillagerHandler implements Listener {
             villagerBedY = bedLocation.getBlockY();
             villagerBedZ = bedLocation.getBlockZ();
         } else {
-            String villagerBed = messages.get("none-msg");
+            //villagerBed = messages.get("noneString");
+            villagerBed = "debug: none";
         }
         //last-slept
         Long lastSlept = villager.getMemory(MemoryKey.LAST_SLEPT);
-        String villagerLastSlept = "";
+        String villagerLastSlept;
         if ( lastSlept != null) {
             villagerLastSlept = TimeFormatting.timeMath(worldTimeTotal - lastSlept);
         } else {
-            villagerLastSlept = messages.get("never-msg");
+            //villagerLastSlept = messages.get("neverString");
+            villagerLastSlept = "debug: never";
         }
         //inventory
         Inventory villInventory = villager.getInventory();
-        String villagerInventory = "";
+        String villagerInventory = null;
         if (villInventory.isEmpty()){
-            villagerInventory = messages.get("empty-msg");
+            //villagerInventory = messages.get("empty-msg");
+            villagerInventory = "debug: empty";
         } else {
             ItemStack[] inventoryItems = villInventory.getContents();
             for (ItemStack items : inventoryItems) {
@@ -134,34 +147,65 @@ public class VillagerHandler implements Listener {
         //Messages
         ArrayList<Component> messageList = new ArrayList<>();
         if(config.getBoolean("profession")){
-            Component professionMessage = mM.deserialize(messages.get("villager-profession"), Placeholder.parsed("profession", villagerProfession));
+            Component professionMessage;
+            if (villagerProfession == Villager.Profession.NONE){
+                professionMessage = mM.deserialize(villagerProfessionString);
+            } else {
+                professionMessage = mM.deserialize(messages.get("villager-profession"), Placeholder.parsed("profession", villagerProfessionString));
+            }
             messageList.add(professionMessage);
         }
-        if(config.getBoolean("job-site")){
+        if(config.getBoolean("job-site")) {
+            Component jobLocationMessage;
+        if(villagerJobLocation == null){
+            jobLocationMessage = mM.deserialize(villagerJobSite);
+        }else{
             Component jobX = mM.deserialize(messages.get("location-x"), Placeholder.unparsed("int", String.valueOf(villagerJobSiteX)));
             Component jobY = mM.deserialize(messages.get("location-y"), Placeholder.unparsed("int", String.valueOf(villagerJobSiteY)));
             Component jobZ = mM.deserialize(messages.get("location-z"), Placeholder.unparsed("int", String.valueOf(villagerJobSiteZ)));
-            Component jobLocationMessage = mM.deserialize(messages.get("villager-jobsite-msg"),
+            jobLocationMessage = mM.deserialize(messages.get("villager-jobsite-msg"),
                     Placeholder.unparsed("jobsitelocation", String.valueOf(jobX.append(jobY).append(jobZ))));
+        }
             messageList.add(jobLocationMessage);
         }
         if(config.getBoolean("last-worked")){
-            Component lastWorkedMessage = mM.deserialize(messages.get("villager-last-worked-msg"), Placeholder.unparsed("worktime", villagerLastWorked));
+            Component lastWorkedMessage;
+            if(lastWorked == null){
+                lastWorkedMessage = mM.deserialize(villagerLastWorked);
+            } else {
+                lastWorkedMessage = mM.deserialize(messages.get("villager-last-worked-msg"), Placeholder.unparsed("worktime", villagerLastWorked));
+            }
             messageList.add(lastWorkedMessage);
         }
         if(config.getBoolean("bed-location")){
-            Component bedX = mM.deserialize(messages.get("location-x"), Placeholder.unparsed("int", String.valueOf(villagerBedX)));
-            Component bedY = mM.deserialize(messages.get("location-y"), Placeholder.unparsed("int", String.valueOf(villagerBedY)));
-            Component bedZ = mM.deserialize(messages.get("location-z"), Placeholder.unparsed("int", String.valueOf(villagerBedZ)));
-            Component bedLocationMessage = mM.deserialize(messages.get("villager-home-msg"), Placeholder.unparsed("homelocation", String.valueOf(bedX.append(bedY).append(bedZ))));
+            Component bedLocationMessage;
+            if(bedLocation == null){
+                bedLocationMessage = mM.deserialize(villagerBed);
+
+            } else {
+                Component bedX = mM.deserialize(messages.get("location-x"), Placeholder.unparsed("int", String.valueOf(villagerBedX)));
+                Component bedY = mM.deserialize(messages.get("location-y"), Placeholder.unparsed("int", String.valueOf(villagerBedY)));
+                Component bedZ = mM.deserialize(messages.get("location-z"), Placeholder.unparsed("int", String.valueOf(villagerBedZ)));
+                bedLocationMessage = mM.deserialize(messages.get("villager-home-msg"), Placeholder.unparsed("homelocation", String.valueOf(bedX.append(bedY).append(bedZ))));
+            }
             messageList.add(bedLocationMessage);
         }
         if(config.getBoolean("last-slept")){
-            Component lastSleptMessage = mM.deserialize(messages.get("villager-last-slept"), Placeholder.unparsed("sleeptime", villagerLastSlept));
+            Component lastSleptMessage;
+            if (lastSlept == null){
+                lastSleptMessage = mM.deserialize(villagerLastSlept);
+            } else {
+                lastSleptMessage = mM.deserialize(messages.get("villager-last-slept"), Placeholder.unparsed("sleeptime", villagerLastSlept));
+            }
             messageList.add(lastSleptMessage);
         }
         if(config.getBoolean("inventory")){
-            Component villagerInventoryMessage = mM.deserialize(messages.get("villager-inventory-msg"), Placeholder.unparsed("contents", villagerInventory));
+            Component villagerInventoryMessage = null;
+            if(villagerInventory == null) {
+                mM.deserialize(messages.get("villager-inventory-msg"), Placeholder.unparsed("contents", messages.get("empty-message")));
+            } else {
+                villagerInventoryMessage = mM.deserialize(messages.get("villager-inventory-msg"), Placeholder.unparsed("contents", villagerInventory));
+            }
             messageList.add(villagerInventoryMessage);
         }
         if(config.getBoolean("restocks")){

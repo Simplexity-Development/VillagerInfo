@@ -5,6 +5,7 @@ import adhdmc.villagerinfo.Commands.SubCommands.HelpCommand;
 import adhdmc.villagerinfo.Commands.SubCommands.ReloadCommand;
 import adhdmc.villagerinfo.Commands.SubCommands.ToggleCommand;
 import adhdmc.villagerinfo.Config.ConfigDefaults;
+import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.LocaleConfig;
 import adhdmc.villagerinfo.Config.LocaleDefaults;
 import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
@@ -30,6 +31,7 @@ public final class VillagerInfo extends JavaPlugin {
         this.getCommand("vill").setExecutor(new CommandHandler());
         this.saveDefaultConfig();
         localeConfig.saveConfig();
+        ConfigValidator.configValidator();
         ConfigDefaults.mainConfigDefaults();
         try {
             LocaleDefaults.langConfigDefaults();

@@ -29,7 +29,7 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //Checking for arguments
         if (args.length == 0){
-            sender.sendMessage(MiniMessage.miniMessage().deserialize("\n&aAuthor: &6IllogicalSong\n&aVersion:&7 ALPHA\n&aSpecial Thanks to Peashooter101"));
+            sender.sendMessage(MiniMessage.miniMessage().deserialize("<green>VillagerInfo | Author: <gold> IllogicalSong</gold> Version:<grey> ALPHA</grey> Special Thanks to Peashooter101"));
             return true;
         }
         //if has an argument, check to see if it's contained in the list of arguments
