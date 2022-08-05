@@ -5,6 +5,7 @@ import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
+import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,16 +19,16 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
-        HashMap<String, String> msgs = ConfigValidator.localeMap;
+        HashMap<Message, String> msgs = ConfigValidator.localeMap;
 
         if(sender.hasPermission(VillagerInfo.usePermission)) {
-            sender.sendMessage(mM.deserialize(msgs.get("prefix")));
-            sender.sendMessage(mM.deserialize(msgs.get("help-main")));
-            sender.sendMessage(mM.deserialize(msgs.get("help-toggle")));
-            sender.sendMessage(mM.deserialize(msgs.get("help-reload")));
+            sender.sendMessage(mM.deserialize(msgs.get(Message.PREFIX)));
+            sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_MAIN)));
+            sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_TOGGLE)));
+            sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_RELOAD)));
             return;
         }
-        sender.sendMessage(mM.deserialize(msgs.get("no-permission")));
+        sender.sendMessage(mM.deserialize(msgs.get(Message.NO_PERMISSION)));
     }
 
     @Override

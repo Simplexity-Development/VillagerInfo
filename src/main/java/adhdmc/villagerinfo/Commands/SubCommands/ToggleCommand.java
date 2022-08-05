@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ToggleCommand extends SubCommand {
     String enabled = VillagerInfo.isEnabled;
     String disabled = VillagerInfo.isDisabled;
     MiniMessage mM = MiniMessage.miniMessage();
-    HashMap<String, String> messages = ConfigValidator.localeMap;
+    HashMap<Message, String> messages = ConfigValidator.localeMap;
 
     public ToggleCommand() {
         super("toggle", "Toggles villager info on and off","/vill toggle");
@@ -28,20 +29,20 @@ public class ToggleCommand extends SubCommand {
     @Override
     public void doThing(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(mM.deserialize(messages.get("not-a-player")));
+            sender.sendMessage(mM.deserialize(messages.get(Message.NOT_A_PLAYER)));
             return;
         }
         if(!(sender.hasPermission(VillagerInfo.toggleCommandPermission))) {
-            sender.sendMessage(mM.deserialize(messages.get("no-permission")));
+            sender.sendMessage(mM.deserialize(messages.get(Message.NO_PERMISSION)));
             return;
         }
         if (toggleSetting((Player) sender)) {
-            sender.sendMessage(mM.deserialize(messages.get("prefix"))
-                    .append(Component.text(messages.get("toggle-on"))));
+            sender.sendMessage(mM.deserialize(messages.get(Message.PREFIX))
+                    .append(Component.text(messages.get(Message.TOGGLE_ON))));
             return;
         }
-        sender.sendMessage(mM.deserialize(messages.get("prefix"))
-                .append(Component.text(messages.get("toggle-off"))));
+        sender.sendMessage(mM.deserialize(messages.get(Message.PREFIX))
+                .append(Component.text(messages.get(Message.TOGGLE_OFF))));
     }
 
     private boolean toggleSetting(Player p) {
