@@ -16,9 +16,9 @@ public class LocaleDefaults {
         config.addDefault("no-permission", "<red>You don't have permission to use this command!");
         config.addDefault("no-command", "<red>No subcommand by that name!");
         config.addDefault("config-reload", "<gold>VillagerInfo Config Reloaded!");
-        config.addDefault("help-main", "<#4dd5ff>• How to use Villager Info\n<grey>Shift-right-click a villager while toggle is on to have a villager's information displayed");
-        config.addDefault("help-toggle", "<#4dd5ff>•/vill toggle\n<grey>Toggles the ability to receive villager information on or off.");
-        config.addDefault("help-reload", "<#4dd5ff>•/vill reload\n<grey>Reloads the plugin, applies config values");
+        config.addDefault("help-main", "<#4dd5ff> • How to use Villager Info\n<grey>Shift-right-click a villager while toggle is on to have a villager's information displayed");
+        config.addDefault("help-toggle", "<#4dd5ff> • /vill toggle\n<grey>Toggles the ability to receive villager information on or off.");
+        config.addDefault("help-reload", "<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values");
         config.addDefault("not-a-player", "<red>Sorry, you must be a player to use this command");
         config.addDefault("villager-profession", "<green>PROFESSION:\n • <profession>");
         config.addDefault("villager-jobsite-msg", "<green>JOB SITE:\n • <jobsitelocation>");
@@ -27,9 +27,9 @@ public class LocaleDefaults {
         config.addDefault("villager-home-msg", "<green>HOME:\n <homelocation>");
         config.addDefault("villager-slept-msg", "<green>LAST SLEPT:\n <sleeptime>");
         config.addDefault("villager-inventory-msg", "<green>VILLAGER INVENTORY: <contents>");
-        config.addDefault("none-msg", "<grey>NONE");
-        config.addDefault("never-msg", "<grey>NEVER");
-        config.addDefault("empty-msg", "<grey>EMPTY");
+        config.addDefault("none-msg", "<grey> • NONE");
+        config.addDefault("never-msg", "<grey> • NEVER");
+        config.addDefault("empty-msg", "<grey>\n • EMPTY");
         config.addDefault("player-reputation-msg", "<green>PLAYER REPUTATION:\n<reputation>");
         config.addDefault("debug-message", "CONFIG HAS BEEN LOADED");
         config.addDefault("hour", "Hour, ");
