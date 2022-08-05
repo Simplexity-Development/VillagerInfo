@@ -35,7 +35,7 @@ public class ConfigValidator {
         localeMap.put("toggle-off",  locale.getString("toggle-off"));
         localeMap.put("no-permission",  locale.getString("no-permission"));
         localeMap.put("no-command",  locale.getString("no-command"));
-        localeMap.put("config-reloaded",  locale.getString("config-reloaded"));
+        localeMap.put("config-reload",  locale.getString("config-reload"));
         localeMap.put("help-main",  locale.getString("help-main"));
         localeMap.put("help-toggle",  locale.getString("help-toggle"));
         localeMap.put("help-reload",  locale.getString("help-reload"));
