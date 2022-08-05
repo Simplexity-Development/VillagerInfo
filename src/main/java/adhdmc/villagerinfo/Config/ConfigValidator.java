@@ -19,7 +19,7 @@ public class ConfigValidator {
         FileConfiguration config = VillagerInfo.plugin.getConfig();
         FileConfiguration locale = VillagerInfo.localeConfig.getlocaleConfig();
         try {
-            configSound = Sound.valueOf(config.getString("Sound").toUpperCase(Locale.ROOT));
+            configSound = Sound.valueOf(config.getString("sound").toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException | NullPointerException e) {
             VillagerInfo.plugin.getLogger().warning("Configuration Error: " + configSound + " is not a valid sound! Please supply a valid sound");
             configSound = Sound.BLOCK_AMETHYST_BLOCK_BREAK;

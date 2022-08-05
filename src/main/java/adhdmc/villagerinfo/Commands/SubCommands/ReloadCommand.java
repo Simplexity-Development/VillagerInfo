@@ -18,12 +18,13 @@ public class ReloadCommand extends SubCommand {
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)|| sender.hasPermission("villagerinfo.reload")) {
+        if (!(sender instanceof Player)|| sender.hasPermission(VillagerInfo.reloadCommandPermission)) {
             VillagerInfo.plugin.reloadConfig();
             VillagerInfo.localeConfig.reloadConfig();
             ConfigValidator.configValidator();
-            String configReload = ConfigValidator.localeMap.get("config-reloaded");
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(configReload));
+            sender.sendMessage(MiniMessage.miniMessage().deserialize(ConfigValidator.localeMap.get("config-reloaded")));
+        } else {
+            sender.sendMessage(MiniMessage.miniMessage().deserialize(ConfigValidator.localeMap.get("no-permission")));
         }
     }
 

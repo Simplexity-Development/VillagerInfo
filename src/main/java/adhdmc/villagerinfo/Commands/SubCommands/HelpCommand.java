@@ -2,6 +2,7 @@ package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
 import adhdmc.villagerinfo.Config.ConfigValidator;
+import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 
@@ -19,7 +20,7 @@ public class HelpCommand extends SubCommand {
     public void doThing(CommandSender sender, String[] args) {
         HashMap<String, String> msgs = ConfigValidator.localeMap;
 
-        if(sender.hasPermission("villagerinfo.use")) {
+        if(sender.hasPermission(VillagerInfo.usePermission)) {
             sender.sendMessage(mM.deserialize(msgs.get("prefix")));
             sender.sendMessage(mM.deserialize(msgs.get("help-main")));
             sender.sendMessage(mM.deserialize(msgs.get("help-toggle")));
