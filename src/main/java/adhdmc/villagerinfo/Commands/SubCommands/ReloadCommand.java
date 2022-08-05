@@ -22,7 +22,7 @@ public class ReloadCommand extends SubCommand {
             VillagerInfo.plugin.reloadConfig();
             VillagerInfo.localeConfig.reloadConfig();
             ConfigValidator.configValidator();
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(ConfigValidator.localeMap.get("config-reloaded")));
+            sender.sendMessage(MiniMessage.miniMessage().deserialize(ConfigValidator.localeMap.get("config-reload")));
         } else {
             sender.sendMessage(MiniMessage.miniMessage().deserialize(ConfigValidator.localeMap.get("no-permission")));
         }
