@@ -14,13 +14,14 @@ import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ToggleCommand extends SubCommand {
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
     String enabled = VillagerInfo.isEnabled;
     String disabled = VillagerInfo.isDisabled;
     MiniMessage mM = MiniMessage.miniMessage();
-    HashMap<Message, String> messages = ConfigValidator.localeMap;
+    Map<Message, String> messages = ConfigValidator.getMapping();
 
     public ToggleCommand() {
         super("toggle", "Toggles villager info on and off","/vill toggle");
