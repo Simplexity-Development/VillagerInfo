@@ -28,13 +28,14 @@ import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.bukkit.entity.EntityType.SHULKER;
 
 public class VillagerHandler implements Listener {
     MiniMessage mM = MiniMessage.miniMessage();
-    HashMap<Message, String> messages = ConfigValidator.localeMap;
+    Map<Message, String> messages = ConfigValidator.getMapping();
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");

@@ -4,10 +4,11 @@ import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class TimeFormatting {
     public static String timeMath(long mathTime){
-        HashMap<Message, String> msgs = ConfigValidator.localeMap;
+        Map<Message, String> msgs = ConfigValidator.getMapping();
         String mathResult = "";
         //Remainder after dividing by 72,000 (one hour)
         long mathTime2 = mathTime % 72000;

@@ -4,8 +4,10 @@ import adhdmc.villagerinfo.VillagerInfo;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class ConfigValidator {
     public enum Message {
@@ -18,7 +20,7 @@ public class ConfigValidator {
         LOCATION_X, LOCATION_Y, LOCATION_Z
     }
 
-    public static HashMap<Message, String> localeMap = new HashMap<>();
+    private static final HashMap<Message, String> localeMap = new HashMap<>();
     public static Sound configSound = null;
     public static int configTime = 0;
 
@@ -29,7 +31,7 @@ public class ConfigValidator {
         FileConfiguration config = VillagerInfo.plugin.getConfig();
         FileConfiguration locale = VillagerInfo.localeConfig.getlocaleConfig();
         try {
-            configSound = Sound.valueOf(config.getString("sound").toUpperCase(Locale.ROOT));
+            configSound = Sound.valueOf(config.getString("sound", "").toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException | NullPointerException e) {
             VillagerInfo.plugin.getLogger().warning("Configuration Error: " + configSound + " is not a valid sound! Please supply a valid sound");
             configSound = Sound.BLOCK_AMETHYST_BLOCK_BREAK;
@@ -71,4 +73,7 @@ public class ConfigValidator {
         localeMap.put(Message.LOCATION_Y, locale.getString("location-y"));
         localeMap.put(Message.LOCATION_Z, locale.getString("location-z"));
     }
+
+    public static Map<Message, String> getMapping() { return Collections.unmodifiableMap(localeMap); }
+
 }

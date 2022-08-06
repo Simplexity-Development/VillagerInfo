@@ -9,6 +9,7 @@ import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HelpCommand extends SubCommand {
     MiniMessage mM = MiniMessage.miniMessage();
@@ -19,7 +20,7 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
-        HashMap<Message, String> msgs = ConfigValidator.localeMap;
+        Map<Message, String> msgs = ConfigValidator.getMapping();
 
         if(sender.hasPermission(VillagerInfo.usePermission)) {
             sender.sendMessage(mM.deserialize(msgs.get(Message.PREFIX)));
