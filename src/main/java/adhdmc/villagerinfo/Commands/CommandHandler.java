@@ -1,19 +1,19 @@
 package adhdmc.villagerinfo.Commands;
 
+import adhdmc.villagerinfo.Config.ConfigValidator;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class CommandHandler implements CommandExecutor, TabExecutor {
 
     public static HashMap<String, SubCommand> subcommandList = new HashMap<String, SubCommand>();
+    Map<ConfigValidator.Message, Component> msgs = ConfigValidator.getMapping();
     //TY Peashooter101
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
@@ -29,7 +29,7 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //Checking for arguments
         if (args.length == 0){
-            sender.sendMessage(MiniMessage.miniMessage().deserialize("<green>VillagerInfo | Author: <gold> IllogicalSong</gold> Version:<grey> ALPHA</grey> Special Thanks to Peashooter101"));
+            sender.sendMessage(MiniMessage.miniMessage().deserialize("<green><click:open_url:'https://github.com/RhythmicSys/VillagerInfo'><hover:show_text:'<gray>Click here to visit the GitHub!'>VillagerInfo | Version:<version> </hover></click>\nAuthors: <gold> Rhythmic </gold> | <gold>Peashooter101</gold>"));
             return true;
         }
         //if has an argument, check to see if it's contained in the list of arguments
@@ -37,7 +37,7 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
         if (subcommandList.containsKey(command)) {
             subcommandList.get(command).doThing(sender, Arrays.copyOfRange(args, 1, args.length));
         } else {
-            sender.sendMessage("Sorry, you input the command incorrectly. Please use /vill help to see proper usage");
+            sender.sendMessage(msgs.get(ConfigValidator.Message.NO_COMMAND));
         }
         return true;
     }

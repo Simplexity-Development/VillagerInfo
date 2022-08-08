@@ -2,15 +2,14 @@ package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
 import adhdmc.villagerinfo.Config.ConfigValidator;
+import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 import adhdmc.villagerinfo.VillagerInfo;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
-
-import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 public class ReloadCommand extends SubCommand {
 
@@ -21,14 +20,14 @@ public class ReloadCommand extends SubCommand {
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
-        Map<Message, String> localeMap = ConfigValidator.getMapping();
+        Map<Message, Component> msgs = ConfigValidator.getMapping();
         if (!(sender instanceof Player)|| sender.hasPermission(VillagerInfo.reloadCommandPermission)) {
             VillagerInfo.plugin.reloadConfig();
             VillagerInfo.localeConfig.reloadConfig();
             ConfigValidator.configValidator();
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(localeMap.get("config-reload")));
+            sender.sendMessage(msgs.get(Message.CONFIG_RELOADED));
         } else {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(localeMap.get("no-permission")));
+            sender.sendMessage(msgs.get(Message.NO_PERMISSION));
         }
     }
 

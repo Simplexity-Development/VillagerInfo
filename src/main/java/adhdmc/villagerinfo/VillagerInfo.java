@@ -7,7 +7,6 @@ import adhdmc.villagerinfo.Commands.SubCommands.ToggleCommand;
 import adhdmc.villagerinfo.Config.ConfigDefaults;
 import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.LocaleConfig;
-import adhdmc.villagerinfo.Config.LocaleDefaults;
 import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.InvalidConfigurationException;

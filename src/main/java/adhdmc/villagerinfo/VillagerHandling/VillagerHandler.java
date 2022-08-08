@@ -35,7 +35,7 @@ import static org.bukkit.entity.EntityType.SHULKER;
 
 public class VillagerHandler implements Listener {
     MiniMessage mM = MiniMessage.miniMessage();
-    Map<Message, String> messages = ConfigValidator.getMapping();
+    Map<Message, Component> messages = ConfigValidator.getMapping();
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
