@@ -23,6 +23,7 @@ public class LocaleConfig {
             this.localeFile = new File(this.plugin.getDataFolder(), localeName);
         }
         this.localeConfig = YamlConfiguration.loadConfiguration(this.localeFile);
+        this.localeConfig.options().copyDefaults(true);
         InputStream defaultStream = this.plugin.getResource(localeName);
         if (defaultStream != null) {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
@@ -38,6 +39,7 @@ public class LocaleConfig {
     }
 
     public void saveConfig() {
+        getlocaleConfig();
         if (this.localeConfig == null || this.localeFile == null) {
             return;
         }

@@ -27,6 +27,7 @@ public final class VillagerInfo extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         localeConfig = new LocaleConfig(this);
+        localeConfig.getlocaleConfig();
         int pluginId = 13653; // bStats ID
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
         this.getCommand("vill").setExecutor(new CommandHandler());
@@ -35,8 +36,6 @@ public final class VillagerInfo extends JavaPlugin {
         Defaults.configDefaults();
         localeConfig.saveConfig();
         ConfigValidator.configValidator();
-
-        getLogger().info(localeConfig.getlocaleConfig().getString("debug-message"));
         registerCommands();
     }
 
