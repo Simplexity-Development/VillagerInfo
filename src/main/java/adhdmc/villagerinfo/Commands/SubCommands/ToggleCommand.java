@@ -4,7 +4,7 @@ import adhdmc.villagerinfo.Commands.SubCommand;
 import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 import adhdmc.villagerinfo.VillagerInfo;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class ToggleCommand extends SubCommand {
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
     String enabled = VillagerInfo.isEnabled;
     String disabled = VillagerInfo.isDisabled;
-    Map<Message, Component> msgs = ConfigValidator.getMapping();
+    Map<Message, String> msgs = ConfigValidator.getMapping();
 
     public ToggleCommand() {
         super("toggle", "Toggles villager info on and off","/vill toggle");
@@ -26,21 +26,22 @@ public class ToggleCommand extends SubCommand {
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
+        MiniMessage mM = MiniMessage.miniMessage();
         if (!(sender instanceof Player)) {
-            sender.sendMessage(msgs.get(Message.NOT_A_PLAYER));
+            sender.sendMessage(mM.deserialize(msgs.get(Message.NOT_A_PLAYER)));
             return;
         }
         if(!(sender.hasPermission(VillagerInfo.toggleCommandPermission))) {
-            sender.sendMessage(msgs.get(Message.NO_PERMISSION));
+            sender.sendMessage(mM.deserialize(msgs.get(Message.NO_PERMISSION)));
             return;
         }
         if (toggleSetting((Player) sender)) {
-            sender.sendMessage(msgs.get(Message.PREFIX)
-                    .append(msgs.get(Message.TOGGLE_ON)));
+            sender.sendMessage(mM.deserialize(msgs.get(Message.PREFIX))
+                    .append(mM.deserialize(msgs.get(Message.TOGGLE_ON))));
             return;
         }
-        sender.sendMessage(msgs.get(Message.PREFIX)
-                .append(msgs.get(Message.TOGGLE_OFF)));
+        sender.sendMessage(mM.deserialize(msgs.get(Message.PREFIX))
+                .append(mM.deserialize(msgs.get(Message.TOGGLE_OFF))));
     }
 
     private boolean toggleSetting(Player p) {

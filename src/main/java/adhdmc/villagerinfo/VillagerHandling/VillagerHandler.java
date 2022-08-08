@@ -35,7 +35,7 @@ import static org.bukkit.entity.EntityType.SHULKER;
 
 public class VillagerHandler implements Listener {
     MiniMessage mM = MiniMessage.miniMessage();
-    Map<Message, Component> messages = ConfigValidator.getMapping();
+    Map<Message, String> messages = ConfigValidator.getMapping();
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
@@ -128,14 +128,14 @@ public class VillagerHandler implements Listener {
             jobSiteFinal = mM.deserialize(messages.get(Message.VILLAGER_JOBSITE),
                     Placeholder.unparsed("jobsitelocation", messages.get(Message.NONE)));
         }else{
-            Component jobX = mM.deserialize(messages.get(Message.LOCATION_X),
-                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockX())));
-            Component jobY = mM.deserialize(messages.get(Message.LOCATION_Y),
-                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockY())));
-            Component jobZ = mM.deserialize(messages.get(Message.LOCATION_Z),
-                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockZ())));
+            String jobX = String.valueOf(mM.deserialize(messages.get(Message.LOCATION_X),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockX()))));
+            String jobY = String.valueOf(mM.deserialize(messages.get(Message.LOCATION_Y),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockY()))));
+            String jobZ = String.valueOf(mM.deserialize(messages.get(Message.LOCATION_Z),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockZ()))));
             jobSiteFinal = mM.deserialize(messages.get(Message.VILLAGER_JOBSITE),
-                    Placeholder.unparsed("jobsitelocation", String.valueOf(jobX.append(jobY).append(jobZ))));
+                    Placeholder.unparsed("jobsitelocation", jobX + jobY + jobZ));
         }
         return jobSiteFinal;
     }

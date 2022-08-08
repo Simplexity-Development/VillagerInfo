@@ -9,11 +9,8 @@ import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.LocaleConfig;
 import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.IOException;
 
 public final class VillagerInfo extends JavaPlugin {
     public static VillagerInfo plugin;
@@ -36,11 +33,6 @@ public final class VillagerInfo extends JavaPlugin {
         localeConfig.saveConfig();
         ConfigValidator.configValidator();
         ConfigDefaults.mainConfigDefaults();
-        try {
-            LocaleDefaults.langConfigDefaults();
-        } catch (IOException | InvalidConfigurationException e) {
-            plugin.getLogger().severe("Could not save config");
-        }
         getLogger().info( localeConfig.getlocaleConfig().getString("debug-message"));
         registerCommands();
     }
