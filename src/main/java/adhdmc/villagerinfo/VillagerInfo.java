@@ -4,8 +4,8 @@ import adhdmc.villagerinfo.Commands.CommandHandler;
 import adhdmc.villagerinfo.Commands.SubCommands.HelpCommand;
 import adhdmc.villagerinfo.Commands.SubCommands.ReloadCommand;
 import adhdmc.villagerinfo.Commands.SubCommands.ToggleCommand;
-import adhdmc.villagerinfo.Config.ConfigDefaults;
 import adhdmc.villagerinfo.Config.ConfigValidator;
+import adhdmc.villagerinfo.Config.Defaults;
 import adhdmc.villagerinfo.Config.LocaleConfig;
 import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
 import org.bukkit.NamespacedKey;
@@ -31,9 +31,11 @@ public final class VillagerInfo extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
         this.getCommand("vill").setExecutor(new CommandHandler());
         this.saveDefaultConfig();
+        Defaults.localeDefaults();
+        Defaults.configDefaults();
         localeConfig.saveConfig();
         ConfigValidator.configValidator();
-        ConfigDefaults.mainConfigDefaults();
+
         getLogger().info(localeConfig.getlocaleConfig().getString("debug-message"));
         registerCommands();
     }

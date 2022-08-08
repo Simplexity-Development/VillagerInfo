@@ -1,7 +1,7 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
 import adhdmc.villagerinfo.Config.ConfigValidator;
-import adhdmc.villagerinfo.MiscHandling.TimeFormatting;
+import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 import adhdmc.villagerinfo.VillagerInfo;
 import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
@@ -10,7 +10,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Villager;
@@ -24,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
-import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +34,7 @@ import static org.bukkit.entity.EntityType.SHULKER;
 public class VillagerHandler implements Listener {
     MiniMessage mM = MiniMessage.miniMessage();
     Map<Message, String> messages = ConfigValidator.getLocaleMap();
+    Map<ConfigValidator.ToggleSetting, Boolean> toggleSettings = ConfigValidator.getToggleSettings();
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
@@ -45,8 +44,6 @@ public class VillagerHandler implements Listener {
 
     @EventHandler
     public void onVillagerClick(PlayerInteractEntityEvent event) {
-
-        FileConfiguration config = VillagerInfo.plugin.getConfig();
         Player player = event.getPlayer();
         PersistentDataContainer playerPDC = player.getPersistentDataContainer();
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
@@ -69,38 +66,38 @@ public class VillagerHandler implements Listener {
         Location villagerPOI = villager.getMemory(MemoryKey.JOB_SITE);
         ArrayList<Component> messageList = new ArrayList<>();
         //profession
-        if (config.getBoolean("profession")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.PROFESSION)) {
             messageList.add(villagerProfession(villager));
         }
         //job-site
-        if (config.getBoolean("job-site")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.JOB_SITE)) {
             messageList.add(villagerJobSite(villager));
         }
         //last-worked
-        if (config.getBoolean("last-worked")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.LAST_WORKED)) {
             messageList.add(villagerLastWorked(villager));
         }
         //bed-location
-        if (config.getBoolean("bed-location")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.BED_LOCATION)) {
             messageList.add(villagerBed(villager));
         }
         //last-slept
-        if (config.getBoolean("last-slept")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.LAST_WORKED)) {
             messageList.add(villagerLastSlept(villager));
         }
         //inventory
-        if (config.getBoolean("inventory")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.INVENTORY)) {
             messageList.add(villagerInventory(villager));
         }
         //restocks
-        if (config.getBoolean("restocks")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.RESTOCKS)) {
             messageList.add(villagerRestocks(villager));
         }
         //reputation
-        if (config.getBoolean("reputation")) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.REPUTATION)) {
             messageList.add(villagerPlayerReputation(villager, player));
         }
-        if (config.getBoolean("highlight-workstation") && villagerPOI != null) {
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.HIGHLIGHT_WORKSTATION) && villagerPOI != null) {
             villagerJobsiteHighlight(villager.getPersistentDataContainer(), villager.getUniqueId(), villagerPOI);
         }
         //Messages
@@ -127,16 +124,16 @@ public class VillagerHandler implements Listener {
         Component jobSiteFinal;
         if (villagerJobLocation == null) {
             jobSiteFinal = mM.deserialize(messages.get(Message.VILLAGER_JOBSITE),
-                    Placeholder.unparsed("jobsitelocation", messages.get(Message.NONE)));
+                    Placeholder.parsed("jobsitelocation", messages.get(Message.NONE)));
         } else {
-            String jobX = String.valueOf(mM.deserialize(messages.get(Message.LOCATION_X),
-                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockX()))));
-            String jobY = String.valueOf(mM.deserialize(messages.get(Message.LOCATION_Y),
-                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockY()))));
-            String jobZ = String.valueOf(mM.deserialize(messages.get(Message.LOCATION_Z),
-                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockZ()))));
+            Component jobX = mM.deserialize(messages.get(Message.LOCATION_X),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockX())));
+            Component jobY = mM.deserialize(messages.get(Message.LOCATION_Y),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockY())));
+            Component jobZ = mM.deserialize(messages.get(Message.LOCATION_Z),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockZ())));
             jobSiteFinal = mM.deserialize(messages.get(Message.VILLAGER_JOBSITE),
-                    Placeholder.unparsed("jobsitelocation", jobX + jobY + jobZ));
+                    Placeholder.component("jobsitelocation", jobX.append(jobY).append(jobZ)));
         }
         return jobSiteFinal;
     }
@@ -146,9 +143,10 @@ public class VillagerHandler implements Listener {
         Long lastWorked = villager.getMemory(MemoryKey.LAST_WORKED_AT_POI);
         if (lastWorked == null) {
             villagerLastWorkedFinal = mM.deserialize(messages.get(Message.VILLAGER_LAST_WORKED),
-                    Placeholder.unparsed("worktime", messages.get(Message.NEVER)));
+                    Placeholder.parsed("worktime", messages.get(Message.NEVER)));
         } else {
-            String formattedTime = TimeFormatting.timeMath(villager.getWorld().getFullTime() - lastWorked);
+            Long timeSinceWorked = villager.getWorld().getGameTime() - lastWorked;
+            String formattedTime = timeMath(timeSinceWorked);
             villagerLastWorkedFinal = mM.deserialize(messages.get(Message.VILLAGER_LAST_WORKED),
                     Placeholder.unparsed("worktime", formattedTime));
         }
@@ -160,7 +158,7 @@ public class VillagerHandler implements Listener {
         Location bedLocation = villager.getMemory(MemoryKey.HOME);
         if (bedLocation == null) {
             villagerBedFinal = mM.deserialize(messages.get(Message.VILLAGER_HOME),
-                    Placeholder.unparsed("homelocation", messages.get(Message.NONE)));
+                    Placeholder.parsed("homelocation", messages.get(Message.NONE)));
         } else {
             Component bedX = mM.deserialize(messages.get(Message.LOCATION_X),
                     Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockX())));
@@ -169,7 +167,7 @@ public class VillagerHandler implements Listener {
             Component bedZ = mM.deserialize(messages.get(Message.LOCATION_Z),
                     Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockZ())));
             villagerBedFinal = mM.deserialize(messages.get(Message.VILLAGER_HOME),
-                    Placeholder.unparsed("homelocation", String.valueOf(bedX.append(bedY).append(bedZ))));
+                    Placeholder.component("homelocation", bedX.append(bedY).append(bedZ)));
         }
         return villagerBedFinal;
     }
@@ -179,9 +177,10 @@ public class VillagerHandler implements Listener {
         Long lastSlept = villager.getMemory(MemoryKey.LAST_SLEPT);
         if (lastSlept == null) {
             villagerLastSleptFinal = mM.deserialize(messages.get(Message.VILLAGER_SLEPT),
-                    Placeholder.unparsed("sleeptime", messages.get(Message.NEVER)));
+                    Placeholder.parsed("sleeptime", messages.get(Message.NEVER)));
         } else {
-            String formattedTime = TimeFormatting.timeMath(villager.getWorld().getFullTime() - lastSlept);
+            Long timeSinceSlept = villager.getWorld().getGameTime() - lastSlept;
+            String formattedTime = timeMath(timeSinceSlept);
             villagerLastSleptFinal = mM.deserialize(messages.get(Message.VILLAGER_SLEPT),
                     Placeholder.unparsed("sleeptime", formattedTime));
         }
@@ -191,14 +190,14 @@ public class VillagerHandler implements Listener {
     private Component villagerInventory(Villager villager) {
         Component villagerInventoryFinal;
         if (villager.getInventory().isEmpty()) {
-            villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.unparsed("contents", messages.get(Message.EMPTY)));
+            villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.parsed("contents", messages.get(Message.EMPTY)));
         } else {
-            String villagerInventory = null;
+            String villagerInventory = "";
             ItemStack[] inventoryItems = villager.getInventory().getContents();
             for (ItemStack items : inventoryItems) {
                 if (items == null) continue;
                 villagerInventory = villagerInventory +
-                        items.displayName() + "(" + items.getAmount() + ")\n";
+                        "\n • " + items.getType() + " (" + items.getAmount() + ")";
             }
             villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.unparsed("contents", villagerInventory));
         }
@@ -206,7 +205,11 @@ public class VillagerHandler implements Listener {
     }
 
     private Component villagerRestocks(Villager villager) {
-        return mM.deserialize(messages.get(Message.VILLAGER_RESTOCKS), Placeholder.unparsed("restockcount", String.valueOf(villager.getRestocksToday())));
+        if(villager.getRestocksToday() == 0) {
+            return mM.deserialize(messages.get(Message.VILLAGER_RESTOCKS), Placeholder.parsed("restockcount", messages.get(Message.NONE)));
+        }else{
+            return mM.deserialize(messages.get(Message.VILLAGER_RESTOCKS), Placeholder.parsed("restockcount", String.valueOf(villager.getRestocksToday())));
+        }
     }
 
     private Component villagerPlayerReputation(Villager villager, Player player) {
@@ -245,6 +248,26 @@ public class VillagerHandler implements Listener {
         int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
         return (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+    }
+
+    private String timeMath(Long mathTime) {
+        Map<Message, String> msgs = ConfigValidator.getLocaleMap();
+        String mathResult = "";
+        //Remainder after dividing by 72,000 (one hour)
+        long mathTime2 = mathTime % 72000;
+        //Normal number from dividing (hours)
+        long mathTimeB = mathTime / 72000;
+        //Remainder after dividing by 1200 (1 minute)
+        long mathTime3 = mathTime2 % 1200;
+        //Normal number from dividing (minutes)
+        long mathTimeC = mathTime2 / 1200;
+        //Normal number from dividing (seconds)
+        long mathTimeD = mathTime3 / 20;
+        if(mathTimeB > 0) mathResult += mathTimeB + msgs.get(Message.HOUR);
+        if(mathTimeC > 0) mathResult += mathTimeC + msgs.get(Message.MINUTE);
+        if(mathTimeD > 0) mathResult += mathTimeD + msgs.get(Message.SECOND);
+        mathResult += msgs.get(Message.AGO);
+        return mathResult;
     }
 
     private void spawnShulker(UUID uuid, Location location) {
