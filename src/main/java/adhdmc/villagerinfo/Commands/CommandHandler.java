@@ -1,7 +1,6 @@
 package adhdmc.villagerinfo.Commands;
 
 import adhdmc.villagerinfo.Config.ConfigValidator;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,8 +12,9 @@ import java.util.*;
 public class CommandHandler implements CommandExecutor, TabExecutor {
 
     public static HashMap<String, SubCommand> subcommandList = new HashMap<String, SubCommand>();
-    Map<ConfigValidator.Message, String> msgs = ConfigValidator.getMapping();
+    Map<ConfigValidator.Message, String> msgs = ConfigValidator.getLocaleMap();
     MiniMessage mM = MiniMessage.miniMessage();
+
     //TY Peashooter101
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
@@ -29,7 +29,7 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //Checking for arguments
-        if (args.length == 0){
+        if (args.length == 0) {
             sender.sendMessage(mM.deserialize("<green><click:open_url:'https://github.com/RhythmicSys/VillagerInfo'><hover:show_text:'<gray>Click here to visit the GitHub!'>VillagerInfo | Version:<version> </hover></click>\nAuthors: <gold> Rhythmic </gold> | <gold>Peashooter101</gold>"));
             return true;
         }

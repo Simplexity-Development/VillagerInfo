@@ -13,16 +13,16 @@ import java.util.Map;
 public class HelpCommand extends SubCommand {
     MiniMessage mM = MiniMessage.miniMessage();
 
-    public HelpCommand(){
-        super ("help","VillagerInfo help", "/vill help");
+    public HelpCommand() {
+        super("help", "VillagerInfo help", "/vill help");
     }
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
-        Map<Message, String> msgs = ConfigValidator.getMapping();
+        Map<Message, String> msgs = ConfigValidator.getLocaleMap();
         MiniMessage mM = MiniMessage.miniMessage();
 
-        if(sender.hasPermission(VillagerInfo.usePermission)) {
+        if (sender.hasPermission(VillagerInfo.usePermission)) {
             sender.sendMessage(mM.deserialize(msgs.get(Message.PREFIX)));
             sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_MAIN)));
             sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_TOGGLE)));

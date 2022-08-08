@@ -13,16 +13,16 @@ import java.util.Map;
 
 public class ReloadCommand extends SubCommand {
 
-    public ReloadCommand(){
+    public ReloadCommand() {
         super("reload", "Reloads the VillagerInfo plugin", "/vill reload");
     }
 
 
     @Override
     public void doThing(CommandSender sender, String[] args) {
-        Map<Message, String> msgs = ConfigValidator.getMapping();
+        Map<Message, String> msgs = ConfigValidator.getLocaleMap();
         MiniMessage mM = MiniMessage.miniMessage();
-        if (!(sender instanceof Player)|| sender.hasPermission(VillagerInfo.reloadCommandPermission)) {
+        if (!(sender instanceof Player) || sender.hasPermission(VillagerInfo.reloadCommandPermission)) {
             VillagerInfo.plugin.reloadConfig();
             VillagerInfo.localeConfig.reloadConfig();
             ConfigValidator.configValidator();

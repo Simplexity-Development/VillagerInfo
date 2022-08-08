@@ -14,40 +14,40 @@ public class LocaleConfig {
     private YamlConfiguration localeConfig = null;
     private File localeFile = null;
 
-    public LocaleConfig(VillagerInfo plugin){
+    public LocaleConfig(VillagerInfo plugin) {
         this.plugin = plugin;
     }
 
-    public void reloadConfig(){
-        if (this.localeFile == null){
+    public void reloadConfig() {
+        if (this.localeFile == null) {
             this.localeFile = new File(this.plugin.getDataFolder(), localeName);
         }
         this.localeConfig = YamlConfiguration.loadConfiguration(this.localeFile);
         InputStream defaultStream = this.plugin.getResource(localeName);
-        if(defaultStream != null){
-            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration( new InputStreamReader(defaultStream));
+        if (defaultStream != null) {
+            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.localeConfig.setDefaults(defaultConfig);
         }
     }
 
-    public YamlConfiguration getlocaleConfig(){
-        if (this.localeConfig == null){
+    public YamlConfiguration getlocaleConfig() {
+        if (this.localeConfig == null) {
             reloadConfig();
         }
         return this.localeConfig;
     }
 
-    public void saveConfig(){
-        if(this.localeConfig == null || this.localeFile == null){
+    public void saveConfig() {
+        if (this.localeConfig == null || this.localeFile == null) {
             return;
         }
-        try{
+        try {
             this.getlocaleConfig().save(this.localeFile);
         } catch (IOException e) {
             plugin.getLogger().severe("[saveConfig()] Could not save config to " + this.localeFile);
             e.printStackTrace();
         }
-        if (!this.localeFile.exists()){
+        if (!this.localeFile.exists()) {
             this.plugin.saveResource(localeName, false);
         }
     }

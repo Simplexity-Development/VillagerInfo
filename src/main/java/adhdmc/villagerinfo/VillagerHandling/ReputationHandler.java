@@ -8,15 +8,15 @@ public class ReputationHandler {
         StringBuilder output = new StringBuilder();
         int minVal = -14;
         int maxVal = 15;
-        int devNum = repNum/50;
+        int devNum = repNum / 50;
         boolean isPos = Math.abs(devNum) == devNum;
-        for (int i = minVal; i <=maxVal; i++){
-            if (i == 0){
+        for (int i = minVal; i <= maxVal; i++) {
+            if (i == 0) {
                 output.append(ChatColor.WHITE + "[").append(repNum).append("]");
                 continue;
             }
-            if (Math.abs(i) != i){
-                if (!isPos && i < 0 && i >=devNum){
+            if (Math.abs(i) != i) {
+                if (!isPos && i < 0 && i >= devNum) {
                     output.append(ChatColor.RED + "▬");
                     continue;
                 }

@@ -22,8 +22,9 @@ public final class VillagerInfo extends JavaPlugin {
     public static final String toggleCommandPermission = "villagerinfo.toggle";
     public static final String reloadCommandPermission = "villagerinfo.reload";
     public static final String usePermission = "villagerinfo.use";
+
     @Override
-    public void onEnable(){
+    public void onEnable() {
         plugin = this;
         localeConfig = new LocaleConfig(this);
         int pluginId = 13653; // bStats ID
@@ -33,11 +34,11 @@ public final class VillagerInfo extends JavaPlugin {
         localeConfig.saveConfig();
         ConfigValidator.configValidator();
         ConfigDefaults.mainConfigDefaults();
-        getLogger().info( localeConfig.getlocaleConfig().getString("debug-message"));
+        getLogger().info(localeConfig.getlocaleConfig().getString("debug-message"));
         registerCommands();
     }
 
-    public void onDisable(){
+    public void onDisable() {
         VillagerHandler.workstationShulker.forEach((uuid, shulker) -> shulker.remove());
         VillagerHandler.villagerPDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.STRING, isDisabled));
         VillagerHandler.workstationShulker.clear();
