@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -33,7 +34,7 @@ public class VillagerHandler implements Listener {
     String toggleOff =  VillagerInfo.toggleInfoOff;
 
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onVillagerClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         PersistentDataContainer playerPDC = player.getPersistentDataContainer();
@@ -51,6 +52,10 @@ public class VillagerHandler implements Listener {
             return;
         }
         if (!player.hasPermission("villagerinfo.use")) {
+            return;
+        }
+        if (!toggleSettings.containsValue(true)){
+            VillagerInfo.plugin.getLogger().warning("You have all VillagerInfo options turned off. That seems silly, why do you have the plugin installed if you don't want to use it?");
             return;
         }
         event.setCancelled(true);
