@@ -222,8 +222,8 @@ public class VillagerHandler implements Listener {
     }
 
     private void villagerJobsiteHighlight(PersistentDataContainer villPDC, UUID villUUID, Location villPOI) {
-        String getHighlightPDC = villPDC.get(isHighlighted, PersistentDataType.STRING);
-        if (getHighlightPDC == null || getHighlightPDC.equals(disabled)) {
+        String getHighlightPDC = villPDC.getOrDefault(isHighlighted, PersistentDataType.STRING, disabled);
+        if (getHighlightPDC.equals(enabled)) return;
             villPDC.set(isHighlighted, PersistentDataType.STRING, enabled);
             villagerPDC.put(villUUID, villPDC);
             spawnShulker(villUUID, villPOI);
@@ -231,12 +231,12 @@ public class VillagerHandler implements Listener {
                 @Override
                 public void run() {
                     killShulker(villUUID);
-                    villPDC.set(isHighlighted, PersistentDataType.STRING, disabled);
+                    villPDC.remove(isHighlighted);
                     villagerPDC.put(villUUID, villPDC);
                 }
             }.runTaskLater(VillagerInfo.plugin, 20L * ConfigValidator.configTime);
-        }
     }
+
 
     private int reputationTotal(Villager vil, UUID p) {
         Reputation playerReputation = vil.getReputation(p);
