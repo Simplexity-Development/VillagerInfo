@@ -1,7 +1,9 @@
 package adhdmc.villagerinfo.Commands;
 
 import adhdmc.villagerinfo.Config.ConfigValidator;
+import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,7 +32,7 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //Checking for arguments
         if (args.length == 0) {
-            sender.sendMessage(mM.deserialize("<green><click:open_url:'https://github.com/RhythmicSys/VillagerInfo'><hover:show_text:'<gray>Click here to visit the GitHub!'>VillagerInfo | Version:<version> </hover></click>\nAuthors: <gold> Rhythmic </gold> | <gold>Peashooter101</gold>"));
+            sender.sendMessage(mM.deserialize("<green><click:open_url:'https://github.com/RhythmicSys/VillagerInfo'><hover:show_text:'<gray>Click here to visit the GitHub!'>VillagerInfo | Version:<version> </hover></click>\nAuthors: <gold> Rhythmic </gold> | <gold>Peashooter101</gold>", Placeholder.parsed("version", String.valueOf(VillagerInfo.version))));
             return true;
         }
         //if has an argument, check to see if it's contained in the list of arguments

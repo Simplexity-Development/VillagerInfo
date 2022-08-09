@@ -18,6 +18,7 @@ public final class VillagerInfo extends JavaPlugin {
     //These are for the PDC stuff because I manage to not be able to keep '0' and '1' straight in my head, for which is true or false
     public static final String isEnabled = "isEnabled";
     public static final String isDisabled = "isDisabled";
+    public static final double version = 2.0;
     //Permissions
     public static final String toggleCommandPermission = "villagerinfo.toggle";
     public static final String reloadCommandPermission = "villagerinfo.reload";
@@ -29,6 +30,7 @@ public final class VillagerInfo extends JavaPlugin {
         localeConfig = new LocaleConfig(this);
         localeConfig.getlocaleConfig();
         int pluginId = 13653; // bStats ID
+        //Metrics metrics = new Metrics(this, pluginId);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
         this.getCommand("vill").setExecutor(new CommandHandler());
         this.saveDefaultConfig();
