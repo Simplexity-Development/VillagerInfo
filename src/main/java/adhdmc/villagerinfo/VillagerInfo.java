@@ -30,6 +30,13 @@ public final class VillagerInfo extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        try {
+            Class.forName("net.kyori.adventure.text.minimessage.MiniMessage");
+            Class.forName("com.destroystokyo.paper.entity.villager.Reputation");
+        } catch (ClassNotFoundException e) {
+            this.getLogger().severe("VillagerInfo relies on methods in classes not present on your server. Disabling plugin");
+            this.getServer().getPluginManager().disablePlugin(this);
+        }
         localeConfig = new LocaleConfig(this);
         localeConfig.getlocaleConfig();
         Metrics metrics = new Metrics(this, 13653);

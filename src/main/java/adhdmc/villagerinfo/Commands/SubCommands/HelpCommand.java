@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public class HelpCommand extends SubCommand {
-    MiniMessage mM = MiniMessage.miniMessage();
 
     public HelpCommand() {
         super("help", "VillagerInfo help", "/vill help");
