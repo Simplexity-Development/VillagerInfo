@@ -95,9 +95,9 @@ public class ConfigValidator {
         localeMap.put(Message.PREFIX,
                 locale.getString("prefix", "<#3256a8><bold>[</bold><#4dd5ff>Villager Info<#3256a8><bold>]<reset>"));
         localeMap.put(Message.TOGGLE_ON,
-                locale.getString("toggle-on", "<green>Villager Info Toggled <u>ON"));
+                locale.getString("toggle-on", "<green> Villager Info Toggled <u>ON"));
         localeMap.put(Message.TOGGLE_OFF,
-                locale.getString("toggle-off", "<red>Villager Info Toggled <u>OFF"));
+                locale.getString("toggle-off", "<red> Villager Info Toggled <u>OFF"));
         localeMap.put(Message.NO_PERMISSION,
                 locale.getString("no-permission", "<red>You don't have permission to use this command!"));
 

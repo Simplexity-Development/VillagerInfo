@@ -8,8 +8,8 @@ public class Defaults {
     public static void localeDefaults(){
         FileConfiguration locale = VillagerInfo.localeConfig.getlocaleConfig();
         locale.addDefault("prefix", "<#3256a8><bold>[</bold><#4dd5ff>Villager Info<#3256a8><bold>]<reset>");
-        locale.addDefault("toggle-on", "<green>Villager Info Toggled <u>ON");
-        locale.addDefault("toggle-off", "<red>Villager Info Toggled <u>OFF");
+        locale.addDefault("toggle-on", "<green> Villager Info Toggled <u>ON");
+        locale.addDefault("toggle-off", "<red> Villager Info Toggled <u>OFF");
         locale.addDefault("no-permission", "<red>You don't have permission to use this command!");
         locale.addDefault("no-command", "<red>No subcommand by that name!");
         locale.addDefault("config-reloaded", "<gold>VillagerInfo Config Reloaded!");
