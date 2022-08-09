@@ -19,7 +19,7 @@ public class ConfigValidator {
         // Villager Info
         VILLAGER_PROFESSION, VILLAGER_JOBSITE, VILLAGER_LAST_WORKED,
         VILLAGER_RESTOCKS, VILLAGER_HOME, VILLAGER_SLEPT,
-        VILLAGER_INVENTORY, PLAYER_REPUTATION,
+        VILLAGER_INVENTORY, INVENTORY_CONTENTS, PLAYER_REPUTATION,
 
         // Fillers
         NONE, NEVER, EMPTY,
@@ -130,6 +130,8 @@ public class ConfigValidator {
                 locale.getString("villager-slept-msg", "<green>LAST SLEPT:\n<aqua> • <sleeptime>"));
         localeMap.put(Message.VILLAGER_INVENTORY,
                 locale.getString("villager-inventory-msg", "<green>VILLAGER INVENTORY:<aqua> <contents>"));
+        localeMap.put(Message.INVENTORY_CONTENTS,
+                locale.getString("inventory-contents-msg", "\n • <item> (<amount>)"));
         localeMap.put(Message.PLAYER_REPUTATION,
                 locale.getString("player-reputation-msg", "<green>PLAYER REPUTATION:\n<reputation>"));
 

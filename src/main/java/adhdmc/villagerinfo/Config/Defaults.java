@@ -24,6 +24,7 @@ public class Defaults {
         locale.addDefault("villager-home-msg", "<green>HOME:\n<aqua> • <homelocation>");
         locale.addDefault("villager-slept-msg", "<green>LAST SLEPT:\n<aqua> • <sleeptime>");
         locale.addDefault("villager-inventory-msg", "<green>VILLAGER INVENTORY:<aqua> <contents>");
+        locale.addDefault("inventory-contents-msg", "\n • <item> (<amount>)");
         locale.addDefault("player-reputation-msg", "<green>PLAYER REPUTATION:\n<reputation>");
         locale.addDefault("none-msg", "<grey>NONE");
         locale.addDefault("never-msg", "<grey>NEVER");

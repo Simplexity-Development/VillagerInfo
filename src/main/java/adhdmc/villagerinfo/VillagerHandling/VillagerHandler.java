@@ -11,36 +11,27 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import static org.bukkit.entity.EntityType.SHULKER;
 
 public class VillagerHandler implements Listener {
     MiniMessage mM = MiniMessage.miniMessage();
     Map<Message, String> messages = ConfigValidator.getLocaleMap();
     Map<ConfigValidator.ToggleSetting, Boolean> toggleSettings = ConfigValidator.getToggleSettings();
-    public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
-    public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
-    NamespacedKey isHighlighted = new NamespacedKey(VillagerInfo.plugin, "isHighlighted");
-    String enabled = VillagerInfo.isEnabled;
-    String disabled = VillagerInfo.isEnabled;
+    String toggleOff =  VillagerInfo.toggleInfoOff;
+
 
     @EventHandler
     public void onVillagerClick(PlayerInteractEntityEvent event) {
@@ -56,7 +47,7 @@ public class VillagerHandler implements Listener {
             return;
         }
         String togglePDC = playerPDC.get(infoToggle, PersistentDataType.STRING);
-        if (togglePDC != null && togglePDC.equals(enabled)) {
+        if (togglePDC != null && togglePDC.equals(toggleOff)) {
             return;
         }
         if (!player.hasPermission("villagerinfo.use")) {
@@ -98,7 +89,7 @@ public class VillagerHandler implements Listener {
             messageList.add(villagerPlayerReputation(villager, player));
         }
         if (toggleSettings.get(ConfigValidator.ToggleSetting.HIGHLIGHT_WORKSTATION) && villagerPOI != null) {
-            villagerJobsiteHighlight(villager.getPersistentDataContainer(), villager.getUniqueId(), villagerPOI);
+            HighlightHandling.villagerJobsiteHighlight(villager.getPersistentDataContainer(), villager.getUniqueId(), villagerPOI);
         }
         //Messages
         Component prefix = mM.deserialize(messages.get(Message.PREFIX));
@@ -192,14 +183,14 @@ public class VillagerHandler implements Listener {
         if (villager.getInventory().isEmpty()) {
             villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.parsed("contents", messages.get(Message.EMPTY)));
         } else {
-            String villagerInventory = "";
+            Component villagerInventory = Component.text("");
+            String inventoryOutput = messages.get(Message.INVENTORY_CONTENTS);
             ItemStack[] inventoryItems = villager.getInventory().getContents();
             for (ItemStack items : inventoryItems) {
                 if (items == null) continue;
-                villagerInventory = villagerInventory +
-                        "\n • " + items.getType() + " (" + items.getAmount() + ")";
+                villagerInventory = villagerInventory.append(mM.deserialize(inventoryOutput, Placeholder.parsed("item", items.getType().toString()), Placeholder.parsed("amount", String.valueOf(items.getAmount()))));
             }
-            villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.unparsed("contents", villagerInventory));
+            villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.component("contents", villagerInventory));
         }
         return villagerInventoryFinal;
     }
@@ -220,23 +211,6 @@ public class VillagerHandler implements Listener {
         return villagerReputationFinal;
 
     }
-
-    private void villagerJobsiteHighlight(PersistentDataContainer villPDC, UUID villUUID, Location villPOI) {
-        String getHighlightPDC = villPDC.getOrDefault(isHighlighted, PersistentDataType.STRING, disabled);
-        if (getHighlightPDC.equals(enabled)) return;
-            villPDC.set(isHighlighted, PersistentDataType.STRING, enabled);
-            villagerPDC.put(villUUID, villPDC);
-            spawnShulker(villUUID, villPOI);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    killShulker(villUUID);
-                    villPDC.remove(isHighlighted);
-                    villagerPDC.put(villUUID, villPDC);
-                }
-            }.runTaskLater(VillagerInfo.plugin, 20L * ConfigValidator.configTime);
-    }
-
 
     private int reputationTotal(Villager vil, UUID p) {
         Reputation playerReputation = vil.getReputation(p);
@@ -266,25 +240,11 @@ public class VillagerHandler implements Listener {
         if(mathTimeB > 0) mathResult += mathTimeB + msgs.get(Message.HOUR);
         if(mathTimeC > 0) mathResult += mathTimeC + msgs.get(Message.MINUTE);
         if(mathTimeD > 0) mathResult += mathTimeD + msgs.get(Message.SECOND);
+        if(mathResult.isEmpty()){
+            mathResult += "0" + msgs.get(Message.SECOND) + msgs.get(Message.AGO);
+            return mathResult;
+        }
         mathResult += msgs.get(Message.AGO);
         return mathResult;
-    }
-
-    private void spawnShulker(UUID uuid, Location location) {
-        Shulker spawnedShulker = (Shulker) location.getWorld().spawnEntity(location, SHULKER, CreatureSpawnEvent.SpawnReason.CUSTOM, (Entity) -> {
-            Shulker highlightbox = (Shulker) Entity;
-            highlightbox.setAI(false);
-            highlightbox.setAware(false);
-            highlightbox.setCollidable(false);
-            highlightbox.setGlowing(true);
-            highlightbox.setInvisible(true);
-            highlightbox.setInvulnerable(true);
-        });
-        workstationShulker.put(uuid, spawnedShulker);
-    }
-
-    public static void killShulker(UUID uuid) {
-        workstationShulker.get(uuid).remove();
-        workstationShulker.remove(uuid);
     }
 }

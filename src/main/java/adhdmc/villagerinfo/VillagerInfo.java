@@ -7,17 +7,19 @@ import adhdmc.villagerinfo.Commands.SubCommands.ToggleCommand;
 import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.Defaults;
 import adhdmc.villagerinfo.Config.LocaleConfig;
+import adhdmc.villagerinfo.VillagerHandling.HighlightHandling;
 import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
 import org.bukkit.NamespacedKey;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class VillagerInfo extends JavaPlugin {
     public static VillagerInfo plugin;
     public static LocaleConfig localeConfig;
     //These are for the PDC stuff because I manage to not be able to keep '0' and '1' straight in my head, for which is true or false
-    public static final String isEnabled = "isEnabled";
-    public static final String isDisabled = "isDisabled";
+    public static final String toggleInfoOn = "toggleInfoOn";
+    public static final String toggleInfoOff= "toggleInfoOff";
+    public static final String isCurrentlyHighlighted = "isCurrentlyHighlighted";
+    public static final String isNotCurrentlyHighlighted = "isNotCurrentlyHighlighted";
     public static final double version = 2.0;
     //Permissions
     public static final String toggleCommandPermission = "villagerinfo.toggle";
@@ -42,9 +44,9 @@ public final class VillagerInfo extends JavaPlugin {
     }
 
     public void onDisable() {
-        VillagerHandler.workstationShulker.forEach((uuid, shulker) -> shulker.remove());
-        VillagerHandler.villagerPDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.STRING, isDisabled));
-        VillagerHandler.workstationShulker.clear();
+        HighlightHandling.workstationShulker.forEach((uuid, shulker) -> shulker.remove());
+        HighlightHandling.villagerPDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.remove(new NamespacedKey(VillagerInfo.plugin, "highlightStatus")));
+        HighlightHandling.workstationShulker.clear();
     }
 
     private void registerCommands() {

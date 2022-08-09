@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class ToggleCommand extends SubCommand {
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
-    String enabled = VillagerInfo.isEnabled;
-    String disabled = VillagerInfo.isDisabled;
     Map<Message, String> msgs = ConfigValidator.getLocaleMap();
+    String infoOn = VillagerInfo.toggleInfoOn;
+    String infoOff = VillagerInfo.toggleInfoOff;
 
     public ToggleCommand() {
         super("toggle", "Toggles villager info on and off", "/vill toggle");
@@ -47,11 +47,11 @@ public class ToggleCommand extends SubCommand {
     private boolean toggleSetting(Player p) {
         PersistentDataContainer playerPDC = p.getPersistentDataContainer();
         String togglePDC = playerPDC.get(infoToggle, PersistentDataType.STRING);
-        if (togglePDC == null || togglePDC.equals(disabled)) {
-            playerPDC.set(infoToggle, PersistentDataType.STRING, enabled);
+        if (togglePDC == null || togglePDC.equals(infoOn)) {
+            playerPDC.set(infoToggle, PersistentDataType.STRING, infoOff);
             return false;
         }
-        playerPDC.set(infoToggle, PersistentDataType.STRING, disabled);
+        playerPDC.set(infoToggle, PersistentDataType.STRING, infoOn);
         return true;
     }
 
