@@ -9,6 +9,7 @@ import adhdmc.villagerinfo.Config.Defaults;
 import adhdmc.villagerinfo.Config.LocaleConfig;
 import adhdmc.villagerinfo.VillagerHandling.HighlightHandling;
 import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,8 +32,7 @@ public final class VillagerInfo extends JavaPlugin {
         plugin = this;
         localeConfig = new LocaleConfig(this);
         localeConfig.getlocaleConfig();
-        int pluginId = 13653; // bStats ID
-        //Metrics metrics = new Metrics(this, pluginId);
+        Metrics metrics = new Metrics(this, 13653);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
         this.getCommand("vill").setExecutor(new CommandHandler());
         this.saveDefaultConfig();
