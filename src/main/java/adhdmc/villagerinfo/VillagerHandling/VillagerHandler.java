@@ -1,276 +1,255 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
-import adhdmc.villagerinfo.MiscHandling.MessageHandler;
-import adhdmc.villagerinfo.MiscHandling.MessageHandler.MESSAGE_TYPE;
-import adhdmc.villagerinfo.MiscHandling.TimeFormatting;
+import adhdmc.villagerinfo.Config.ConfigValidator;
+import adhdmc.villagerinfo.Config.ConfigValidator.Message;
 import adhdmc.villagerinfo.VillagerInfo;
 import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
-import java.util.HashMap;
+
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
-import static org.bukkit.ChatColor.AQUA;
-import static org.bukkit.ChatColor.GRAY;
-import static org.bukkit.entity.EntityType.SHULKER;
-
 public class VillagerHandler implements Listener {
-    public static HashMap<UUID, Shulker> workstationShulker = new HashMap<UUID, Shulker>();
-    public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<UUID, PersistentDataContainer>();
-    public static Location villagerJobsiteLocation;
-    public static boolean SillyResult;
+    MiniMessage mM = MiniMessage.miniMessage();
+    Map<Message, String> messages = ConfigValidator.getLocaleMap();
+    Map<ConfigValidator.ToggleSetting, Boolean> toggleSettings = ConfigValidator.getToggleSettings();
+    NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
+    String toggleOff = VillagerInfo.toggleInfoOff;
 
-    @EventHandler
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onVillagerClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         PersistentDataContainer playerPDC = player.getPersistentDataContainer();
-        if (event.getRightClicked().getType() != EntityType.VILLAGER) {
+        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        if (!event.getPlayer().isSneaking()) {
             return;
         }
-        if(!event.getPlayer().isSneaking()) {
+        if (!(event.getRightClicked() instanceof Villager villager)) {
             return;
         }
-        if(playerPDC.get(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER) != null && playerPDC.get(new NamespacedKey(VillagerInfo.plugin, "infoToggle"), PersistentDataType.INTEGER).equals(1)){
+        String togglePDC = playerPDC.get(infoToggle, PersistentDataType.STRING);
+        if (togglePDC != null && togglePDC.equals(toggleOff)) {
             return;
         }
-        if(!player.hasPermission("villagerinfo.use")){
+        if (!player.hasPermission("villagerinfo.use")) {
             return;
         }
-        FileConfiguration config = VillagerInfo.plugin.getConfig();
-        boolean configProfession = config.getBoolean("Profession");
-        boolean configJobSite = config.getBoolean("Job Site");
-        boolean configLastWorked = config.getBoolean("Last Worked");
-        boolean configRestocks = config.getBoolean("Number of Restocks");
-        boolean configHome = config.getBoolean("Bed Location");
-        boolean configLastSlept = config.getBoolean("Last Slept");
-        boolean configInventory = config.getBoolean("Villager Inventory Contents");
-        boolean configReputation = config.getBoolean("Player Reputation");
-        boolean configHighlight = config.getBoolean("Highlight Workstation");
-        int configTime = config.getInt("Length of time to highlight workstation");
-        int highlightTime;
-        if (!(configTime > 0)){
-            highlightTime = 10;
-        } else {
-            highlightTime = configTime;
-        }
-        if(!configProfession && !configJobSite && !configLastWorked && !configRestocks && !configHome && !configLastSlept && !configInventory && !configReputation && !configHighlight) {
-            SillyResult = true;
+        if (!toggleSettings.containsValue(true)) {
+            VillagerInfo.plugin.getLogger().warning("You have all VillagerInfo options turned off. That seems silly, why do you have the plugin installed if you don't want to use it?");
             return;
         }
         event.setCancelled(true);
-        HashMap<MESSAGE_TYPE, String> mMap = MessageHandler.getMessages();
-        UUID pUUID = player.getUniqueId();
-        Villager villagerClicked = (Villager) event.getRightClicked();
-        String villagerProfession = villagerClicked.getProfession().toString();
-        int villagerRestocks = VillagerInfo.isPaper ? villagerClicked.getRestocksToday() : Integer.MIN_VALUE;
-        int playerReputationTotal = 0;
-        Location villagerJobSite = villagerClicked.getMemory(MemoryKey.JOB_SITE);
-        Long villagerWorked = villagerClicked.getMemory(MemoryKey.LAST_WORKED_AT_POI);
-        Location villagerHome = villagerClicked.getMemory(MemoryKey.HOME);
-        Long villagerSlept = villagerClicked.getMemory(MemoryKey.LAST_SLEPT);
-        ItemStack[] villagerInventoryContents = villagerClicked.getInventory().getContents();
-        PersistentDataContainer villPDC =  villagerClicked.getPersistentDataContainer();
-        UUID villUUID = villagerClicked.getUniqueId();
-        StringBuilder villOutput = new StringBuilder("");
-        if (VillagerInfo.isPaper) {
-            Reputation playerReputation = villagerClicked.getReputation(pUUID);
-            int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
-            int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
-            int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
-            int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
-            int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
-            //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
-            playerReputationTotal = (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+        Location villagerPOI = villager.getMemory(MemoryKey.JOB_SITE);
+        ArrayList<Component> messageList = new ArrayList<>();
+        //profession
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.PROFESSION)) {
+            messageList.add(villagerProfession(villager));
         }
-        Sound configSound = null;
-        if(VillagerInfo.plugin.getConfig().getBoolean("Sound Toggle")) {
-            try {
-                configSound = Sound.valueOf(VillagerInfo.plugin.getConfig().getString("Sound"));
-            } catch (IllegalArgumentException e) {
-                player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 2, 2);
-            }
-            if (configSound != null) {
-                player.playSound(player.getLocation(), configSound, 2, 2);
-            }
+        //job-site
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.JOB_SITE)) {
+            messageList.add(villagerJobSite(villager));
         }
-        villOutput.append(mMap.get(MESSAGE_TYPE.PREFIX));
-        StringBuilder villagerInventoryString = new StringBuilder("");
-        if(configInventory){
-            for (int i = 0; i < villagerInventoryContents.length; i++) {
-                ItemStack villagerInventoryItem = villagerClicked.getInventory().getItem(i);
-                if (villagerInventoryItem != null) {
-                    villagerInventoryString.append("\n")
-                            .append(AQUA)
-                            .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                            .append(villagerInventoryItem.getType())
-                            .append(GRAY)
-                            .append(" (")
-                            .append(villagerInventoryItem.getAmount())
-                            .append(")");
-                }
-            }
+        //last-worked
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.LAST_WORKED)) {
+            messageList.add(villagerLastWorked(villager));
         }
-        if(configProfession) {
-            if (villagerProfession.equals("NONE")) {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.PROFESSION_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NONE_MSG));
-            } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.PROFESSION_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(villagerProfession);
-            }
+        //bed-location
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.BED_LOCATION)) {
+            messageList.add(villagerBed(villager));
         }
-        if(configJobSite){
-            if (villagerJobSite != null) {
-                villOutput.append("\n").append(mMap.get(MESSAGE_TYPE.JOBSITE_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(villagerJobSite.getBlockX())
-                        .append("x, ")
-                        .append(villagerJobSite.getBlockY())
-                        .append("y, ")
-                        .append(villagerJobSite.getBlockZ())
-                        .append("z");
-                villagerJobsiteLocation = villagerJobSite;
-                if(configHighlight){
-                    if (villPDC.get(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER) == null ||
-                        villPDC.get(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER).equals(0)){
-                        villPDC.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER, 1);
-                        villagerPDC.put(villUUID, villPDC);
-                        spawnShulker(villagerClicked.getUniqueId());
-                            new BukkitRunnable() {
-                        @Override
-                        public void run(){
-                                killShulker(villagerClicked.getUniqueId());
-                                villPDC.set(new NamespacedKey(VillagerInfo.plugin, "IsHighlighted"), PersistentDataType.INTEGER, 0);
-                                villagerPDC.put(villUUID, villPDC);
-                                }
-                        }.runTaskLater(VillagerInfo.plugin, 20L * highlightTime);
-                    }
-                }
-            } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.JOBSITE_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NONE_MSG));
-            }
+        //last-slept
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.LAST_WORKED)) {
+            messageList.add(villagerLastSlept(villager));
         }
-        if(configLastWorked) {
-            if (villagerWorked != null) {
-                long mathTime = villagerClicked.getWorld().getGameTime() - villagerWorked;
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_WORKED_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(TimeFormatting.timeMath(mathTime));
-            } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_WORKED_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NEVER_MSG));
-            }
+        //inventory
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.INVENTORY)) {
+            messageList.add(villagerInventory(villager));
         }
-        if(configRestocks && villagerRestocks != Integer.MIN_VALUE) {
-            if (villagerRestocks != 0){
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.RESTOCK_NUMBER_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(villagerRestocks);
-            } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.RESTOCK_NUMBER_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(GRAY)
-                        .append("0");
-            }
+        //restocks
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.RESTOCKS)) {
+            messageList.add(villagerRestocks(villager));
         }
-        if(configHome) {
-            if (villagerHome != null) {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.HOME_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(villagerHome.getBlockX())
-                        .append("x, ")
-                        .append(villagerHome.getBlockY())
-                        .append("y, ")
-                        .append(villagerHome.getBlockZ())
-                        .append("z");
-            } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.HOME_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NONE_MSG));
-            }
+        //reputation
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.REPUTATION)) {
+            messageList.add(villagerPlayerReputation(villager, player));
         }
-        if(configLastSlept) {
-            if (villagerSlept != null) {
-                long mathTime = villagerClicked.getWorld().getGameTime() - villagerSlept;
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_SLEPT_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mathTime);
-            } else {
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.LAST_SLEPT_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.NEVER_MSG));
-            }
+        if (toggleSettings.get(ConfigValidator.ToggleSetting.HIGHLIGHT_WORKSTATION) && villagerPOI != null) {
+            HighlightHandling.villagerJobsiteHighlight(villager.getPersistentDataContainer(), villager.getUniqueId(), villagerPOI);
         }
-        if(configInventory) {
-            if(villagerInventoryString.toString().equals("")){
-                villOutput.append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.INVENTORY_MSG))
-                        .append("\n")
-                        .append(mMap.get(MESSAGE_TYPE.SEPARATOR_MSG))
-                        .append(mMap.get(MESSAGE_TYPE.EMPTY_MSG));
-            } else {
-            villOutput.append("\n")
-                    .append(mMap.get(MESSAGE_TYPE.INVENTORY_MSG))
-                    .append(villagerInventoryString);
+        //Messages
+        Component prefix = mM.deserialize(messages.get(Message.PREFIX));
+        player.sendMessage(prefix);
+        for (Component component : messageList) {
+            player.sendMessage(component);
         }
-        if(configReputation){
-            villOutput.append("\n")
-                  .append(mMap.get(MESSAGE_TYPE.REPUTATION_MSG))
-                  .append(ReputationHandler.villagerReputation(playerReputationTotal));
-            }
-        }
-        player.sendMessage(String.valueOf(villOutput));
     }
-    public void spawnShulker(UUID uuid){
-        Shulker spawnedShulker = (Shulker) villagerJobsiteLocation.getWorld().spawnEntity(villagerJobsiteLocation, SHULKER, CreatureSpawnEvent.SpawnReason.CUSTOM, (Entity) ->{
-            Shulker highlightbox = (Shulker) Entity;
-            highlightbox.setAI(false);
-            highlightbox.setAware(false);
-            highlightbox.setCollidable(false);
-            highlightbox.setGlowing(true);
-            highlightbox.setInvisible(true);
-            highlightbox.setInvulnerable(true);
-        });
-        workstationShulker.put(uuid, spawnedShulker);
+
+    private Component villagerProfession(Villager villager) {
+        Component professionFinal;
+        String villagerProfessionString = villager.getProfession().toString();
+        if (villager.getProfession() == Villager.Profession.NONE) {
+            professionFinal = mM.deserialize(messages.get(Message.VILLAGER_PROFESSION), Placeholder.parsed("profession", messages.get(Message.NONE)));
+        } else {
+            professionFinal = mM.deserialize(messages.get(Message.VILLAGER_PROFESSION), Placeholder.parsed("profession", villagerProfessionString));
+        }
+        return professionFinal;
     }
-    public static void killShulker(UUID uuid){
-        workstationShulker.get(uuid).remove();
-        workstationShulker.remove(uuid);
+
+    private Component villagerJobSite(Villager villager) {
+        Location villagerJobLocation = villager.getMemory(MemoryKey.JOB_SITE);
+        Component jobSiteFinal;
+        if (villagerJobLocation == null) {
+            jobSiteFinal = mM.deserialize(messages.get(Message.VILLAGER_JOBSITE),
+                    Placeholder.parsed("jobsitelocation", messages.get(Message.NONE)));
+        } else {
+            Component jobX = mM.deserialize(messages.get(Message.LOCATION_X),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockX())));
+            Component jobY = mM.deserialize(messages.get(Message.LOCATION_Y),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockY())));
+            Component jobZ = mM.deserialize(messages.get(Message.LOCATION_Z),
+                    Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockZ())));
+            jobSiteFinal = mM.deserialize(messages.get(Message.VILLAGER_JOBSITE),
+                    Placeholder.component("jobsitelocation", jobX.append(jobY).append(jobZ)));
+        }
+        return jobSiteFinal;
+    }
+
+    private Component villagerLastWorked(Villager villager) {
+        Component villagerLastWorkedFinal;
+        Long lastWorked = villager.getMemory(MemoryKey.LAST_WORKED_AT_POI);
+        if (lastWorked == null) {
+            villagerLastWorkedFinal = mM.deserialize(messages.get(Message.VILLAGER_LAST_WORKED),
+                    Placeholder.parsed("worktime", messages.get(Message.NEVER)));
+        } else {
+            Long timeSinceWorked = villager.getWorld().getGameTime() - lastWorked;
+            String formattedTime = timeMath(timeSinceWorked);
+            villagerLastWorkedFinal = mM.deserialize(messages.get(Message.VILLAGER_LAST_WORKED),
+                    Placeholder.unparsed("worktime", formattedTime));
+        }
+        return villagerLastWorkedFinal;
+    }
+
+    private Component villagerBed(Villager villager) {
+        Component villagerBedFinal;
+        Location bedLocation = villager.getMemory(MemoryKey.HOME);
+        if (bedLocation == null) {
+            villagerBedFinal = mM.deserialize(messages.get(Message.VILLAGER_HOME),
+                    Placeholder.parsed("homelocation", messages.get(Message.NONE)));
+        } else {
+            Component bedX = mM.deserialize(messages.get(Message.LOCATION_X),
+                    Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockX())));
+            Component bedY = mM.deserialize(messages.get(Message.LOCATION_Y),
+                    Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockY())));
+            Component bedZ = mM.deserialize(messages.get(Message.LOCATION_Z),
+                    Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockZ())));
+            villagerBedFinal = mM.deserialize(messages.get(Message.VILLAGER_HOME),
+                    Placeholder.component("homelocation", bedX.append(bedY).append(bedZ)));
+        }
+        return villagerBedFinal;
+    }
+
+    private Component villagerLastSlept(Villager villager) {
+        Component villagerLastSleptFinal;
+        Long lastSlept = villager.getMemory(MemoryKey.LAST_SLEPT);
+        if (lastSlept == null) {
+            villagerLastSleptFinal = mM.deserialize(messages.get(Message.VILLAGER_SLEPT),
+                    Placeholder.parsed("sleeptime", messages.get(Message.NEVER)));
+        } else {
+            Long timeSinceSlept = villager.getWorld().getGameTime() - lastSlept;
+            String formattedTime = timeMath(timeSinceSlept);
+            villagerLastSleptFinal = mM.deserialize(messages.get(Message.VILLAGER_SLEPT),
+                    Placeholder.unparsed("sleeptime", formattedTime));
+        }
+        return villagerLastSleptFinal;
+    }
+
+    private Component villagerInventory(Villager villager) {
+        Component villagerInventoryFinal;
+        if (villager.getInventory().isEmpty()) {
+            villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.parsed("contents", messages.get(Message.EMPTY)));
+        } else {
+            Component villagerInventory = Component.text("");
+            String inventoryOutput = messages.get(Message.INVENTORY_CONTENTS);
+            ItemStack[] inventoryItems = villager.getInventory().getContents();
+            for (ItemStack items : inventoryItems) {
+                if (items == null) continue;
+                villagerInventory = villagerInventory.append(mM.deserialize(inventoryOutput, Placeholder.parsed("item", items.getType().toString()), Placeholder.parsed("amount", String.valueOf(items.getAmount()))));
+            }
+            villagerInventoryFinal = mM.deserialize(messages.get(Message.VILLAGER_INVENTORY), Placeholder.component("contents", villagerInventory));
+        }
+        return villagerInventoryFinal;
+    }
+
+    private Component villagerRestocks(Villager villager) {
+        if (villager.getRestocksToday() == 0) {
+            return mM.deserialize(messages.get(Message.VILLAGER_RESTOCKS), Placeholder.parsed("restockcount", messages.get(Message.NONE)));
+        } else {
+            return mM.deserialize(messages.get(Message.VILLAGER_RESTOCKS), Placeholder.parsed("restockcount", String.valueOf(villager.getRestocksToday())));
+        }
+    }
+
+    private Component villagerPlayerReputation(Villager villager, Player player) {
+        Component villagerReputationFinal;
+        int reputationRawTotal = reputationTotal(villager, player.getUniqueId());
+        String playerReputation = ReputationHandler.villagerReputation(reputationRawTotal);
+        villagerReputationFinal = mM.deserialize(messages.get(Message.PLAYER_REPUTATION), Placeholder.unparsed("reputation", playerReputation));
+        return villagerReputationFinal;
+
+    }
+
+    private int reputationTotal(Villager vil, UUID p) {
+        Reputation playerReputation = vil.getReputation(p);
+        if (playerReputation == null) return 0;
+        int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
+        int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
+        int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
+        int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
+        int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
+        //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
+        return (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+    }
+
+    private String timeMath(Long mathTime) {
+        Map<Message, String> msgs = ConfigValidator.getLocaleMap();
+        String mathResult = "";
+        //Remainder after dividing by 72,000 (one hour)
+        long mathTime2 = mathTime % 72000;
+        //Normal number from dividing (hours)
+        long mathTimeB = mathTime / 72000;
+        //Remainder after dividing by 1200 (1 minute)
+        long mathTime3 = mathTime2 % 1200;
+        //Normal number from dividing (minutes)
+        long mathTimeC = mathTime2 / 1200;
+        //Normal number from dividing (seconds)
+        long mathTimeD = mathTime3 / 20;
+        if (mathTimeB > 0) mathResult += mathTimeB + msgs.get(Message.HOUR);
+        if (mathTimeC > 0) mathResult += mathTimeC + msgs.get(Message.MINUTE);
+        if (mathTimeD > 0) mathResult += mathTimeD + msgs.get(Message.SECOND);
+        if (mathResult.isEmpty()) {
+            mathResult += "0" + msgs.get(Message.SECOND) + msgs.get(Message.AGO);
+            return mathResult;
+        }
+        mathResult += msgs.get(Message.AGO);
+        return mathResult;
     }
 }
