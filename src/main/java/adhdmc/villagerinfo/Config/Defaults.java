@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Defaults {
 
-    public static void localeDefaults(){
+    public static void localeDefaults() {
         FileConfiguration locale = VillagerInfo.localeConfig.getlocaleConfig();
         locale.addDefault("prefix", "<#3256a8><bold>[</bold><#4dd5ff>Villager Info<#3256a8><bold>]<reset>");
         locale.addDefault("toggle-on", "<green> Villager Info Toggled <u>ON");
@@ -38,7 +38,7 @@ public class Defaults {
         locale.addDefault("location-z", "<int>z");
     }
 
-    public static void configDefaults(){
+    public static void configDefaults() {
         FileConfiguration config = VillagerInfo.plugin.getConfig();
         config.addDefault("profession", true);
         config.addDefault("job-site", true);

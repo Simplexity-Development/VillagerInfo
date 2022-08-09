@@ -31,7 +31,7 @@ public class VillagerHandler implements Listener {
     Map<Message, String> messages = ConfigValidator.getLocaleMap();
     Map<ConfigValidator.ToggleSetting, Boolean> toggleSettings = ConfigValidator.getToggleSettings();
     NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
-    String toggleOff =  VillagerInfo.toggleInfoOff;
+    String toggleOff = VillagerInfo.toggleInfoOff;
 
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
@@ -54,7 +54,7 @@ public class VillagerHandler implements Listener {
         if (!player.hasPermission("villagerinfo.use")) {
             return;
         }
-        if (!toggleSettings.containsValue(true)){
+        if (!toggleSettings.containsValue(true)) {
             VillagerInfo.plugin.getLogger().warning("You have all VillagerInfo options turned off. That seems silly, why do you have the plugin installed if you don't want to use it?");
             return;
         }
@@ -201,9 +201,9 @@ public class VillagerHandler implements Listener {
     }
 
     private Component villagerRestocks(Villager villager) {
-        if(villager.getRestocksToday() == 0) {
+        if (villager.getRestocksToday() == 0) {
             return mM.deserialize(messages.get(Message.VILLAGER_RESTOCKS), Placeholder.parsed("restockcount", messages.get(Message.NONE)));
-        }else{
+        } else {
             return mM.deserialize(messages.get(Message.VILLAGER_RESTOCKS), Placeholder.parsed("restockcount", String.valueOf(villager.getRestocksToday())));
         }
     }
@@ -242,10 +242,10 @@ public class VillagerHandler implements Listener {
         long mathTimeC = mathTime2 / 1200;
         //Normal number from dividing (seconds)
         long mathTimeD = mathTime3 / 20;
-        if(mathTimeB > 0) mathResult += mathTimeB + msgs.get(Message.HOUR);
-        if(mathTimeC > 0) mathResult += mathTimeC + msgs.get(Message.MINUTE);
-        if(mathTimeD > 0) mathResult += mathTimeD + msgs.get(Message.SECOND);
-        if(mathResult.isEmpty()){
+        if (mathTimeB > 0) mathResult += mathTimeB + msgs.get(Message.HOUR);
+        if (mathTimeC > 0) mathResult += mathTimeC + msgs.get(Message.MINUTE);
+        if (mathTimeD > 0) mathResult += mathTimeD + msgs.get(Message.SECOND);
+        if (mathResult.isEmpty()) {
             mathResult += "0" + msgs.get(Message.SECOND) + msgs.get(Message.AGO);
             return mathResult;
         }

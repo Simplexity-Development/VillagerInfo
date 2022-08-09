@@ -18,7 +18,7 @@ public final class VillagerInfo extends JavaPlugin {
     public static LocaleConfig localeConfig;
     //These are for the PDC stuff because I manage to not be able to keep '0' and '1' straight in my head, for which is true or false
     public static final String toggleInfoOn = "toggleInfoOn";
-    public static final String toggleInfoOff= "toggleInfoOff";
+    public static final String toggleInfoOff = "toggleInfoOff";
     public static final String isCurrentlyHighlighted = "isCurrentlyHighlighted";
     public static final String isNotCurrentlyHighlighted = "isNotCurrentlyHighlighted";
     public static final double version = 2.0;
