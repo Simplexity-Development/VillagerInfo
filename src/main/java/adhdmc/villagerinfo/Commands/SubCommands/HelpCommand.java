@@ -17,7 +17,7 @@ public class HelpCommand extends SubCommand {
     }
 
     @Override
-    public void doThing(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
         Map<Message, String> msgs = ConfigValidator.getLocaleMap();
         MiniMessage mM = MiniMessage.miniMessage();
 

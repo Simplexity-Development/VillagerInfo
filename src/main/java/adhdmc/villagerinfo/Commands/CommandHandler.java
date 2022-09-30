@@ -13,14 +13,14 @@ import java.util.*;
 
 public class CommandHandler implements CommandExecutor, TabExecutor {
 
-    public static HashMap<String, SubCommand> subcommandList = new HashMap<String, SubCommand>();
+    public static HashMap<String, SubCommand> subcommandList = new HashMap<>();
     Map<ConfigValidator.Message, String> msgs = ConfigValidator.getLocaleMap();
     MiniMessage mM = MiniMessage.miniMessage();
 
     //TY Peashooter101
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        ArrayList<String> subCommands1 = new ArrayList<String>(Arrays.asList("help", "toggle", "reload"));
+        ArrayList<String> subCommands1 = new ArrayList<>(Arrays.asList("help", "toggle", "reload"));
         if (args.length == 1) {
             return subCommands1;
         }
@@ -32,13 +32,26 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //Checking for arguments
         if (args.length == 0) {
-            sender.sendMessage(mM.deserialize("<green><click:open_url:'https://github.com/RhythmicSys/VillagerInfo'><hover:show_text:'<gray>Click here to visit the GitHub!'>VillagerInfo | Version:<version> </hover></click>\nAuthors: <gold> Rhythmic </gold> | <gold>Peashooter101</gold>", Placeholder.parsed("version", String.valueOf(VillagerInfo.version))));
+            String url = VillagerInfo.plugin.getDescription().getWebsite();
+            String version = VillagerInfo.plugin.getDescription().getVersion();
+            List<String> authors = new ArrayList<>();
+            for (String authorName : VillagerInfo.plugin.getDescription().getAuthors()) {
+                authors.add(String.format("<gold> %s </gold>", authorName));
+            }
+            String authorsString = String.join(" | ", authors);
+            sender.sendMessage(mM.deserialize(
+                    "<green><click:open_url:'<url>'><hover:show_text:'<gray>Click here to visit the GitHub!'>VillagerInfo | Version:<version> </hover></click>\nAuthors: <authors>",
+                    Placeholder.parsed("version", version),
+                    Placeholder.parsed("authors", authorsString),
+                    Placeholder.unparsed("url", url)
+                    )
+            );
             return true;
         }
         //if has an argument, check to see if it's contained in the list of arguments
         String command = args[0].toLowerCase();
         if (subcommandList.containsKey(command)) {
-            subcommandList.get(command).doThing(sender, Arrays.copyOfRange(args, 1, args.length));
+            subcommandList.get(command).execute(sender, Arrays.copyOfRange(args, 1, args.length));
         } else {
             sender.sendMessage(mM.deserialize(msgs.get(ConfigValidator.Message.NO_COMMAND)));
         }

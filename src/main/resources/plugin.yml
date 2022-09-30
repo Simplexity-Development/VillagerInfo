@@ -1,9 +1,12 @@
 name: VillagerInfo
-author: Rhythmic, Peashooter101
+authors:
+  - Rhythmic
+  - Peashooter101
 description: Easier access to information from villager's brains generally only accessable through the /data command.
 version: '${project.version}'
 main: adhdmc.villagerinfo.VillagerInfo
 api-version: 1.19
+website: https://github.com/RhythmicSys/VillagerInfo
 commands:
   vill:
     description: base command for VillagerInfo
