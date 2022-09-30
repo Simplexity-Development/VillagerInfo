@@ -9,7 +9,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
@@ -30,14 +29,10 @@ public class VillagerHandler implements Listener {
     MiniMessage mM = MiniMessage.miniMessage();
     Map<Message, String> messages = ConfigValidator.getLocaleMap();
     Map<ConfigValidator.ToggleSetting, Boolean> toggleSettings = ConfigValidator.getToggleSettings();
-    NamespacedKey infoToggle = new NamespacedKey(VillagerInfo.plugin, "infoToggle");
-    String toggleOff = VillagerInfo.toggleInfoOff;
-
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onVillagerClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        PersistentDataContainer playerPDC = player.getPersistentDataContainer();
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
@@ -47,8 +42,9 @@ public class VillagerHandler implements Listener {
         if (!(event.getRightClicked() instanceof Villager villager)) {
             return;
         }
-        String togglePDC = playerPDC.get(infoToggle, PersistentDataType.STRING);
-        if (togglePDC != null && togglePDC.equals(toggleOff)) {
+        PersistentDataContainer playerPDC = player.getPersistentDataContainer();
+        byte togglePDC = playerPDC.getOrDefault(VillagerInfo.getInfoEnabledKey(), PersistentDataType.BYTE, (byte)0);
+        if (togglePDC == 0) {
             return;
         }
         if (!player.hasPermission("villagerinfo.use")) {

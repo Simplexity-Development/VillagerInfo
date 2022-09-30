@@ -16,16 +16,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class VillagerInfo extends JavaPlugin {
     public static VillagerInfo plugin;
     public static LocaleConfig localeConfig;
-    //These are for the PDC stuff because I manage to not be able to keep '0' and '1' straight in my head, for which is true or false
-    public static final String toggleInfoOn = "toggleInfoOn";
-    public static final String toggleInfoOff = "toggleInfoOff";
     public static final String isCurrentlyHighlighted = "isCurrentlyHighlighted";
     public static final String isNotCurrentlyHighlighted = "isNotCurrentlyHighlighted";
-    public static final double version = 2.0;
     //Permissions
     public static final String toggleCommandPermission = "villagerinfo.toggle";
     public static final String reloadCommandPermission = "villagerinfo.reload";
     public static final String usePermission = "villagerinfo.use";
+
+    private static NamespacedKey infoEnabledKey;
 
     @Override
     public void onEnable() {
@@ -37,6 +35,7 @@ public final class VillagerInfo extends JavaPlugin {
             this.getLogger().severe("VillagerInfo relies on methods in classes not present on your server. Disabling plugin");
             this.getServer().getPluginManager().disablePlugin(this);
         }
+        infoEnabledKey = new NamespacedKey(VillagerInfo.plugin, "infoEnabled");
         localeConfig = new LocaleConfig(this);
         localeConfig.getlocaleConfig();
         Metrics metrics = new Metrics(this, 13653);
@@ -60,5 +59,9 @@ public final class VillagerInfo extends JavaPlugin {
         CommandHandler.subcommandList.put("help", new HelpCommand());
         CommandHandler.subcommandList.put("toggle", new ToggleCommand());
         CommandHandler.subcommandList.put("reload", new ReloadCommand());
+    }
+
+    public static NamespacedKey getInfoEnabledKey() {
+        return infoEnabledKey;
     }
 }
