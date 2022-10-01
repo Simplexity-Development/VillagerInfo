@@ -57,16 +57,24 @@ public class VillagerHandler implements Listener {
         event.setCancelled(true);
         Location villagerPOI = villager.getMemory(MemoryKey.JOB_SITE);
         ArrayList<Component> messageList = new ArrayList<>();
+
+        boolean isUseful = villager.getProfession() != Villager.Profession.NONE
+                && villager.getProfession() != Villager.Profession.NITWIT;
+        boolean hasWorkSite = villager.getMemory(MemoryKey.JOB_SITE) != null;
+        boolean hasBed = villager.getMemory(MemoryKey.HOME) != null;
+
         //profession
         if (toggleSettings.get(ConfigValidator.ToggleSetting.PROFESSION)) {
             messageList.add(villagerProfession(villager));
         }
         //job-site
-        if (toggleSettings.get(ConfigValidator.ToggleSetting.JOB_SITE)) {
+        // Only show job site and last worked info if the villager has a profession
+        if (isUseful && toggleSettings.get(ConfigValidator.ToggleSetting.JOB_SITE)) {
             messageList.add(villagerJobSite(villager));
         }
         //last-worked
-        if (toggleSettings.get(ConfigValidator.ToggleSetting.LAST_WORKED)) {
+        // Only show last worked info if the villager has a profession and a work site
+        if (isUseful && hasWorkSite && toggleSettings.get(ConfigValidator.ToggleSetting.LAST_WORKED)) {
             messageList.add(villagerLastWorked(villager));
         }
         //bed-location
@@ -74,7 +82,8 @@ public class VillagerHandler implements Listener {
             messageList.add(villagerBed(villager));
         }
         //last-slept
-        if (toggleSettings.get(ConfigValidator.ToggleSetting.LAST_WORKED)) {
+        // Only show last sleep info if the villager has a bed
+        if (hasBed && toggleSettings.get(ConfigValidator.ToggleSetting.LAST_SLEPT)) {
             messageList.add(villagerLastSlept(villager));
         }
         //inventory
@@ -82,7 +91,8 @@ public class VillagerHandler implements Listener {
             messageList.add(villagerInventory(villager));
         }
         //restocks
-        if (toggleSettings.get(ConfigValidator.ToggleSetting.RESTOCKS)) {
+        // Only show restocks info if the villager has a profession and a work site
+        if (isUseful && hasWorkSite && toggleSettings.get(ConfigValidator.ToggleSetting.RESTOCKS)) {
             messageList.add(villagerRestocks(villager));
         }
         //reputation
