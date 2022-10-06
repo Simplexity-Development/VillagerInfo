@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class Defaults {
 
     public static void localeDefaults() {
-        FileConfiguration locale = VillagerInfo.localeConfig.getlocaleConfig();
+        FileConfiguration locale = VillagerInfo.getLocaleConfig().getlocaleConfig();
         locale.addDefault("prefix", "<#3256a8><bold>[</bold><#4dd5ff>Villager Info<#3256a8><bold>]<reset>");
         locale.addDefault("toggle-on", "<green> Villager Info Toggled <u>ON");
         locale.addDefault("toggle-off", "<red> Villager Info Toggled <u>OFF");
@@ -39,7 +39,7 @@ public class Defaults {
     }
 
     public static void configDefaults() {
-        FileConfiguration config = VillagerInfo.plugin.getConfig();
+        FileConfiguration config = VillagerInfo.getInstance().getConfig();
         config.addDefault("profession", true);
         config.addDefault("job-site", true);
         config.addDefault("last-worked", true);

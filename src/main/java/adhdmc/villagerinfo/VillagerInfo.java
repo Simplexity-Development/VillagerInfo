@@ -9,25 +9,21 @@ import adhdmc.villagerinfo.Config.Defaults;
 import adhdmc.villagerinfo.Config.LocaleConfig;
 import adhdmc.villagerinfo.VillagerHandling.HighlightHandling;
 import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class VillagerInfo extends JavaPlugin {
-    public static VillagerInfo plugin;
-    public static LocaleConfig localeConfig;
-    public static final String isCurrentlyHighlighted = "isCurrentlyHighlighted";
-    public static final String isNotCurrentlyHighlighted = "isNotCurrentlyHighlighted";
+    private static VillagerInfo instance;
+    private static MiniMessage miniMessage = MiniMessage.miniMessage();
+    private static LocaleConfig localeConfig;
     //Permissions
-    public static final String toggleCommandPermission = "villagerinfo.toggle";
-    public static final String reloadCommandPermission = "villagerinfo.reload";
-    public static final String usePermission = "villagerinfo.use";
-
     private static NamespacedKey infoEnabledKey;
 
     @Override
     public void onEnable() {
-        plugin = this;
+        instance = this;
         try {
             Class.forName("net.kyori.adventure.text.minimessage.MiniMessage");
             Class.forName("com.destroystokyo.paper.entity.villager.Reputation");
@@ -35,7 +31,7 @@ public final class VillagerInfo extends JavaPlugin {
             this.getLogger().severe("VillagerInfo relies on methods in classes not present on your server. Disabling plugin");
             this.getServer().getPluginManager().disablePlugin(this);
         }
-        infoEnabledKey = new NamespacedKey(VillagerInfo.plugin, "infoEnabled");
+        infoEnabledKey = new NamespacedKey(VillagerInfo.instance, "infoEnabled");
         localeConfig = new LocaleConfig(this);
         localeConfig.getlocaleConfig();
         Metrics metrics = new Metrics(this, 13653);
@@ -51,7 +47,7 @@ public final class VillagerInfo extends JavaPlugin {
 
     public void onDisable() {
         HighlightHandling.workstationShulker.forEach((uuid, shulker) -> shulker.remove());
-        HighlightHandling.villagerPDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.remove(new NamespacedKey(VillagerInfo.plugin, "highlightStatus")));
+        HighlightHandling.villagerPDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.remove(new NamespacedKey(VillagerInfo.instance, "highlightStatus")));
         HighlightHandling.workstationShulker.clear();
     }
 
@@ -63,5 +59,14 @@ public final class VillagerInfo extends JavaPlugin {
 
     public static NamespacedKey getInfoEnabledKey() {
         return infoEnabledKey;
+    }
+    public static MiniMessage getMiniMessage(){
+        return miniMessage;
+    }
+    public static VillagerInfo getInstance(){
+        return instance;
+    }
+    public static LocaleConfig getLocaleConfig(){
+        return localeConfig;
     }
 }

@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.bukkit.entity.EntityType.SHULKER;
 
 public class HighlightHandling {
-    static NamespacedKey highlightStatus = new NamespacedKey(VillagerInfo.plugin, "highlighted");
+    static NamespacedKey highlightStatus = new NamespacedKey(VillagerInfo.getInstance(), "highlighted");
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
 
@@ -26,7 +26,7 @@ public class HighlightHandling {
         villPDC.set(highlightStatus, PersistentDataType.BYTE, (byte)1);
         villagerPDC.put(villUUID, villPDC);
         spawnShulker(villUUID, villPOI);
-        Bukkit.getScheduler().runTaskLater(VillagerInfo.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(VillagerInfo.getInstance(), () -> {
             killShulker(villUUID);
             villPDC.set(highlightStatus, PersistentDataType.BYTE, (byte)0);
             villagerPDC.put(villUUID, villPDC);

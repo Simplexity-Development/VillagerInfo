@@ -1,6 +1,7 @@
 package adhdmc.villagerinfo.Commands;
 
 import adhdmc.villagerinfo.Config.ConfigValidator;
+import adhdmc.villagerinfo.Config.Message;
 import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -14,8 +15,7 @@ import java.util.*;
 public class CommandHandler implements CommandExecutor, TabExecutor {
 
     public static HashMap<String, SubCommand> subcommandList = new HashMap<>();
-    Map<ConfigValidator.Message, String> msgs = ConfigValidator.getLocaleMap();
-    MiniMessage mM = MiniMessage.miniMessage();
+    MiniMessage miniMessage = VillagerInfo.getMiniMessage();
 
     //TY Peashooter101
     @Override
@@ -32,14 +32,14 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //Checking for arguments
         if (args.length == 0) {
-            String url = VillagerInfo.plugin.getDescription().getWebsite();
-            String version = VillagerInfo.plugin.getDescription().getVersion();
+            String url = VillagerInfo.getInstance().getDescription().getWebsite();
+            String version = VillagerInfo.getInstance().getDescription().getVersion();
             List<String> authors = new ArrayList<>();
-            for (String authorName : VillagerInfo.plugin.getDescription().getAuthors()) {
+            for (String authorName : VillagerInfo.getInstance().getDescription().getAuthors()) {
                 authors.add(String.format("<gold> %s </gold>", authorName));
             }
             String authorsString = String.join(" | ", authors);
-            sender.sendMessage(mM.deserialize(
+            sender.sendMessage(miniMessage.deserialize(
                     "<green><click:open_url:'<url>'><hover:show_text:'<gray>Click here to visit the GitHub!'>VillagerInfo | Version:<version> </hover></click>\nAuthors: <authors>",
                     Placeholder.parsed("version", version),
                     Placeholder.parsed("authors", authorsString),
@@ -53,7 +53,7 @@ public class CommandHandler implements CommandExecutor, TabExecutor {
         if (subcommandList.containsKey(command)) {
             subcommandList.get(command).execute(sender, Arrays.copyOfRange(args, 1, args.length));
         } else {
-            sender.sendMessage(mM.deserialize(msgs.get(ConfigValidator.Message.NO_COMMAND)));
+            sender.sendMessage(miniMessage.deserialize(Message.NO_COMMAND.getMessage()));
         }
         return true;
     }
