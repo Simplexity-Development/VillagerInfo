@@ -1,14 +1,13 @@
 package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
-import adhdmc.villagerinfo.Config.ConfigValidator;
-import adhdmc.villagerinfo.Config.ConfigValidator.Message;
+import adhdmc.villagerinfo.Config.Message;
+import adhdmc.villagerinfo.Config.Perms;
 import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
-import java.util.Map;
 
 public class HelpCommand extends SubCommand {
 
@@ -18,17 +17,16 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        Map<Message, String> msgs = ConfigValidator.getLocaleMap();
-        MiniMessage mM = MiniMessage.miniMessage();
+        MiniMessage miniMessage = VillagerInfo.getMiniMessage();
 
-        if (sender.hasPermission(VillagerInfo.usePermission)) {
-            sender.sendMessage(mM.deserialize(msgs.get(Message.PREFIX)));
-            sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_MAIN)));
-            sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_TOGGLE)));
-            sender.sendMessage(mM.deserialize(msgs.get(Message.HELP_RELOAD)));
+        if (sender.hasPermission(Perms.USE.getPerm())) {
+            sender.sendMessage(miniMessage.deserialize(Message.PREFIX.getMessage()));
+            sender.sendMessage(miniMessage.deserialize(Message.HELP_MAIN.getMessage()));
+            sender.sendMessage(miniMessage.deserialize(Message.HELP_TOGGLE.getMessage()));
+            sender.sendMessage(miniMessage.deserialize(Message.HELP_RELOAD.getMessage()));
             return;
         }
-        sender.sendMessage(mM.deserialize(msgs.get(Message.NO_PERMISSION)));
+        sender.sendMessage(miniMessage.deserialize(Message.NO_PERMISSION.getMessage()));
     }
 
     @Override

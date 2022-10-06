@@ -2,14 +2,14 @@ package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
 import adhdmc.villagerinfo.Config.ConfigValidator;
-import adhdmc.villagerinfo.Config.ConfigValidator.Message;
+import adhdmc.villagerinfo.Config.Message;
+import adhdmc.villagerinfo.Config.Perms;
 import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Map;
 
 public class ReloadCommand extends SubCommand {
 
@@ -20,15 +20,14 @@ public class ReloadCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        Map<Message, String> msgs = ConfigValidator.getLocaleMap();
-        MiniMessage mM = MiniMessage.miniMessage();
-        if (!(sender instanceof Player) || sender.hasPermission(VillagerInfo.reloadCommandPermission)) {
-            VillagerInfo.plugin.reloadConfig();
-            VillagerInfo.localeConfig.reloadConfig();
+        MiniMessage miniMessage = VillagerInfo.getMiniMessage();
+        if (!(sender instanceof Player) || sender.hasPermission(Perms.RELOAD.getPerm())) {
+            VillagerInfo.getInstance().reloadConfig();
+            VillagerInfo.getLocaleConfig().reloadConfig();
             ConfigValidator.configValidator();
-            sender.sendMessage(mM.deserialize(msgs.get(Message.CONFIG_RELOADED)));
+            sender.sendMessage(miniMessage.deserialize(Message.CONFIG_RELOADED.getMessage()));
         } else {
-            sender.sendMessage(mM.deserialize(msgs.get(Message.NO_PERMISSION)));
+            sender.sendMessage(miniMessage.deserialize((Message.NO_PERMISSION.getMessage())));
         }
     }
 
