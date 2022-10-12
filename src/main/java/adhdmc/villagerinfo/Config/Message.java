@@ -17,6 +17,7 @@ public enum Message {
     NOT_A_PLAYER("<red>Sorry, you must be a player to use this command"),
 
     // Villager Info
+    VILLAGER_AGE("<green>TIME UNTIL ADULT: \n<aqua> • <age>"),
     VILLAGER_PROFESSION("<green>PROFESSION:\n<aqua> • <profession>"),
     VILLAGER_JOBSITE("<green>JOB SITE:\n<aqua> • <jobsitelocation>"),
     VILLAGER_LAST_WORKED("<green>LAST WORKED AT WORKSTATION:\n<aqua> • <worktime>"),
@@ -59,6 +60,7 @@ public enum Message {
         HELP_RELOAD.setMessage(locale.getString("help-reload", "<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values"));
         NOT_A_PLAYER.setMessage(locale.getString("not-a-player", "<red>Sorry, you must be a player to use this command"));
         // Villager Info
+        VILLAGER_AGE.setMessage(locale.getString("villager-age", "<green>TIME UNTIL ADULT: \n<aqua> • <age>"));
         VILLAGER_PROFESSION.setMessage(locale.getString("villager-profession", "<green>PROFESSION:\n<aqua> • <profession>"));
         VILLAGER_JOBSITE.setMessage(locale.getString("villager-jobsite-msg", "<green>JOB SITE:\n<aqua> • <jobsitelocation>"));
         VILLAGER_LAST_WORKED.setMessage(locale.getString("villager-last-worked-msg", "<green>LAST WORKED AT WORKSTATION:\n<aqua> • <worktime>"));

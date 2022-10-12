@@ -1,6 +1,5 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
-import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.Message;
 import adhdmc.villagerinfo.Config.Perms;
 import adhdmc.villagerinfo.Config.ToggleSetting;
@@ -25,7 +24,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 
 public class VillagerHandler implements Listener {
@@ -65,6 +63,10 @@ public class VillagerHandler implements Listener {
         boolean hasWorkSite = villager.getMemory(MemoryKey.JOB_SITE) != null;
         boolean hasBed = villager.getMemory(MemoryKey.HOME) != null;
         boolean isAdult = villager.isAdult();
+        //time until adult
+        if (ToggleSetting.BABY_AGE.isEnabled() && !isAdult) {
+           messageList.add(villagerTimeTillAdult(villager));
+        }
         //profession
         if (ToggleSetting.PROFESSION.isEnabled() && isAdult) {
             messageList.add(villagerProfession(villager));
@@ -111,6 +113,16 @@ public class VillagerHandler implements Listener {
         }
     }
 
+    private Component villagerTimeTillAdult(Villager villager) {
+        Component timeTillAdultFinal;
+        long villAge = villager.getAge();
+        villAge = villAge * -1;
+        VillagerInfo.getInstance().getLogger().info("" + villAge);
+        String timeCalc = timeMath(villAge);
+        timeTillAdultFinal = miniMessage.deserialize(Message.VILLAGER_AGE.getMessage(), Placeholder.unparsed("age", timeCalc));
+        return timeTillAdultFinal;
+    }
+
     private Component villagerProfession(Villager villager) {
         Component professionFinal;
         String villagerProfessionString = villager.getProfession().toString();
@@ -149,7 +161,7 @@ public class VillagerHandler implements Listener {
                     Placeholder.parsed("worktime", Message.NEVER.getMessage()));
         } else {
             Long timeSinceWorked = villager.getWorld().getGameTime() - lastWorked;
-            String formattedTime = timeMath(timeSinceWorked);
+            String formattedTime = timeMath(timeSinceWorked) + Message.AGO.getMessage();
             villagerLastWorkedFinal = miniMessage.deserialize(Message.VILLAGER_LAST_WORKED.getMessage(),
                     Placeholder.unparsed("worktime", formattedTime));
         }
@@ -183,7 +195,7 @@ public class VillagerHandler implements Listener {
                     Placeholder.parsed("sleeptime", Message.NEVER.getMessage()));
         } else {
             Long timeSinceSlept = villager.getWorld().getGameTime() - lastSlept;
-            String formattedTime = timeMath(timeSinceSlept);
+            String formattedTime = timeMath(timeSinceSlept) + Message.AGO.getMessage() ;
             villagerLastSleptFinal = miniMessage.deserialize(Message.VILLAGER_SLEPT.getMessage(),
                     Placeholder.unparsed("sleeptime", formattedTime));
         }
@@ -252,10 +264,8 @@ public class VillagerHandler implements Listener {
         if (mathTimeC > 0) mathResult += mathTimeC + Message.MINUTE.getMessage();
         if (mathTimeD > 0) mathResult += mathTimeD + Message.SECOND.getMessage();
         if (mathResult.isEmpty()) {
-            mathResult += "0" + Message.SECOND.getMessage() + Message.AGO.getMessage();
-            return mathResult;
+            mathResult += "0" + Message.SECOND.getMessage();
         }
-        mathResult += Message.AGO.getMessage();
         return mathResult;
     }
 }

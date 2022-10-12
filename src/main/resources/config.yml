@@ -2,6 +2,7 @@
 
 #Information Toggles
 #True to enable the information to display when requested, false for it not to display
+baby-age: true
 profession: true
 job-site: true
 last-worked: true

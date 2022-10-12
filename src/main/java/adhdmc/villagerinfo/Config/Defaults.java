@@ -40,6 +40,7 @@ public class Defaults {
 
     public static void configDefaults() {
         FileConfiguration config = VillagerInfo.getInstance().getConfig();
+        config.addDefault("baby-age", true);
         config.addDefault("profession", true);
         config.addDefault("job-site", true);
         config.addDefault("last-worked", true);
