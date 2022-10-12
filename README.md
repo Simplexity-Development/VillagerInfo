@@ -16,9 +16,10 @@
 Accessing the information in villager's brains is useful, but `/data get` has much more information than is needed for most things.
 
 ## **Default list provided through VillagerInfo**
-|Villager with nothing | Villager with everything|
-|-----|-----|
-|![base-villager-messages-nothing](https://user-images.githubusercontent.com/45906780/183571265-a60e1015-d891-4c01-81d3-81009e96d70c.png)|![base-villager-messages-full](https://user-images.githubusercontent.com/45906780/183571272-f21f6280-6bec-4ff3-b87c-965df16bd1b2.png)|
+|Baby Villager with nothing|Adult Villager with nothing |Adult Villager with everything|
+|-----|-----|-----|
+|![villager-baby](https://user-images.githubusercontent.com/45906780/195231157-51cbc29a-bddd-4063-9bd8-6f541651e8a1.png)| ![villager-adult](https://user-images.githubusercontent.com/45906780/195231183-c511cab1-2cc3-4b58-ae51-653b48aa70d1.png) | ![villager-info](https://user-images.githubusercontent.com/45906780/195231207-73c16912-dc77-4771-92ac-c200ac87f0ce.png)|
+
 
 ### **Default minecraft /data get**
 
