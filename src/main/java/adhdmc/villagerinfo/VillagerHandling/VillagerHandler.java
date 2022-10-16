@@ -113,6 +113,11 @@ public class VillagerHandler implements Listener {
         }
     }
 
+    /**
+     * Checks and returns formatted 'time till adult' message component
+     * @param villager Clicked Villager
+     * @return Formatted Time Component
+     */
     private Component villagerTimeTillAdult(Villager villager) {
         Component timeTillAdultFinal;
         long villAge = villager.getAge();
@@ -123,6 +128,11 @@ public class VillagerHandler implements Listener {
         return timeTillAdultFinal;
     }
 
+    /**
+     * Checks and returns villager profession component
+     * @param villager Clicked Villager
+     * @return Profession Component
+     */
     private Component villagerProfession(Villager villager) {
         Component professionFinal;
         String villagerProfessionString = villager.getProfession().toString();
@@ -134,6 +144,11 @@ public class VillagerHandler implements Listener {
         return professionFinal;
     }
 
+    /**
+     * Checks and returns formatted jobsite location component
+     * @param villager clicked villager
+     * @return Jobsite Location Component
+     */
     private Component villagerJobSite(Villager villager) {
         Location villagerJobLocation = villager.getMemory(MemoryKey.JOB_SITE);
         Component jobSiteFinal;
@@ -153,6 +168,11 @@ public class VillagerHandler implements Listener {
         return jobSiteFinal;
     }
 
+    /**
+     * Checks and returns formatted 'villager last worked' message component
+     * @param villager Clicked Villager
+     * @return Formatted Time Component
+     */
     private Component villagerLastWorked(Villager villager) {
         Component villagerLastWorkedFinal;
         Long lastWorked = villager.getMemory(MemoryKey.LAST_WORKED_AT_POI);
@@ -168,6 +188,11 @@ public class VillagerHandler implements Listener {
         return villagerLastWorkedFinal;
     }
 
+    /**
+     * Checks and returns formatted home location component
+     * @param villager clicked villager
+     * @return Home Location Component
+     */
     private Component villagerBed(Villager villager) {
         Component villagerBedFinal;
         Location bedLocation = villager.getMemory(MemoryKey.HOME);
@@ -187,6 +212,11 @@ public class VillagerHandler implements Listener {
         return villagerBedFinal;
     }
 
+    /**
+     * Checks and returns formatted 'villager last slept' message component
+     * @param villager Clicked Villager
+     * @return Formatted Time Component
+     */
     private Component villagerLastSlept(Villager villager) {
         Component villagerLastSleptFinal;
         Long lastSlept = villager.getMemory(MemoryKey.LAST_SLEPT);
@@ -202,6 +232,11 @@ public class VillagerHandler implements Listener {
         return villagerLastSleptFinal;
     }
 
+    /**
+     * Checks and lists all the items in a villager's inventory
+     * @param villager Clicked Villager
+     * @return Inventory List Component
+     */
     private Component villagerInventory(Villager villager) {
         Component villagerInventoryFinal;
         if (villager.getInventory().isEmpty()) {
@@ -219,6 +254,11 @@ public class VillagerHandler implements Listener {
         return villagerInventoryFinal;
     }
 
+    /**
+     * Gets the number of times a villager has restocked that day and returns a component
+     * @param villager Clicked Villager
+     * @return Restock Count Component
+     */
     private Component villagerRestocks(Villager villager) {
         if (villager.getRestocksToday() == 0) {
             return miniMessage.deserialize(Message.VILLAGER_RESTOCKS.getMessage(), Placeholder.parsed("restockcount", Message.NONE.getMessage()));
@@ -227,6 +267,12 @@ public class VillagerHandler implements Listener {
         }
     }
 
+    /**
+     * Gets a player's reputation and returns a component
+     * @param villager Clicked Villager
+     * @param player Player to evaluate
+     * @return Reputation Component
+     */
     private Component villagerPlayerReputation(Villager villager, Player player) {
         Component villagerReputationFinal;
         int reputationRawTotal = reputationTotal(villager, player.getUniqueId());
@@ -236,8 +282,14 @@ public class VillagerHandler implements Listener {
 
     }
 
-    private int reputationTotal(Villager vil, UUID p) {
-        Reputation playerReputation = vil.getReputation(p);
+    /**
+     * Calculates the total reputation of a player, using all reputation types
+     * @param villager Clicked Villager
+     * @param player Player to evaluate
+     * @return Total reputation score
+     */
+    private int reputationTotal(Villager villager, UUID player) {
+        Reputation playerReputation = villager.getReputation(player);
         if (playerReputation == null) return 0;
         int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
         int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
@@ -248,6 +300,11 @@ public class VillagerHandler implements Listener {
         return (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
     }
 
+    /**
+     * Formats a tick-based-time into a human-readable format
+     * @param mathTime Time in Ticks
+     * @return Formatted String
+     */
     private String timeMath(Long mathTime) {
         String mathResult = "";
         //Remainder after dividing by 72,000 (one hour)

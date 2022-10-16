@@ -20,7 +20,12 @@ public class HighlightHandling {
     public static HashMap<UUID, Shulker> workstationShulker = new HashMap<>();
     public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
 
-
+    /**
+     * villagerJobsiteHighlight
+     * @param villPDC the villager's PersistentDataContainer
+     * @param villUUID the villager's UUID
+     * @param villPOI the villager's Point Of Interest Location
+     */
     public static void villagerJobsiteHighlight(PersistentDataContainer villPDC, UUID villUUID, Location villPOI) {
         if (villPDC.getOrDefault(highlightStatus, PersistentDataType.BYTE, (byte)0) == 1) return;
         villPDC.set(highlightStatus, PersistentDataType.BYTE, (byte)1);
@@ -33,6 +38,11 @@ public class HighlightHandling {
         }, 20L * ConfigValidator.configTime);
     }
 
+    /**
+     * spawnShulker
+     * @param villUUID the villager's UUID
+     * @param location location to spawn the Shulker
+     */
     private static void spawnShulker(UUID villUUID, Location location) {
         Shulker spawnedShulker = (Shulker) location.getWorld().spawnEntity(location, SHULKER, CreatureSpawnEvent.SpawnReason.CUSTOM, (entity) -> {
             Shulker highlightbox = (Shulker) entity;
@@ -46,6 +56,10 @@ public class HighlightHandling {
         workstationShulker.put(villUUID, spawnedShulker);
     }
 
+    /**
+     * killShulker
+     * @param villUUID villager's UUID that the shulker was attached to
+     */
     public static void killShulker(UUID villUUID) {
         workstationShulker.get(villUUID).remove();
         workstationShulker.remove(villUUID);

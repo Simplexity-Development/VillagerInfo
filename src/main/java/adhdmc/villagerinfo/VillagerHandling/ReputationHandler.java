@@ -1,9 +1,14 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
 import org.bukkit.ChatColor;
+//TODO: Switch this to use adventure
 
 public class ReputationHandler {
-
+    /**
+     * Formats a player's total reputation into a cool bar
+     * @param repNum total reputation
+     * @return formatted reputation string
+     */
     public static String villagerReputation(int repNum) {
         StringBuilder output = new StringBuilder();
         int minVal = -14;
