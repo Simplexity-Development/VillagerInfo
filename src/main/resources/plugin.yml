@@ -6,7 +6,7 @@ description: Easier access to information from villager's brains generally only 
 version: '${project.version}'
 main: adhdmc.villagerinfo.VillagerInfo
 api-version: 1.19
-website: https://github.com/RhythmicSys/VillagerInfo
+website: https://github.com/ADHDMC/VillagerInfo
 commands:
   vill:
     description: base command for VillagerInfo
