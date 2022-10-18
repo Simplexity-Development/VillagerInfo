@@ -4,7 +4,6 @@ import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.VillagerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -17,7 +16,6 @@ public class HighlightHandling {
     private static final double CENTER = 0.5;
     private static final double OFFSET = -0.001;
     private static final int MAX_FALL_DISTANCE = -2147483648;
-    private static final NamespacedKey HIGHLIGHT_STATUS = new NamespacedKey(VillagerInfo.getInstance(), "highlighted");
 
     public static final HashMap<UUID, FallingBlock> WORKSTATION_HIGHLIGHT_BLOCK = new HashMap<>();
     public static final HashMap<UUID, PersistentDataContainer> VILLAGER_PDC = new HashMap<>();
@@ -29,13 +27,13 @@ public class HighlightHandling {
      * @param villPOI the villager's Point Of Interest Location
      */
     public static void villagerJobsiteHighlight(PersistentDataContainer villPDC, UUID villUUID, Location villPOI) {
-        if (villPDC.getOrDefault(HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)0) == 1) return;
-        villPDC.set(HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)1);
+        if (villPDC.getOrDefault(VillagerInfo.HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)0) == 1) return;
+        villPDC.set(VillagerInfo.HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)1);
         VILLAGER_PDC.put(villUUID, villPDC);
         spawnFallingBlock(villUUID, villPOI);
         Bukkit.getScheduler().runTaskLater(VillagerInfo.getInstance(), () -> {
             killFallingBlock(villUUID);
-            villPDC.set(HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)0);
+            villPDC.set(VillagerInfo.HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)0);
             VILLAGER_PDC.put(villUUID, villPDC);
         }, 20L * ConfigValidator.configTime);
     }
