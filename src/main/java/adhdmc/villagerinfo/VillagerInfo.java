@@ -18,8 +18,8 @@ public final class VillagerInfo extends JavaPlugin {
     private static VillagerInfo instance;
     private static MiniMessage miniMessage = MiniMessage.miniMessage();
     private static LocaleConfig localeConfig;
-    //Permissions
-    private static NamespacedKey infoEnabledKey;
+    public static final NamespacedKey INFO_ENABLED_KEY = new NamespacedKey("villagerinfo", "infoEnabled");
+    public static final NamespacedKey HIGHLIGHT_STATUS = new NamespacedKey("villagerinfo", "highlighted");
 
     @Override
     public void onEnable() {
@@ -31,7 +31,6 @@ public final class VillagerInfo extends JavaPlugin {
             this.getLogger().severe("VillagerInfo relies on methods in classes not present on your server. Disabling plugin");
             this.getServer().getPluginManager().disablePlugin(this);
         }
-        infoEnabledKey = new NamespacedKey(VillagerInfo.instance, "infoEnabled");
         localeConfig = new LocaleConfig(this);
         localeConfig.getlocaleConfig();
         Metrics metrics = new Metrics(this, 13653);
@@ -45,10 +44,11 @@ public final class VillagerInfo extends JavaPlugin {
         registerCommands();
     }
 
+    @Override
     public void onDisable() {
-        HighlightHandling.workstationShulker.forEach((uuid, shulker) -> shulker.remove());
-        HighlightHandling.villagerPDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.remove(new NamespacedKey(VillagerInfo.instance, "highlightStatus")));
-        HighlightHandling.workstationShulker.clear();
+        HighlightHandling.WORKSTATION_HIGHLIGHT_BLOCK.forEach((uuid, fallingBlock) -> fallingBlock.remove());
+        HighlightHandling.VILLAGER_PDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.remove(HIGHLIGHT_STATUS));
+        HighlightHandling.WORKSTATION_HIGHLIGHT_BLOCK.clear();
     }
 
     private void registerCommands() {
@@ -57,9 +57,6 @@ public final class VillagerInfo extends JavaPlugin {
         CommandHandler.subcommandList.put("reload", new ReloadCommand());
     }
 
-    public static NamespacedKey getInfoEnabledKey() {
-        return infoEnabledKey;
-    }
     public static MiniMessage getMiniMessage(){
         return miniMessage;
     }
