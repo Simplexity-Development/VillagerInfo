@@ -17,10 +17,10 @@ public class HighlightHandling {
     private static final double CENTER = 0.5;
     private static final double OFFSET = -0.001;
     private static final int MAX_FALL_DISTANCE = -2147483648;
-    private static NamespacedKey highlightStatus = new NamespacedKey(VillagerInfo.getInstance(), "highlighted");
+    private static final NamespacedKey HIGHLIGHT_STATUS = new NamespacedKey(VillagerInfo.getInstance(), "highlighted");
 
-    public static HashMap<UUID, FallingBlock> workstationHighlightBlock = new HashMap<>();
-    public static HashMap<UUID, PersistentDataContainer> villagerPDC = new HashMap<>();
+    public static final HashMap<UUID, FallingBlock> WORKSTATION_HIGHLIGHT_BLOCK = new HashMap<>();
+    public static final HashMap<UUID, PersistentDataContainer> VILLAGER_PDC = new HashMap<>();
 
     /**
      * villagerJobsiteHighlight
@@ -29,14 +29,14 @@ public class HighlightHandling {
      * @param villPOI the villager's Point Of Interest Location
      */
     public static void villagerJobsiteHighlight(PersistentDataContainer villPDC, UUID villUUID, Location villPOI) {
-        if (villPDC.getOrDefault(highlightStatus, PersistentDataType.BYTE, (byte)0) == 1) return;
-        villPDC.set(highlightStatus, PersistentDataType.BYTE, (byte)1);
-        villagerPDC.put(villUUID, villPDC);
+        if (villPDC.getOrDefault(HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)0) == 1) return;
+        villPDC.set(HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)1);
+        VILLAGER_PDC.put(villUUID, villPDC);
         spawnFallingBlock(villUUID, villPOI);
         Bukkit.getScheduler().runTaskLater(VillagerInfo.getInstance(), () -> {
             killFallingBlock(villUUID);
-            villPDC.set(highlightStatus, PersistentDataType.BYTE, (byte)0);
-            villagerPDC.put(villUUID, villPDC);
+            villPDC.set(HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)0);
+            VILLAGER_PDC.put(villUUID, villPDC);
         }, 20L * ConfigValidator.configTime);
     }
 
@@ -56,7 +56,7 @@ public class HighlightHandling {
         fallingBlock.setGravity(false);
         fallingBlock.setFallDistance(MAX_FALL_DISTANCE);
 
-        workstationHighlightBlock.put(villUUID, fallingBlock);
+        WORKSTATION_HIGHLIGHT_BLOCK.put(villUUID, fallingBlock);
     }
 
     /**
@@ -64,7 +64,7 @@ public class HighlightHandling {
      * @param villUUID villager's UUID that the FallingBlock was attached to
      */
     public static void killFallingBlock(UUID villUUID) {
-        workstationHighlightBlock.get(villUUID).remove();
-        workstationHighlightBlock.remove(villUUID);
+        WORKSTATION_HIGHLIGHT_BLOCK.get(villUUID).remove();
+        WORKSTATION_HIGHLIGHT_BLOCK.remove(villUUID);
     }
 }

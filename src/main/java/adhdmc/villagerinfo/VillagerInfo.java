@@ -46,9 +46,9 @@ public final class VillagerInfo extends JavaPlugin {
     }
 
     public void onDisable() {
-        HighlightHandling.workstationHighlightBlock.forEach((uuid, fallingBlock) -> fallingBlock.remove());
-        HighlightHandling.villagerPDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.remove(new NamespacedKey(VillagerInfo.instance, "highlightStatus")));
-        HighlightHandling.workstationHighlightBlock.clear();
+        HighlightHandling.WORKSTATION_HIGHLIGHT_BLOCK.forEach((uuid, fallingBlock) -> fallingBlock.remove());
+        HighlightHandling.VILLAGER_PDC.forEach((uuid, persistentDataContainer) -> persistentDataContainer.remove(new NamespacedKey(VillagerInfo.instance, "highlightStatus")));
+        HighlightHandling.WORKSTATION_HIGHLIGHT_BLOCK.clear();
     }
 
     private void registerCommands() {
