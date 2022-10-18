@@ -5,7 +5,7 @@
 
 [![Discord](https://img.shields.io/badge/Discord-join-7289DA?logo=discord&logoColor=7289DA&style=flat-square)](https://discord.gg/qe3YQrbegA)
 [![Ko-Fi Support Link](https://img.shields.io/badge/Ko--fi-donate-FF5E5B?logo=ko-fi&style=flat-square)](https://ko-fi.com/illogicalrhythmic)
-
+[![wakatime](https://wakatime.com/badge/user/bf4f6f62-0e88-4b6f-8363-aac43611fe08/project/0010c0ce-a1f3-4392-8a18-df3580ea2adc.svg?style=flat-square)](https://wakatime.com/badge/user/bf4f6f62-0e88-4b6f-8363-aac43611fe08/project/0010c0ce-a1f3-4392-8a18-df3580ea2adc)
 > **Note**
 >
 > This plugin depends on methods found in Paper servers & forks of Paper. 
