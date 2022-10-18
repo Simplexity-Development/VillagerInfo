@@ -14,11 +14,13 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public final class VillagerInfo extends JavaPlugin {
     private static VillagerInfo instance;
-    private static MiniMessage miniMessage = MiniMessage.miniMessage();
+    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
     private static LocaleConfig localeConfig;
-    public static final NamespacedKey INFO_ENABLED_KEY = new NamespacedKey("villagerinfo", "infoEnabled");
+    public static final NamespacedKey INFO_ENABLED_KEY = new NamespacedKey("villagerinfo", "info-enabled");
     public static final NamespacedKey HIGHLIGHT_STATUS = new NamespacedKey("villagerinfo", "highlighted");
 
     @Override
@@ -35,7 +37,7 @@ public final class VillagerInfo extends JavaPlugin {
         localeConfig.getlocaleConfig();
         Metrics metrics = new Metrics(this, 13653);
         getServer().getPluginManager().registerEvents(new VillagerHandler(), this);
-        this.getCommand("vill").setExecutor(new CommandHandler());
+        Objects.requireNonNull(this.getCommand("vill")).setExecutor(new CommandHandler());
         this.saveDefaultConfig();
         Defaults.localeDefaults();
         Defaults.configDefaults();

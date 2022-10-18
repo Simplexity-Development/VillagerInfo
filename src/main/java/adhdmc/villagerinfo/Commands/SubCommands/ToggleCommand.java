@@ -40,7 +40,7 @@ public class ToggleCommand extends SubCommand {
 
     private boolean toggleSetting(Player player) {
         PersistentDataContainer playerPDC = player.getPersistentDataContainer();
-        byte togglePDC = playerPDC.getOrDefault(VillagerInfo.INFO_ENABLED_KEY, PersistentDataType.BYTE, (byte)0);
+        byte togglePDC = playerPDC.getOrDefault(VillagerInfo.INFO_ENABLED_KEY, PersistentDataType.BYTE, (byte)1);
         if (togglePDC == 1) {
             playerPDC.set(VillagerInfo.INFO_ENABLED_KEY, PersistentDataType.BYTE, (byte)0);
             return false;
