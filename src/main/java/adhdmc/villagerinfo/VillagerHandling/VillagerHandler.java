@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
@@ -24,7 +25,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.UUID;
 
 public class VillagerHandler implements Listener {
 
@@ -65,11 +65,11 @@ public class VillagerHandler implements Listener {
         boolean isAdult = villager.isAdult();
         //time until adult
         if (ToggleSetting.BABY_AGE.isEnabled() && !isAdult) {
-           messageList.add(villagerTimeTillAdult(villager));
+           messageList.add(timeTillAdult(villager));
         }
         //profession
         if (ToggleSetting.PROFESSION.isEnabled() && isAdult) {
-            messageList.add(villagerProfession(villager));
+            messageList.add(villagerProfession(villager.getProfession()));
         }
         //job-site
         // Only show job site and last worked info if the villager has a profession
@@ -100,7 +100,7 @@ public class VillagerHandler implements Listener {
         }
         //reputation
         if (ToggleSetting.REPUTATION.isEnabled()) {
-            messageList.add(villagerPlayerReputation(villager, player));
+            messageList.add(villagerPlayerReputation(villager.getReputation(player.getUniqueId())));
         }
         if (ToggleSetting.HIGHLIGHT_WORKSTATION.isEnabled() && villagerPOI != null) {
             HighlightHandling.villagerJobsiteHighlight(villager.getPersistentDataContainer(), villager.getUniqueId(), villagerPOI);
@@ -115,28 +115,27 @@ public class VillagerHandler implements Listener {
 
     /**
      * Checks and returns formatted 'time till adult' message component
-     * @param villager Clicked Villager
+     * @param ageable Clicked Villager
      * @return Formatted Time Component
      */
-    private Component villagerTimeTillAdult(Villager villager) {
+    private Component timeTillAdult(Ageable ageable) {
         Component timeTillAdultFinal;
-        long villAge = villager.getAge();
-        villAge = villAge * -1;
-        VillagerInfo.getInstance().getLogger().info("" + villAge);
-        String timeCalc = timeMath(villAge);
+        long age = ageable.getAge();
+        age = age * -1;
+        String timeCalc = timeMath(age);
         timeTillAdultFinal = miniMessage.deserialize(Message.VILLAGER_AGE.getMessage(), Placeholder.unparsed("age", timeCalc));
         return timeTillAdultFinal;
     }
 
     /**
-     * Checks and returns villager profession component
-     * @param villager Clicked Villager
+     * Checks and returns profession component
+     * @param profession profession
      * @return Profession Component
      */
-    private Component villagerProfession(Villager villager) {
+    private Component villagerProfession(Villager.Profession profession) {
         Component professionFinal;
-        String villagerProfessionString = villager.getProfession().toString();
-        if (villager.getProfession() == Villager.Profession.NONE) {
+        String villagerProfessionString = profession.toString();
+        if (profession == Villager.Profession.NONE) {
             professionFinal = miniMessage.deserialize(Message.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", Message.NONE.getMessage()));
         } else {
             professionFinal = miniMessage.deserialize(Message.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", villagerProfessionString));
@@ -273,9 +272,9 @@ public class VillagerHandler implements Listener {
      * @param player Player to evaluate
      * @return Reputation Component
      */
-    private Component villagerPlayerReputation(Villager villager, Player player) {
+    private Component villagerPlayerReputation(Reputation reputation) {
         Component villagerReputationFinal;
-        int reputationRawTotal = reputationTotal(villager, player.getUniqueId());
+        int reputationRawTotal = reputationTotal(reputation);
         String playerReputation = ReputationHandler.villagerReputation(reputationRawTotal);
         villagerReputationFinal = miniMessage.deserialize(Message.PLAYER_REPUTATION.getMessage(), Placeholder.unparsed("reputation", playerReputation));
         return villagerReputationFinal;
@@ -284,20 +283,18 @@ public class VillagerHandler implements Listener {
 
     /**
      * Calculates the total reputation of a player, using all reputation types
-     * @param villager Clicked Villager
-     * @param player Player to evaluate
+     * @param reputation reputation to calculate
      * @return Total reputation score
      */
-    private int reputationTotal(Villager villager, UUID player) {
-        Reputation playerReputation = villager.getReputation(player);
-        if (playerReputation == null) return 0;
-        int playerReputationMP = playerReputation.getReputation(ReputationType.MAJOR_POSITIVE);
-        int playerReputationP = playerReputation.getReputation(ReputationType.MINOR_POSITIVE);
-        int playerReputationMN = playerReputation.getReputation(ReputationType.MAJOR_NEGATIVE);
-        int playerReputationN = playerReputation.getReputation(ReputationType.MINOR_NEGATIVE);
-        int playerReputationT = playerReputation.getReputation(ReputationType.TRADING);
+    private int reputationTotal(Reputation reputation) {
+        if (reputation == null) return 0;
+        int reputationMP = reputation.getReputation(ReputationType.MAJOR_POSITIVE);
+        int reputationP = reputation.getReputation(ReputationType.MINOR_POSITIVE);
+        int reputationMN = reputation.getReputation(ReputationType.MAJOR_NEGATIVE);
+        int reputationN = reputation.getReputation(ReputationType.MINOR_NEGATIVE);
+        int reputationT = reputation.getReputation(ReputationType.TRADING);
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
-        return (playerReputationMP * 5) + playerReputationP + playerReputationT - playerReputationN - (playerReputationMN * 5);
+        return (reputationMP * 5) + reputationP + reputationT - reputationN - (reputationMN * 5);
     }
 
     /**
