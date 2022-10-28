@@ -134,11 +134,10 @@ public class VillagerHandler implements Listener {
      */
     private Component villagerProfession(Villager.Profession profession) {
         Component professionFinal;
-        String villagerProfessionString = profession.toString();
         if (profession == Villager.Profession.NONE) {
             professionFinal = miniMessage.deserialize(Message.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", Message.NONE.getMessage()));
         } else {
-            professionFinal = miniMessage.deserialize(Message.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", villagerProfessionString));
+            professionFinal = miniMessage.deserialize(Message.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", profession.toString()));
         }
         return professionFinal;
     }
