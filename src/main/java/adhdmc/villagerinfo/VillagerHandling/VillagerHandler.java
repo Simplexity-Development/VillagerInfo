@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,18 +45,30 @@ public class VillagerHandler implements Listener {
         if (!event.getPlayer().isSneaking()) {
             return;
         }
-        if (!(event.getRightClicked() instanceof Villager villager)) {
-            return;
+        if (event.getRightClicked() instanceof Villager villager) {
+            if (!player.hasPermission(Perms.USE.getPerm())) {
+                return;
+            }
+            if (Arrays.stream(ToggleSetting.values()).noneMatch(ToggleSetting::isEnabled)) {
+                VillagerInfo.getInstance().getLogger().warning("You have all VillagerInfo options turned off. That seems silly, why do you have the plugin installed if you don't want to use it?");
+                return;
+            }
+            event.setCancelled(true);
+            processVillager(player, villager);
+        } else if (event.getRightClicked() instanceof ZombieVillager zombieVillager) {
+            if (!player.hasPermission(Perms.USE.getPerm())) {
+                return;
+            }
+            if (Arrays.stream(ToggleSetting.values()).noneMatch(ToggleSetting::isEnabled)) {
+                VillagerInfo.getInstance().getLogger().warning("You have all VillagerInfo options turned off. That seems silly, why do you have the plugin installed if you don't want to use it?");
+                return;
+            }
+            event.setCancelled(true);
+            processZombieVillager(player, zombieVillager);
         }
+    }
 
-        if (!player.hasPermission(Perms.USE.getPerm())) {
-            return;
-        }
-        if (Arrays.stream(ToggleSetting.values()).noneMatch(ToggleSetting::isEnabled)) {
-            VillagerInfo.getInstance().getLogger().warning("You have all VillagerInfo options turned off. That seems silly, why do you have the plugin installed if you don't want to use it?");
-            return;
-        }
-        event.setCancelled(true);
+    private void processVillager(Player player, Villager villager) {
         Location villagerPOI = villager.getMemory(MemoryKey.JOB_SITE);
         ArrayList<Component> messageList = new ArrayList<>();
         boolean hasProfession = villager.getProfession() != Villager.Profession.NONE
@@ -105,6 +118,30 @@ public class VillagerHandler implements Listener {
         if (ToggleSetting.HIGHLIGHT_WORKSTATION.isEnabled() && villagerPOI != null) {
             HighlightHandling.villagerJobsiteHighlight(villager.getPersistentDataContainer(), villager.getUniqueId(), villagerPOI);
         }
+        //Messages
+        Component prefix = miniMessage.deserialize(Message.PREFIX.getMessage());
+        player.sendMessage(prefix);
+        for (Component component : messageList) {
+            player.sendMessage(component);
+        }
+    }
+
+    private void processZombieVillager(Player player, ZombieVillager zombieVillager) {
+        ArrayList<Component> messageList = new ArrayList<>();
+        boolean isAdult = zombieVillager.isAdult();
+        //time until adult
+        if (ToggleSetting.BABY_AGE.isEnabled() && !isAdult) {
+           messageList.add(timeTillAdult(zombieVillager));
+        }
+        //profession
+        if (ToggleSetting.PROFESSION.isEnabled() && isAdult) {
+            messageList.add(villagerProfession(zombieVillager.getVillagerProfession()));
+        }
+        //reputation
+        // TODO: wait for Reputation API to be added for Zombie Villagers or use PDC to calculate reputation NBT by hand
+        //if (ToggleSetting.REPUTATION.isEnabled()) {
+        //    messageList.add(villagerPlayerReputation(zombieVillager.getReputation(player.getUniqueId())));
+        //}
         //Messages
         Component prefix = miniMessage.deserialize(Message.PREFIX.getMessage());
         player.sendMessage(prefix);
@@ -267,8 +304,7 @@ public class VillagerHandler implements Listener {
 
     /**
      * Gets a player's reputation and returns a component
-     * @param villager Clicked Villager
-     * @param player Player to evaluate
+     * @param reputation Reputation to evaluate
      * @return Reputation Component
      */
     private Component villagerPlayerReputation(Reputation reputation) {
