@@ -35,7 +35,7 @@ public class HighlightHandling {
             killFallingBlock(villUUID);
             villPDC.set(VillagerInfo.HIGHLIGHT_STATUS, PersistentDataType.BYTE, (byte)0);
             VILLAGER_PDC.put(villUUID, villPDC);
-        }, 20L * ConfigValidator.configTime);
+        }, 20L * ConfigValidator.getConfigTime());
     }
 
     /**

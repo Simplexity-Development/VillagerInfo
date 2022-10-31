@@ -17,6 +17,8 @@ public class Defaults {
         locale.addDefault("help-toggle", "<#4dd5ff> • /vill toggle\n<grey>Toggles the ability to receive villager information on or off.");
         locale.addDefault("help-reload", "<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values");
         locale.addDefault("not-a-player", "<red>Sorry, you must be a player to use this command");
+        locale.addDefault("zombie-villager-conversion-time", "<green>TIME UNTIL CONVERTED: \n<aqua> • <time>");
+        locale.addDefault("villager-age", "<green>TIME UNTIL ADULT: \n<aqua> • <age>");
         locale.addDefault("villager-profession", "<green>PROFESSION:\n<aqua> • <profession>");
         locale.addDefault("villager-jobsite-msg", "<green>JOB SITE:\n<aqua> • <jobsitelocation>");
         locale.addDefault("villager-last-worked-msg", "<green>LAST WORKED AT WORKSTATION:\n<aqua> • <worktime>");
@@ -29,6 +31,7 @@ public class Defaults {
         locale.addDefault("none-msg", "<grey>NONE");
         locale.addDefault("never-msg", "<grey>NEVER");
         locale.addDefault("empty-msg", "\n • <grey>EMPTY");
+        locale.addDefault("no-information", "<grey>No information to display on this villager");
         locale.addDefault("hour", "h, ");
         locale.addDefault("minute", "m, ");
         locale.addDefault("second", "s");
@@ -41,6 +44,7 @@ public class Defaults {
     public static void configDefaults() {
         FileConfiguration config = VillagerInfo.getInstance().getConfig();
         config.addDefault("baby-age", true);
+        config.addDefault("zombie-conversion", true);
         config.addDefault("profession", true);
         config.addDefault("job-site", true);
         config.addDefault("last-worked", true);
@@ -52,6 +56,8 @@ public class Defaults {
         config.addDefault("highlight-workstation", true);
         config.addDefault("sound-toggle", true);
         config.addDefault("sound", "BLOCK_AMETHYST_BLOCK_BREAK");
+        config.addDefault("sound-volume", 0.5);
+        config.addDefault("sound-pitch", 1.5);
         config.addDefault("highlight-time", 10);
     }
 

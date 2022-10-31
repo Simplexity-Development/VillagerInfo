@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public enum ToggleSetting {
     BABY_AGE(true),
+    ZOMBIE_CONVERSION(true),
     PROFESSION(true),
     JOB_SITE(true),
     LAST_WORKED(true),
@@ -25,6 +26,7 @@ public enum ToggleSetting {
     public static void reloadToggles() {
         FileConfiguration config = VillagerInfo.getInstance().getConfig();
         BABY_AGE.setEnabled(config.getBoolean("baby-age", true));
+        ZOMBIE_CONVERSION.setEnabled(config.getBoolean("zombie-conversion", true));
         PROFESSION.setEnabled(config.getBoolean("profession", true));
         JOB_SITE.setEnabled(config.getBoolean("job-site", true));
         LAST_WORKED.setEnabled(config.getBoolean("last-worked", true));

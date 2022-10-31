@@ -3,6 +3,7 @@
 #Information Toggles
 #True to enable the information to display when requested, false for it not to display
 baby-age: true
+zombie-conversion: true
 profession: true
 job-site: true
 last-worked: true
@@ -14,6 +15,9 @@ reputation: true
 highlight-workstation: true
 sound-toggle: true
 #Sound must be from this list https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+#Volume and pitch can range from 0.0-2.0
 sound: BLOCK_AMETHYST_BLOCK_BREAK
+sound-volume: 0.5
+sound-pitch: 1.5
 #Length of time to highlight the villager's workstation (if enabled)
 highlight-time: 10

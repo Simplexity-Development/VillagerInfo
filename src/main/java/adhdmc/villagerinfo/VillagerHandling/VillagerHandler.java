@@ -1,5 +1,6 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
+import adhdmc.villagerinfo.Config.ConfigValidator;
 import adhdmc.villagerinfo.Config.Message;
 import adhdmc.villagerinfo.Config.Perms;
 import adhdmc.villagerinfo.Config.ToggleSetting;
@@ -120,7 +121,12 @@ public class VillagerHandler implements Listener {
         }
         //Messages
         Component prefix = miniMessage.deserialize(Message.PREFIX.getMessage());
+        player.playSound(player.getLocation(), ConfigValidator.getConfigSound(), ConfigValidator.getSoundVolume(), ConfigValidator.getSoundPitch());
         player.sendMessage(prefix);
+        if (messageList.size() == 0) {
+            player.sendMessage(miniMessage.deserialize(Message.NO_INFORMATION.getMessage()));
+            return;
+        }
         for (Component component : messageList) {
             player.sendMessage(component);
         }
@@ -129,13 +135,13 @@ public class VillagerHandler implements Listener {
     private void processZombieVillager(Player player, ZombieVillager zombieVillager) {
         ArrayList<Component> messageList = new ArrayList<>();
         boolean isAdult = zombieVillager.isAdult();
-        //time until adult
-        if (ToggleSetting.BABY_AGE.isEnabled() && !isAdult) {
-           messageList.add(timeTillAdult(zombieVillager));
-        }
         //profession
         if (ToggleSetting.PROFESSION.isEnabled() && isAdult) {
             messageList.add(villagerProfession(zombieVillager.getVillagerProfession()));
+        }
+        //time until converted
+        if (ToggleSetting.ZOMBIE_CONVERSION.isEnabled() && zombieVillager.isConverting()) {
+            messageList.add(timeTillConverted(zombieVillager));
         }
         //reputation
         // TODO: wait for Reputation API to be added for Zombie Villagers or use PDC to calculate reputation NBT by hand
@@ -144,10 +150,21 @@ public class VillagerHandler implements Listener {
         //}
         //Messages
         Component prefix = miniMessage.deserialize(Message.PREFIX.getMessage());
+        player.playSound(player.getLocation(), ConfigValidator.getConfigSound(), ConfigValidator.getSoundVolume(), ConfigValidator.getSoundPitch());
         player.sendMessage(prefix);
+        if (messageList.size() == 0) {
+            player.sendMessage(miniMessage.deserialize(Message.NO_INFORMATION.getMessage()));
+            return;
+        }
         for (Component component : messageList) {
             player.sendMessage(component);
         }
+    }
+
+    private Component timeTillConverted(ZombieVillager zombieVillager){
+            long converstionTime = zombieVillager.getConversionTime();
+            String timeCalc = timeMath(converstionTime);
+            return miniMessage.deserialize(Message.ZOMBIE_VILLAGER_CONVERSION_TIME.getMessage(), Placeholder.unparsed("time", timeCalc));
     }
 
     /**
@@ -159,6 +176,9 @@ public class VillagerHandler implements Listener {
         Component timeTillAdultFinal;
         long age = ageable.getAge();
         age = age * -1;
+        if (age == 0) {
+            return null;
+        }
         String timeCalc = timeMath(age);
         timeTillAdultFinal = miniMessage.deserialize(Message.VILLAGER_AGE.getMessage(), Placeholder.unparsed("age", timeCalc));
         return timeTillAdultFinal;

@@ -17,6 +17,7 @@ public enum Message {
     NOT_A_PLAYER("<red>Sorry, you must be a player to use this command"),
 
     // Villager Info
+    ZOMBIE_VILLAGER_CONVERSION_TIME("<green>TIME UNTIL CONVERTED: \n<aqua> • <time>"),
     VILLAGER_AGE("<green>TIME UNTIL ADULT: \n<aqua> • <age>"),
     VILLAGER_PROFESSION("<green>PROFESSION:\n<aqua> • <profession>"),
     VILLAGER_JOBSITE("<green>JOB SITE:\n<aqua> • <jobsitelocation>"),
@@ -30,6 +31,7 @@ public enum Message {
 
     // Fillers
     NONE("<grey>NONE"), NEVER("<grey>NEVER"), EMPTY("\n • <grey>EMPTY"),
+    NO_INFORMATION("<grey>No information to display on this villager"),
 
     // Time
     HOUR("h, "), MINUTE("m, "), SECOND("s"), AGO(" Ago"),
@@ -60,6 +62,7 @@ public enum Message {
         HELP_RELOAD.setMessage(locale.getString("help-reload", "<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values"));
         NOT_A_PLAYER.setMessage(locale.getString("not-a-player", "<red>Sorry, you must be a player to use this command"));
         // Villager Info
+        ZOMBIE_VILLAGER_CONVERSION_TIME.setMessage(locale.getString("zombie-villager-conversion-time", "<green>TIME UNTIL CONVERTED: \n<aqua> • <time>"));
         VILLAGER_AGE.setMessage(locale.getString("villager-age", "<green>TIME UNTIL ADULT: \n<aqua> • <age>"));
         VILLAGER_PROFESSION.setMessage(locale.getString("villager-profession", "<green>PROFESSION:\n<aqua> • <profession>"));
         VILLAGER_JOBSITE.setMessage(locale.getString("villager-jobsite-msg", "<green>JOB SITE:\n<aqua> • <jobsitelocation>"));
@@ -74,6 +77,8 @@ public enum Message {
         NONE.setMessage(locale.getString("none-msg", "<grey>NONE"));
         NEVER.setMessage(locale.getString("never-msg", "<grey>NEVER"));
         EMPTY.setMessage(locale.getString("empty-msg", "\n • <grey>EMPTY"));
+        NO_INFORMATION.setMessage(locale.getString("no-information", "<grey>No information to display on this villager"));
+
         // Time
         HOUR.setMessage(locale.getString("hour", "h, "));
         MINUTE.setMessage(locale.getString("minute", "m, "));
