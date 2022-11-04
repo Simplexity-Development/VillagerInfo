@@ -19,6 +19,8 @@ public class Defaults {
         locale.addDefault("not-a-player", "<red>Sorry, you must be a player to use this command");
         locale.addDefault("zombie-villager-conversion-time", "<green>TIME UNTIL CONVERTED: \n<aqua> • <time>");
         locale.addDefault("villager-age", "<green>TIME UNTIL ADULT: \n<aqua> • <age>");
+        locale.addDefault("purpur-lobotomized","<green>LOBOTOMIZED: \n<aqua> • <state>");
+        locale.addDefault("villager-health", "<green>HEALTH:\n<aqua> • <grey><current></grey>/<green><total>");
         locale.addDefault("villager-profession", "<green>PROFESSION:\n<aqua> • <profession>");
         locale.addDefault("villager-jobsite-msg", "<green>JOB SITE:\n<aqua> • <jobsitelocation>");
         locale.addDefault("villager-last-worked-msg", "<green>LAST WORKED AT WORKSTATION:\n<aqua> • <worktime>");
@@ -28,6 +30,8 @@ public class Defaults {
         locale.addDefault("villager-inventory-msg", "<green>VILLAGER INVENTORY:<aqua> <contents>");
         locale.addDefault("inventory-contents-msg", "\n • <item> (<amount>)");
         locale.addDefault("player-reputation-msg", "<green>PLAYER REPUTATION:\n<reputation>");
+        locale.addDefault("true-msg", "<aqua>TRUE");
+        locale.addDefault("false-msg", "<aqua>FALSE");
         locale.addDefault("none-msg", "<grey>NONE");
         locale.addDefault("never-msg", "<grey>NEVER");
         locale.addDefault("empty-msg", "\n • <grey>EMPTY");

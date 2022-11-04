@@ -2,8 +2,10 @@
 
 #Information Toggles
 #True to enable the information to display when requested, false for it not to display
+purpur-lobotomized: false
 baby-age: true
 zombie-conversion: true
+health: true
 profession: true
 job-site: true
 last-worked: true

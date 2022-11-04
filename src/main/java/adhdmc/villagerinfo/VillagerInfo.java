@@ -12,6 +12,7 @@ import adhdmc.villagerinfo.VillagerHandling.VillagerHandler;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Villager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -22,6 +23,7 @@ public final class VillagerInfo extends JavaPlugin {
     private static LocaleConfig localeConfig;
     public static final NamespacedKey INFO_ENABLED_KEY = new NamespacedKey("villagerinfo", "info-enabled");
     public static final NamespacedKey HIGHLIGHT_STATUS = new NamespacedKey("villagerinfo", "highlighted");
+    public static boolean usingPurpur = true;
 
     @Override
     public void onEnable() {

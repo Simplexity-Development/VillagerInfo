@@ -11,10 +11,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
-import org.bukkit.entity.ZombieVillager;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class VillagerHandler implements Listener {
+    private boolean usingPurpur = VillagerInfo.usingPurpur;
 
     MiniMessage miniMessage = VillagerInfo.getMiniMessage();
 
@@ -77,9 +76,17 @@ public class VillagerHandler implements Listener {
         boolean hasWorkSite = villager.getMemory(MemoryKey.JOB_SITE) != null;
         boolean hasBed = villager.getMemory(MemoryKey.HOME) != null;
         boolean isAdult = villager.isAdult();
+        //lobotomized
+        if (ToggleSetting.PURPUR_LOBOTOMIZED.isEnabled() && usingPurpur && isAdult) {
+            messageList.add(villagerLobotomized(villager));
+        }
         //time until adult
         if (ToggleSetting.BABY_AGE.isEnabled() && !isAdult) {
            messageList.add(timeTillAdult(villager));
+        }
+        //health
+        if (ToggleSetting.HEALTH.isEnabled()) {
+            messageList.add(villagerHealth(villager));
         }
         //profession
         if (ToggleSetting.PROFESSION.isEnabled() && isAdult) {
@@ -143,6 +150,9 @@ public class VillagerHandler implements Listener {
         if (ToggleSetting.ZOMBIE_CONVERSION.isEnabled() && zombieVillager.isConverting()) {
             messageList.add(timeTillConverted(zombieVillager));
         }
+        if (ToggleSetting.HEALTH.isEnabled()) {
+            messageList.add(villagerHealth(zombieVillager));
+        }
         //reputation
         // TODO: wait for Reputation API to be added for Zombie Villagers or use PDC to calculate reputation NBT by hand
         //if (ToggleSetting.REPUTATION.isEnabled()) {
@@ -160,6 +170,12 @@ public class VillagerHandler implements Listener {
             player.sendMessage(component);
         }
     }
+
+    /**
+     * Checks and returnt formatted 'time till converted' message component
+     * @param zombieVillager Clicked Zombie Villager
+     * @return Formatted Time Component
+     */
 
     private Component timeTillConverted(ZombieVillager zombieVillager){
             long converstionTime = zombieVillager.getConversionTime();
@@ -182,6 +198,35 @@ public class VillagerHandler implements Listener {
         String timeCalc = timeMath(age);
         timeTillAdultFinal = miniMessage.deserialize(Message.VILLAGER_AGE.getMessage(), Placeholder.unparsed("age", timeCalc));
         return timeTillAdultFinal;
+    }
+
+    private Component villagerHealth(LivingEntity entity) {
+        Component villagerHealthFinal;
+        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double currentHealth = entity.getHealth();
+        villagerHealthFinal = miniMessage.deserialize(Message.VILLAGER_HEALTH.getMessage(),
+                Placeholder.unparsed("current", String.valueOf(currentHealth)),
+                Placeholder.unparsed("total", String.valueOf(maxHealth)));
+        return villagerHealthFinal;
+    }
+
+    private Component villagerLobotomized(Villager villager) {
+        Component villagerLobotomizedFinal = null;
+        if(usingPurpur) {
+            try {
+                villager.isLobotomized();
+            } catch (NoSuchMethodError e) {
+                VillagerInfo.usingPurpur = false;
+                return null;
+            }
+            String state = "";
+            if (villager.isLobotomized()) state = Message.TRUE.getMessage();
+            if (!villager.isLobotomized()) state = Message.FALSE.getMessage();
+            villagerLobotomizedFinal = miniMessage.deserialize(Message.PURPUR_LOBOTOMIZED.getMessage(),
+                    Placeholder.unparsed("state", state));
+            return villagerLobotomizedFinal;
+        }
+        return null;
     }
 
     /**
