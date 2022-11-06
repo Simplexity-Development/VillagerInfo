@@ -4,6 +4,7 @@ import adhdmc.villagerinfo.VillagerInfo;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public enum ToggleSetting {
+    HOVER_MESSAGES(true),
     PURPUR_LOBOTOMIZED(false),
     BABY_AGE(true),
     ZOMBIE_CONVERSION(true),
@@ -27,6 +28,7 @@ public enum ToggleSetting {
 
     public static void reloadToggles() {
         FileConfiguration config = VillagerInfo.getInstance().getConfig();
+        HOVER_MESSAGES.setEnabled(config.getBoolean("hover-messages", true));
         PURPUR_LOBOTOMIZED.setEnabled(config.getBoolean("purpur-lobotomized", false));
         BABY_AGE.setEnabled(config.getBoolean("baby-age", true));
         ZOMBIE_CONVERSION.setEnabled(config.getBoolean("zombie-conversion", true));
