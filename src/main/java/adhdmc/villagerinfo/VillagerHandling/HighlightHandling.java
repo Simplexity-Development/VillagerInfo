@@ -52,6 +52,9 @@ public class HighlightHandling {
         fallingBlock.setGlowing(true);
         // setting fall distance to it's max w/ gravity disabled makes it "fall infinitely"
         fallingBlock.setGravity(false);
+        fallingBlock.setDropItem(false);
+        fallingBlock.setPersistent(true);
+        fallingBlock.setInvulnerable(true);
         fallingBlock.setFallDistance(MAX_FALL_DISTANCE);
 
         WORKSTATION_HIGHLIGHT_BLOCK.put(villUUID, fallingBlock);

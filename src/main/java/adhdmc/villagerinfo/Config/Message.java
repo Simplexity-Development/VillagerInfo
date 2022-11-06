@@ -17,23 +17,23 @@ public enum Message {
     NOT_A_PLAYER("<red>Sorry, you must be a player to use this command"),
 
     // Villager Info
-    PURPUR_LOBOTOMIZED("<green><hover:show_text:'<grey><state>'>[LOBOTOMIZED]"),
-    ZOMBIE_VILLAGER_CONVERSION_TIME("<green><hover:show_text:'<grey><time>'>[TIME UNTIL CONVERTED]</hover>"),
-    VILLAGER_AGE("<green><hover:show_text:'<grey><age>'>[TIME UNTIL ADULT]"),
-    VILLAGER_PROFESSION("<green><hover:show_text:'<grey><profession>'>[PROFESSION]"),
-    VILLAGER_HEALTH("<green><hover:show_text:'<grey><current><aqua>/</aqua><total>'>[HEALTH]"),
-    VILLAGER_JOBSITE("<green><hover:show_text:'<grey><jobsitelocation>'>[JOB SITE]"),
-    VILLAGER_LAST_WORKED("<green><hover:show_text:'<grey><worktime>'>[LAST WORKED AT WORKSTATION]"),
-    VILLAGER_RESTOCKS("<green><hover:show_text:'<grey><restockcount>'>[RESTOCKS TODAY]"),
-    VILLAGER_HOME("<green><hover:show_text:'<grey><homelocation>'>[HOME]"),
-    VILLAGER_SLEPT("<green><hover:show_text:'<grey><sleeptime>'>[LAST SLEPT]"),
-    VILLAGER_INVENTORY("<green><hover:show_text:'<grey><contents>'>[VILLAGER INVENTORY]"),
+    PURPUR_LOBOTOMIZED("<#05bff7><hover:show_text:'<aqua>Lobotomized: <grey><state>'>[<#c4fff7>Lobotomized</#c4fff7>]"),
+    ZOMBIE_VILLAGER_CONVERSION_TIME("<#05bff7><hover:show_text:'<aqua>Conversion Time: <grey><time>'>[<#c4fff7>Time Until Converted</#c4fff7>]</hover>"),
+    VILLAGER_AGE("<#05bff7><hover:show_text:'<aqua>Childhood Left: <grey><age>'>[<#c4fff7>Time Until Adult</#c4fff7>]"),
+    VILLAGER_PROFESSION("<#05bff7><hover:show_text:'<aqua>Profession: <grey><profession>'>[<#c4fff7>Profession</#c4fff7>]"),
+    VILLAGER_HEALTH("<#05bff7><hover:show_text:'<aqua>Health: <grey><current><aqua>/</aqua><total>'>[<#c4fff7>Health</#c4fff7>]"),
+    VILLAGER_JOBSITE("<#05bff7><hover:show_text:'<aqua>POI: <grey><jobsitelocation>'>[<#c4fff7>Job Site</#c4fff7>]"),
+    VILLAGER_LAST_WORKED("<#05bff7><hover:show_text:'<aqua>Last Worked: <grey><worktime>'>[<#c4fff7>Last Worked At Workstation</#c4fff7>]"),
+    VILLAGER_RESTOCKS("<#05bff7><hover:show_text:'<aqua>Restocks: <grey><restockcount>'>[<#c4fff7>Restocks Today</#c4fff7>]"),
+    VILLAGER_HOME("<#05bff7><hover:show_text:'<aqua>Bed: <grey><homelocation>'>[<#c4fff7>Home</#c4fff7>]"),
+    VILLAGER_SLEPT("<#05bff7><hover:show_text:'<aqua>Last Slept: <grey><sleeptime>'>[<#c4fff7>Last Slept</#c4fff7>]"),
+    VILLAGER_INVENTORY("<#05bff7><hover:show_text:'<aqua>Inventory: <grey><contents>'>[<#c4fff7>Villager Inventory</#c4fff7>]"),
     INVENTORY_CONTENTS("\n • <item> (<amount>)"),
-    PLAYER_REPUTATION("<green>PLAYER REPUTATION:\n<reputation>"),
+    PLAYER_REPUTATION("<#05bff7><hover:show_text:'<#05bff7>[<#c4fff7>Player Reputation</#c4fff7>]'><reputation>"),
 
     // Fillers
-    TRUE("<grey>TRUE"), FALSE("<grey>FALSE"),
-    NONE("<grey>NONE"), NEVER("<grey>NEVER"), EMPTY("<grey>EMPTY"),
+    TRUE("<grey>True"), FALSE("<grey>False"),
+    NONE("<grey>None"), NEVER("<grey>Never"), EMPTY("\n<grey>Empty"),
     NO_INFORMATION("<grey>No information to display on this villager"),
 
     // Time
@@ -53,47 +53,47 @@ public enum Message {
     public static void reloadLocale() {
         FileConfiguration locale = VillagerInfo.getLocaleConfig().getlocaleConfig();
         // General
-        PREFIX.setMessage(locale.getString("prefix", "<#3256a8><bold>[</bold><#4dd5ff>Villager Info<#3256a8><bold>]<reset>"));
-        TOGGLE_ON.setMessage(locale.getString("toggle-on", "<green> Villager Info Toggled <u>ON"));
-        TOGGLE_OFF.setMessage(locale.getString("toggle-off", "<red> Villager Info Toggled <u>OFF"));
-        NO_PERMISSION.setMessage(locale.getString("no-permission", "<red>You don't have permission to use this command!"));
+        PREFIX.setMessage(locale.getString("prefix"));
+        TOGGLE_ON.setMessage(locale.getString("toggle-on"));
+        TOGGLE_OFF.setMessage(locale.getString("toggle-off"));
+        NO_PERMISSION.setMessage(locale.getString("no-permission"));
         // Commands
-        NO_COMMAND.setMessage(locale.getString("no-command", "<red>No subcommand by that name!"));
-        CONFIG_RELOADED.setMessage(locale.getString("config-reloaded", "<gold>VillagerInfo Config Reloaded!"));
-        HELP_MAIN.setMessage(locale.getString("help-main", "<#4dd5ff> • How to use Villager Info\n<grey>Shift-right-click a villager while toggle is on to have a villager's information displayed"));
-        HELP_TOGGLE.setMessage(locale.getString("help-toggle", "<#4dd5ff> • /vill toggle\n<grey>Toggles the ability to receive villager information on or off."));
-        HELP_RELOAD.setMessage(locale.getString("help-reload", "<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values"));
-        NOT_A_PLAYER.setMessage(locale.getString("not-a-player", "<red>Sorry, you must be a player to use this command"));
+        NO_COMMAND.setMessage(locale.getString("no-command"));
+        CONFIG_RELOADED.setMessage(locale.getString("config-reloaded"));
+        HELP_MAIN.setMessage(locale.getString("help-main"));
+        HELP_TOGGLE.setMessage(locale.getString("help-toggle"));
+        HELP_RELOAD.setMessage(locale.getString("help-reload"));
+        NOT_A_PLAYER.setMessage(locale.getString("not-a-player"));
         // Villager Info
-        PURPUR_LOBOTOMIZED.setMessage(locale.getString("purpur-lobotomized","<green><hover:show_text:'<grey><state>'>[LOBOTOMIZED]"));
-        ZOMBIE_VILLAGER_CONVERSION_TIME.setMessage(locale.getString("zombie-villager-conversion-time", "<green><hover:show_text:'<grey><time>'>[TIME UNTIL CONVERTED]</hover>"));
-        VILLAGER_AGE.setMessage(locale.getString("villager-age", "<green><hover:show_text:'<grey><age>'>[TIME UNTIL ADULT]"));
-        VILLAGER_HEALTH.setMessage(locale.getString("villager-health", "<green><hover:show_text:'<grey><current><aqua>/</aqua><total>'>[HEALTH]"));
-        VILLAGER_PROFESSION.setMessage(locale.getString("villager-profession", "<green><hover:show_text:'<grey><profession>'>[PROFESSION]"));
-        VILLAGER_JOBSITE.setMessage(locale.getString("villager-jobsite-msg", "<green><hover:show_text:'<grey><jobsitelocation>'>[JOB SITE]"));
-        VILLAGER_LAST_WORKED.setMessage(locale.getString("villager-last-worked-msg", "<green><hover:show_text:'<grey><worktime>'>[LAST WORKED AT WORKSTATION]"));
-        VILLAGER_RESTOCKS.setMessage(locale.getString("villager-num-restocks-msg", "<green><hover:show_text:'<grey><restockcount>'>[RESTOCKS TODAY]"));
-        VILLAGER_HOME.setMessage(locale.getString("villager-home-msg", "<green><hover:show_text:'<grey><homelocation>'>[HOME]"));
-        VILLAGER_SLEPT.setMessage(locale.getString("villager-slept-msg", "<green><hover:show_text:'<grey><sleeptime>'>[LAST SLEPT]"));
-        VILLAGER_INVENTORY.setMessage(locale.getString("villager-inventory-msg", "<green><hover:show_text:'<grey><contents>'>[VILLAGER INVENTORY]"));
-        INVENTORY_CONTENTS.setMessage(locale.getString("inventory-contents-msg", "\n • <item> (<amount>)"));
-        PLAYER_REPUTATION.setMessage(locale.getString("player-reputation-msg", "<green>PLAYER REPUTATION:\n<reputation>"));
+        PURPUR_LOBOTOMIZED.setMessage(locale.getString("purpur-lobotomized"));
+        ZOMBIE_VILLAGER_CONVERSION_TIME.setMessage(locale.getString("zombie-villager-conversion-time"));
+        VILLAGER_AGE.setMessage(locale.getString("villager-age"));
+        VILLAGER_HEALTH.setMessage(locale.getString("villager-health"));
+        VILLAGER_PROFESSION.setMessage(locale.getString("villager-profession"));
+        VILLAGER_JOBSITE.setMessage(locale.getString("villager-jobsite-msg"));
+        VILLAGER_LAST_WORKED.setMessage(locale.getString("villager-last-worked-msg"));
+        VILLAGER_RESTOCKS.setMessage(locale.getString("villager-num-restocks-msg"));
+        VILLAGER_HOME.setMessage(locale.getString("villager-home-msg"));
+        VILLAGER_SLEPT.setMessage(locale.getString("villager-slept-msg"));
+        VILLAGER_INVENTORY.setMessage(locale.getString("villager-inventory-msg"));
+        INVENTORY_CONTENTS.setMessage(locale.getString("inventory-contents-msg"));
+        PLAYER_REPUTATION.setMessage(locale.getString("player-reputation-msg"));
         // Fillers
-        TRUE.setMessage(locale.getString("true-msg", "<grey>TRUE"));
-        FALSE.setMessage(locale.getString("false-msg", "<grey>FALSE"));
-        NONE.setMessage(locale.getString("none-msg", "<grey>NONE"));
-        NEVER.setMessage(locale.getString("never-msg", "<grey>NEVER"));
-        EMPTY.setMessage(locale.getString("empty-msg", "<grey>EMPTY"));
-        NO_INFORMATION.setMessage(locale.getString("no-information", "<grey>No information to display on this villager"));
+        TRUE.setMessage(locale.getString("true-msg"));
+        FALSE.setMessage(locale.getString("false-msg"));
+        NONE.setMessage(locale.getString("none-msg"));
+        NEVER.setMessage(locale.getString("never-msg"));
+        EMPTY.setMessage(locale.getString("empty-msg"));
+        NO_INFORMATION.setMessage(locale.getString("no-information"));
         // Time
-        HOUR.setMessage(locale.getString("hour", "h, "));
-        MINUTE.setMessage(locale.getString("minute", "m, "));
-        SECOND.setMessage(locale.getString("second", "s"));
-        AGO.setMessage(locale.getString("ago", " Ago"));
+        HOUR.setMessage(locale.getString("hour"));
+        MINUTE.setMessage(locale.getString("minute"));
+        SECOND.setMessage(locale.getString("second"));
+        AGO.setMessage(locale.getString("ago"));
 
         // Location
-        LOCATION_X.setMessage(locale.getString("location-x", "<int>x, "));
-        LOCATION_Y.setMessage(locale.getString("location-y", "<int>y, "));
-        LOCATION_Z.setMessage(locale.getString("location-z", "<int>z"));
+        LOCATION_X.setMessage(locale.getString("location-x"));
+        LOCATION_Y.setMessage(locale.getString("location-y"));
+        LOCATION_Z.setMessage(locale.getString("location-z"));
     }
 }
