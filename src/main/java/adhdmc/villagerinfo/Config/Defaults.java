@@ -17,24 +17,24 @@ public class Defaults {
         locale.addDefault("help-toggle", "<#4dd5ff> • /vill toggle\n<grey>Toggles the ability to receive villager information on or off.");
         locale.addDefault("help-reload", "<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values");
         locale.addDefault("not-a-player", "<red>Sorry, you must be a player to use this command");
-        locale.addDefault("zombie-villager-conversion-time", "<green>TIME UNTIL CONVERTED: \n<aqua> • <time>");
-        locale.addDefault("villager-age", "<green>TIME UNTIL ADULT: \n<aqua> • <age>");
-        locale.addDefault("purpur-lobotomized","<green>LOBOTOMIZED: \n<aqua> • <state>");
-        locale.addDefault("villager-health", "<green>HEALTH:\n<aqua> • <grey><current></grey>/<green><total>");
-        locale.addDefault("villager-profession", "<green>PROFESSION:\n<aqua> • <profession>");
-        locale.addDefault("villager-jobsite-msg", "<green>JOB SITE:\n<aqua> • <jobsitelocation>");
-        locale.addDefault("villager-last-worked-msg", "<green>LAST WORKED AT WORKSTATION:\n<aqua> • <worktime>");
-        locale.addDefault("villager-num-restocks-msg", "<green>RESTOCKS TODAY:\n<aqua> • <restockcount>");
-        locale.addDefault("villager-home-msg", "<green>HOME:\n<aqua> • <homelocation>");
-        locale.addDefault("villager-slept-msg", "<green>LAST SLEPT:\n<aqua> • <sleeptime>");
-        locale.addDefault("villager-inventory-msg", "<green>VILLAGER INVENTORY:<aqua> <contents>");
+        locale.addDefault("zombie-villager-conversion-time", "<green><hover:show_text:'<grey><time>'>[TIME UNTIL CONVERTED]</hover>");
+        locale.addDefault("villager-age", "<green><hover:show_text:'<grey><age>'>[TIME UNTIL ADULT]");
+        locale.addDefault("purpur-lobotomized","<green><hover:show_text:'<grey><state>'>[LOBOTOMIZED]");
+        locale.addDefault("villager-health", "<green><hover:show_text:'<grey><current><aqua>/</aqua><total>'>[HEALTH]");
+        locale.addDefault("villager-profession", "<green><hover:show_text:'<grey><profession>'>[PROFESSION]");
+        locale.addDefault("villager-jobsite-msg", "<green><hover:show_text:'<grey><jobsitelocation>'>[JOB SITE]");
+        locale.addDefault("villager-last-worked-msg", "<green><hover:show_text:'<grey><worktime>'>[LAST WORKED AT WORKSTATION]");
+        locale.addDefault("villager-num-restocks-msg", "<green><hover:show_text:'<grey><restockcount>'>[RESTOCKS TODAY]");
+        locale.addDefault("villager-home-msg", "<green><hover:show_text:'<grey><homelocation>'>[HOME]");
+        locale.addDefault("villager-slept-msg", "<green><hover:show_text:'<grey><sleeptime>'>[LAST SLEPT]");
+        locale.addDefault("villager-inventory-msg", "<green><hover:show_text:'<grey><contents>'>[VILLAGER INVENTORY]");
         locale.addDefault("inventory-contents-msg", "\n • <item> (<amount>)");
         locale.addDefault("player-reputation-msg", "<green>PLAYER REPUTATION:\n<reputation>");
-        locale.addDefault("true-msg", "<aqua>TRUE");
-        locale.addDefault("false-msg", "<aqua>FALSE");
+        locale.addDefault("true-msg", "<grey>TRUE");
+        locale.addDefault("false-msg", "<grey>FALSE");
         locale.addDefault("none-msg", "<grey>NONE");
         locale.addDefault("never-msg", "<grey>NEVER");
-        locale.addDefault("empty-msg", "\n • <grey>EMPTY");
+        locale.addDefault("empty-msg", "<grey>EMPTY");
         locale.addDefault("no-information", "<grey>No information to display on this villager");
         locale.addDefault("hour", "h, ");
         locale.addDefault("minute", "m, ");
@@ -47,6 +47,8 @@ public class Defaults {
 
     public static void configDefaults() {
         FileConfiguration config = VillagerInfo.getInstance().getConfig();
+        config.addDefault("hover-messages", true);
+        config.addDefault("purpur-lobotomized", false);
         config.addDefault("baby-age", true);
         config.addDefault("zombie-conversion", true);
         config.addDefault("profession", true);
