@@ -22,8 +22,7 @@ Accessing the information in villager's brains is useful, but `/data get` has mu
 
 ### **Default minecraft /data get**
 
-![image](https://user-images.githubusercontent.com/45906780/137825819-6356126f-5c16-49f3-94de-73757a515620.png)
-
+<img src="https://user-images.githubusercontent.com/45906780/204659030-d2ffabb8-1a1c-461b-8032-209441c2dad5.png" width = 50%>
 
 ### Permissions:
 
