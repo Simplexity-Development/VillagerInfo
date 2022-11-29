@@ -18,8 +18,7 @@ Accessing the information in villager's brains is useful, but `/data get` has mu
 ## **Default list provided through VillagerInfo**
 |Baby Villager with nothing|Adult Villager with nothing |Adult Villager with everything|
 |-----|-----|-----|
-|![villager-baby](https://user-images.githubusercontent.com/45906780/195231157-51cbc29a-bddd-4063-9bd8-6f541651e8a1.png)| ![villager-adult](https://user-images.githubusercontent.com/45906780/195231183-c511cab1-2cc3-4b58-ae51-653b48aa70d1.png) | ![villager-info](https://user-images.githubusercontent.com/45906780/195231207-73c16912-dc77-4771-92ac-c200ac87f0ce.png)|
-
+|![base-baby-villager](https://user-images.githubusercontent.com/45906780/204650730-0235fc6d-ad87-40df-96ec-048fc84edb8c.png)| ![base-empty-villager](https://user-images.githubusercontent.com/45906780/204650734-e30a76c2-9c0e-41f6-a667-01d6baca4cbf.png) | ![base-full-villager](https://user-images.githubusercontent.com/45906780/204650736-0f76510c-c0c1-40c8-8d8e-b68fa6d66089.png)|
 
 ### **Default minecraft /data get**
 
