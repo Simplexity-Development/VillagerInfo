@@ -1,6 +1,6 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
-import adhdmc.villagerinfo.Config.Message;
+import adhdmc.villagerinfo.Config.VIMessage;
 import adhdmc.villagerinfo.VillagerInfo;
 import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
@@ -16,9 +16,11 @@ import org.bukkit.entity.ZombieVillager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
+
 public class ComponentHandler {
     private static final MiniMessage miniMessage = VillagerInfo.getMiniMessage();
-    private static boolean usingPurpur = VillagerInfo.usingPurpur;
+    private static final boolean usingPurpur = VillagerInfo.usingPurpur;
 
     /**
      * Checks and returns formatted 'time till adult' message component
@@ -33,22 +35,22 @@ public class ComponentHandler {
             return null;
         }
         String timeCalc = timeMath(age);
-        timeTillAdultFinal = miniMessage.deserialize(Message.VILLAGER_AGE.getMessage(), Placeholder.unparsed("age", timeCalc));
+        timeTillAdultFinal = miniMessage.deserialize(VIMessage.VILLAGER_AGE.getMessage(), Placeholder.unparsed("age", timeCalc));
         return timeTillAdultFinal;
     }
 
     public static Component villagerHealth(LivingEntity entity) {
         Component villagerHealthFinal;
-        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double maxHealth = Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
         double currentHealth = entity.getHealth();
-        villagerHealthFinal = miniMessage.deserialize(Message.VILLAGER_HEALTH.getMessage(),
+        villagerHealthFinal = miniMessage.deserialize(VIMessage.VILLAGER_HEALTH.getMessage(),
                 Placeholder.unparsed("current", String.valueOf(currentHealth)),
                 Placeholder.unparsed("total", String.valueOf(maxHealth)));
         return villagerHealthFinal;
     }
 
     public static Component villagerLobotomized(Villager villager) {
-        Component villagerLobotomizedFinal = null;
+        Component villagerLobotomizedFinal;
         if(usingPurpur) {
             try {
                 villager.isLobotomized();
@@ -57,9 +59,9 @@ public class ComponentHandler {
                 return null;
             }
             String state = "";
-            if (villager.isLobotomized()) state = Message.TRUE.getMessage();
-            if (!villager.isLobotomized()) state = Message.FALSE.getMessage();
-            villagerLobotomizedFinal = miniMessage.deserialize(Message.PURPUR_LOBOTOMIZED.getMessage(),
+            if (villager.isLobotomized()) state = VIMessage.TRUE.getMessage();
+            if (!villager.isLobotomized()) state = VIMessage.FALSE.getMessage();
+            villagerLobotomizedFinal = miniMessage.deserialize(VIMessage.PURPUR_LOBOTOMIZED.getMessage(),
                     Placeholder.parsed("state", state));
             return villagerLobotomizedFinal;
         }
@@ -74,9 +76,9 @@ public class ComponentHandler {
     public static Component villagerProfession(Villager.Profession profession) {
         Component professionFinal;
         if (profession == Villager.Profession.NONE) {
-            professionFinal = miniMessage.deserialize(Message.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", Message.NONE.getMessage()));
+            professionFinal = miniMessage.deserialize(VIMessage.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", VIMessage.NONE.getMessage()));
         } else {
-            professionFinal = miniMessage.deserialize(Message.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", profession.toString()));
+            professionFinal = miniMessage.deserialize(VIMessage.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", profession.toString()));
         }
         return professionFinal;
     }
@@ -90,16 +92,16 @@ public class ComponentHandler {
         Location villagerJobLocation = villager.getMemory(MemoryKey.JOB_SITE);
         Component jobSiteFinal;
         if (villagerJobLocation == null) {
-            jobSiteFinal = miniMessage.deserialize(Message.VILLAGER_JOBSITE.getMessage(),
-                    Placeholder.parsed("jobsitelocation", Message.NONE.getMessage()));
+            jobSiteFinal = miniMessage.deserialize(VIMessage.VILLAGER_JOBSITE.getMessage(),
+                    Placeholder.parsed("jobsitelocation", VIMessage.NONE.getMessage()));
         } else {
-            Component jobX = miniMessage.deserialize(Message.LOCATION_X.getMessage(),
+            Component jobX = miniMessage.deserialize(VIMessage.LOCATION_X.getMessage(),
                     Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockX())));
-            Component jobY = miniMessage.deserialize(Message.LOCATION_Y.getMessage(),
+            Component jobY = miniMessage.deserialize(VIMessage.LOCATION_Y.getMessage(),
                     Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockY())));
-            Component jobZ = miniMessage.deserialize(Message.LOCATION_Z.getMessage(),
+            Component jobZ = miniMessage.deserialize(VIMessage.LOCATION_Z.getMessage(),
                     Placeholder.unparsed("int", String.valueOf(villagerJobLocation.getBlockZ())));
-            jobSiteFinal = miniMessage.deserialize(Message.VILLAGER_JOBSITE.getMessage(),
+            jobSiteFinal = miniMessage.deserialize(VIMessage.VILLAGER_JOBSITE.getMessage(),
                     Placeholder.component("jobsitelocation", jobX.append(jobY).append(jobZ)));
         }
         return jobSiteFinal;
@@ -114,12 +116,12 @@ public class ComponentHandler {
         Component villagerLastWorkedFinal;
         Long lastWorked = villager.getMemory(MemoryKey.LAST_WORKED_AT_POI);
         if (lastWorked == null) {
-            villagerLastWorkedFinal = miniMessage.deserialize(Message.VILLAGER_LAST_WORKED.getMessage(),
-                    Placeholder.parsed("worktime", Message.NEVER.getMessage()));
+            villagerLastWorkedFinal = miniMessage.deserialize(VIMessage.VILLAGER_LAST_WORKED.getMessage(),
+                    Placeholder.parsed("worktime", VIMessage.NEVER.getMessage()));
         } else {
             Long timeSinceWorked = villager.getWorld().getGameTime() - lastWorked;
-            String formattedTime = timeMath(timeSinceWorked) + Message.AGO.getMessage();
-            villagerLastWorkedFinal = miniMessage.deserialize(Message.VILLAGER_LAST_WORKED.getMessage(),
+            String formattedTime = timeMath(timeSinceWorked) + VIMessage.AGO.getMessage();
+            villagerLastWorkedFinal = miniMessage.deserialize(VIMessage.VILLAGER_LAST_WORKED.getMessage(),
                     Placeholder.unparsed("worktime", formattedTime));
         }
         return villagerLastWorkedFinal;
@@ -134,16 +136,16 @@ public class ComponentHandler {
         Component villagerBedFinal;
         Location bedLocation = villager.getMemory(MemoryKey.HOME);
         if (bedLocation == null) {
-            villagerBedFinal = miniMessage.deserialize(Message.VILLAGER_HOME.getMessage(),
-                    Placeholder.parsed("homelocation", Message.NONE.getMessage()));
+            villagerBedFinal = miniMessage.deserialize(VIMessage.VILLAGER_HOME.getMessage(),
+                    Placeholder.parsed("homelocation", VIMessage.NONE.getMessage()));
         } else {
-            Component bedX = miniMessage.deserialize(Message.LOCATION_X.getMessage(),
+            Component bedX = miniMessage.deserialize(VIMessage.LOCATION_X.getMessage(),
                     Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockX())));
-            Component bedY = miniMessage.deserialize(Message.LOCATION_Y.getMessage(),
+            Component bedY = miniMessage.deserialize(VIMessage.LOCATION_Y.getMessage(),
                     Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockY())));
-            Component bedZ = miniMessage.deserialize(Message.LOCATION_Z.getMessage(),
+            Component bedZ = miniMessage.deserialize(VIMessage.LOCATION_Z.getMessage(),
                     Placeholder.unparsed("int", String.valueOf(bedLocation.getBlockZ())));
-            villagerBedFinal = miniMessage.deserialize(Message.VILLAGER_HOME.getMessage(),
+            villagerBedFinal = miniMessage.deserialize(VIMessage.VILLAGER_HOME.getMessage(),
                     Placeholder.component("homelocation", bedX.append(bedY).append(bedZ)));
         }
         return villagerBedFinal;
@@ -158,12 +160,12 @@ public class ComponentHandler {
         Component villagerLastSleptFinal;
         Long lastSlept = villager.getMemory(MemoryKey.LAST_SLEPT);
         if (lastSlept == null) {
-            villagerLastSleptFinal = miniMessage.deserialize(Message.VILLAGER_SLEPT.getMessage(),
-                    Placeholder.parsed("sleeptime", Message.NEVER.getMessage()));
+            villagerLastSleptFinal = miniMessage.deserialize(VIMessage.VILLAGER_SLEPT.getMessage(),
+                    Placeholder.parsed("sleeptime", VIMessage.NEVER.getMessage()));
         } else {
             Long timeSinceSlept = villager.getWorld().getGameTime() - lastSlept;
-            String formattedTime = timeMath(timeSinceSlept) + Message.AGO.getMessage() ;
-            villagerLastSleptFinal = miniMessage.deserialize(Message.VILLAGER_SLEPT.getMessage(),
+            String formattedTime = timeMath(timeSinceSlept) + VIMessage.AGO.getMessage() ;
+            villagerLastSleptFinal = miniMessage.deserialize(VIMessage.VILLAGER_SLEPT.getMessage(),
                     Placeholder.unparsed("sleeptime", formattedTime));
         }
         return villagerLastSleptFinal;
@@ -177,16 +179,16 @@ public class ComponentHandler {
     public static Component villagerInventory(Villager villager) {
         Component villagerInventoryFinal;
         if (villager.getInventory().isEmpty()) {
-            villagerInventoryFinal = miniMessage.deserialize(Message.VILLAGER_INVENTORY.getMessage(), Placeholder.parsed("contents", Message.EMPTY.getMessage()));
+            villagerInventoryFinal = miniMessage.deserialize(VIMessage.VILLAGER_INVENTORY.getMessage(), Placeholder.parsed("contents", VIMessage.EMPTY.getMessage()));
         } else {
             Component villagerInventory = Component.text("");
-            String inventoryOutput = Message.INVENTORY_CONTENTS.getMessage();
+            String inventoryOutput = VIMessage.INVENTORY_CONTENTS.getMessage();
             ItemStack[] inventoryItems = villager.getInventory().getContents();
             for (ItemStack items : inventoryItems) {
                 if (items == null) continue;
                 villagerInventory = villagerInventory.append(miniMessage.deserialize(inventoryOutput, Placeholder.parsed("item", items.getType().toString()), Placeholder.parsed("amount", String.valueOf(items.getAmount()))));
             }
-            villagerInventoryFinal = miniMessage.deserialize(Message.VILLAGER_INVENTORY.getMessage(), Placeholder.component("contents", villagerInventory));
+            villagerInventoryFinal = miniMessage.deserialize(VIMessage.VILLAGER_INVENTORY.getMessage(), Placeholder.component("contents", villagerInventory));
         }
         return villagerInventoryFinal;
     }
@@ -198,9 +200,9 @@ public class ComponentHandler {
      */
     public static Component villagerRestocks(Villager villager) {
         if (villager.getRestocksToday() == 0) {
-            return miniMessage.deserialize(Message.VILLAGER_RESTOCKS.getMessage(), Placeholder.parsed("restockcount", Message.NONE.getMessage()));
+            return miniMessage.deserialize(VIMessage.VILLAGER_RESTOCKS.getMessage(), Placeholder.parsed("restockcount", VIMessage.NONE.getMessage()));
         } else {
-            return miniMessage.deserialize(Message.VILLAGER_RESTOCKS.getMessage(), Placeholder.parsed("restockcount", String.valueOf(villager.getRestocksToday())));
+            return miniMessage.deserialize(VIMessage.VILLAGER_RESTOCKS.getMessage(), Placeholder.parsed("restockcount", String.valueOf(villager.getRestocksToday())));
         }
     }
 
@@ -213,21 +215,21 @@ public class ComponentHandler {
         Component villagerReputationFinal;
         int reputationRawTotal = reputationTotal(reputation);
         String playerReputation = ReputationHandler.villagerReputation(reputationRawTotal);
-        villagerReputationFinal = miniMessage.deserialize(Message.PLAYER_REPUTATION.getMessage(), Placeholder.unparsed("reputation", playerReputation));
+        villagerReputationFinal = miniMessage.deserialize(VIMessage.PLAYER_REPUTATION.getMessage(), Placeholder.unparsed("reputation", playerReputation));
         return villagerReputationFinal;
 
     }
 
     /**
-     * Checks and returnt formatted 'time till converted' message component
+     * Checks and returns formatted 'time till converted' message component
      * @param zombieVillager Clicked Zombie Villager
      * @return Formatted Time Component
      */
 
     public static Component timeTillConverted(ZombieVillager zombieVillager){
-        long converstionTime = zombieVillager.getConversionTime();
-        String timeCalc = ComponentHandler.timeMath(converstionTime);
-        return miniMessage.deserialize(Message.ZOMBIE_VILLAGER_CONVERSION_TIME.getMessage(), Placeholder.unparsed("time", timeCalc));
+        long conversionTime = zombieVillager.getConversionTime();
+        String timeCalc = ComponentHandler.timeMath(conversionTime);
+        return miniMessage.deserialize(VIMessage.ZOMBIE_VILLAGER_CONVERSION_TIME.getMessage(), Placeholder.unparsed("time", timeCalc));
     }
 
     /**
@@ -263,11 +265,11 @@ public class ComponentHandler {
         long mathTimeC = mathTime2 / 1200;
         //Normal number from dividing (seconds)
         long mathTimeD = mathTime3 / 20;
-        if (mathTimeB > 0) mathResult += mathTimeB + Message.HOUR.getMessage();
-        if (mathTimeC > 0) mathResult += mathTimeC + Message.MINUTE.getMessage();
-        if (mathTimeD > 0) mathResult += mathTimeD + Message.SECOND.getMessage();
+        if (mathTimeB > 0) mathResult += mathTimeB + VIMessage.HOUR.getMessage();
+        if (mathTimeC > 0) mathResult += mathTimeC + VIMessage.MINUTE.getMessage();
+        if (mathTimeD > 0) mathResult += mathTimeD + VIMessage.SECOND.getMessage();
         if (mathResult.isEmpty()) {
-            mathResult += "0" + Message.SECOND.getMessage();
+            mathResult += "0" + VIMessage.SECOND.getMessage();
         }
         return mathResult;
     }

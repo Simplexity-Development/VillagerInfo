@@ -1,7 +1,7 @@
 package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
-import adhdmc.villagerinfo.Config.Message;
+import adhdmc.villagerinfo.Config.VIMessage;
 import adhdmc.villagerinfo.Config.Perms;
 import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -19,14 +19,14 @@ public class HelpCommand extends SubCommand {
     public void execute(CommandSender sender, String[] args) {
         MiniMessage miniMessage = VillagerInfo.getMiniMessage();
 
-        if (sender.hasPermission(Perms.USE.getPerm())) {
-            sender.sendMessage(miniMessage.deserialize(Message.PREFIX.getMessage()));
-            sender.sendMessage(miniMessage.deserialize(Message.HELP_MAIN.getMessage()));
-            sender.sendMessage(miniMessage.deserialize(Message.HELP_TOGGLE.getMessage()));
-            sender.sendMessage(miniMessage.deserialize(Message.HELP_RELOAD.getMessage()));
+        if (sender.hasPermission(Perms.USE.getVIPerm())) {
+            sender.sendMessage(miniMessage.deserialize(VIMessage.PLUGIN_PREFIX.getMessage()));
+            sender.sendMessage(miniMessage.deserialize(VIMessage.HELP_MAIN.getMessage()));
+            sender.sendMessage(miniMessage.deserialize(VIMessage.HELP_TOGGLE.getMessage()));
+            sender.sendMessage(miniMessage.deserialize(VIMessage.HELP_RELOAD.getMessage()));
             return;
         }
-        sender.sendMessage(miniMessage.deserialize(Message.NO_PERMISSION.getMessage()));
+        sender.sendMessage(miniMessage.deserialize(VIMessage.NO_PERMISSION.getMessage()));
     }
 
     @Override

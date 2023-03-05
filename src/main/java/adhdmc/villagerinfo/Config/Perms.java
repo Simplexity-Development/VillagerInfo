@@ -1,15 +1,13 @@
 package adhdmc.villagerinfo.Config;
 
-import org.bukkit.permissions.Permission;
-
 public enum Perms {
     TOGGLE("villagerinfo.toggle"),
     RELOAD("villagerinfo.reload"),
     USE("villagerinfo.use");
 
-    String perm;
+    final String VIPerm;
     Perms(String perm) {
-        this.perm = perm;
+        this.VIPerm = perm;
     }
-    public String getPerm() { return this.perm; }
+    public String getVIPerm() { return this.VIPerm; }
 }

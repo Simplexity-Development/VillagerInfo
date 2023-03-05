@@ -1,57 +1,45 @@
 package adhdmc.villagerinfo.Config;
 
 import adhdmc.villagerinfo.VillagerInfo;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Set;
 
 public class LocaleConfig {
-    private final VillagerInfo plugin;
-    private static final String localeName = "locale.yml";
-    private YamlConfiguration localeConfig = null;
-    private File localeFile = null;
 
-    public LocaleConfig(VillagerInfo plugin) {
-        this.plugin = plugin;
+    private static LocaleConfig instance;
+    private final String fileName = "locale.yml";
+    private final  File localeFile = new File(VillagerInfo.getInstance().getDataFolder(), fileName);
+    private final FileConfiguration localeConfig = new YamlConfiguration();
+
+
+    private LocaleConfig() {
+        if (!localeFile.exists()) VillagerInfo.getInstance().saveResource(fileName, false);
+        reloadLocale();
     }
 
-    public void reloadConfig() {
-        if (this.localeFile == null) {
-            this.localeFile = new File(this.plugin.getDataFolder(), localeName);
-        }
-        this.localeConfig = YamlConfiguration.loadConfiguration(this.localeFile);
-        this.localeConfig.options().copyDefaults(true);
-        InputStream defaultStream = this.plugin.getResource(localeName);
-        if (defaultStream != null) {
-            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
-            this.localeConfig.setDefaults(defaultConfig);
-        }
+    public static LocaleConfig getInstance() {
+        if (instance == null) instance = new LocaleConfig();
+        return instance;
     }
 
-    public YamlConfiguration getlocaleConfig() {
-        if (this.localeConfig == null) {
-            reloadConfig();
-        }
-        return this.localeConfig;
-    }
+    public FileConfiguration getLocale() { return localeConfig; }
 
-    public void saveConfig() {
-        getlocaleConfig();
-        if (this.localeConfig == null || this.localeFile == null) {
-            return;
-        }
-        try {
-            this.getlocaleConfig().save(this.localeFile);
-        } catch (IOException e) {
-            plugin.getLogger().severe("[saveConfig()] Could not save config to " + this.localeFile);
-            e.printStackTrace();
-        }
-        if (!this.localeFile.exists()) {
-            this.plugin.saveResource(localeName, false);
+    public void reloadLocale() {
+        try { localeConfig.load(localeFile); }
+        catch (IOException | InvalidConfigurationException e) { e.printStackTrace(); }
+        Set<String> keys = localeConfig.getKeys(false);
+        for (String key : keys) {
+            try {
+                VIMessage message = VIMessage.valueOf(key);
+                message.setMessage(localeConfig.getString(key, message.getMessage()));
+            } catch (IllegalArgumentException e) {
+                VillagerInfo.getVillagerInfoLogger().warning(VIMessage.LOGGER_INVALID_LOCALE_KEY.getMessage() + key);
+            }
         }
     }
 }
-
