@@ -27,7 +27,7 @@ Accessing the information in villager's brains is useful, but `/data get` has mu
 ### Permissions:
 
 - villagerinfo.reload: Allows for reloading of the plugin config
-- villagerinfo.use: Allows for use of the plugin, getting info from villagers by shift-right-clicking them
+- villagerinfo.use: Allows for use of the plugin, getting info from villagers by crouch-right-clicking them
 - villagerinfo.toggle: Allows a player to toggle the ability to get the information displayed, on/off
 
 ### Commands:
