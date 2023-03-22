@@ -13,7 +13,7 @@ public class Defaults {
         locale.addDefault("no-permission", "<red>You don't have permission to use this command!");
         locale.addDefault("no-command", "<red>No subcommand by that name!");
         locale.addDefault("config-reloaded", "<gold>VillagerInfo Config Reloaded!");
-        locale.addDefault("help-main", "<#4dd5ff> • How to use Villager Info\n<grey>Shift-right-click a villager while toggle is on to have a villager's information displayed");
+        locale.addDefault("help-main", "<#4dd5ff> • How to use Villager Info\n<grey>Crouch-right-click a villager while toggle is on to have a villager's information displayed");
         locale.addDefault("help-toggle", "<#4dd5ff> • /vill toggle\n<grey>Toggles the ability to receive villager information on or off.");
         locale.addDefault("help-reload", "<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values");
         locale.addDefault("not-a-player", "<red>Sorry, you must be a player to use this command");
