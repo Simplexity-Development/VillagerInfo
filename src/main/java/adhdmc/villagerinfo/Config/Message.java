@@ -11,7 +11,7 @@ public enum Message {
     NO_PERMISSION("<red>You don't have permission to use this command!"),
     NO_COMMAND("<red>No command by that name!"),
     CONFIG_RELOADED("<gold>VillagerInfo Config Reloaded!"),
-    HELP_MAIN("<#4dd5ff> • How to use Villager Info\n<grey>Shift-right-click a villager while toggle is on to have a villager's information displayed"),
+    HELP_MAIN("<#4dd5ff> • How to use Villager Info\n<grey>Crouch-right-click a villager while toggle is on to have a villager's information displayed"),
     HELP_TOGGLE("<#4dd5ff> • /vill toggle\n<grey>Toggles the ability to receive villager information on or off."),
     HELP_RELOAD("<#4dd5ff> • /vill reload\n<grey>Reloads the plugin, applies config values"),
     NOT_A_PLAYER("<red>Sorry, you must be a player to use this command"),
