@@ -16,7 +16,7 @@ permissions:
     description: reload VillagerInfo config
     default: op
   villagerinfo.use:
-    description: get the villager information by shift-right-clicking on a villager
+    description: get the villager information by crouch-right-clicking on a villager
     default: op
   villagerinfo.toggle:
     description: allows toggling functionality on/off
