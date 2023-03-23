@@ -4,10 +4,7 @@ import adhdmc.villagerinfo.VillagerInfo;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class ConfigValidator {
 
@@ -50,7 +47,6 @@ public class ConfigValidator {
             soundPitch = 1.5F;
         }
         ToggleSetting.reloadToggles();
-        Message.reloadLocale();
     }
 
     public static float getSoundPitch() {

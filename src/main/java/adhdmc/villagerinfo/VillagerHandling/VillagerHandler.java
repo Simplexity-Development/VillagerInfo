@@ -1,7 +1,7 @@
 package adhdmc.villagerinfo.VillagerHandling;
 
 import adhdmc.villagerinfo.Config.ConfigValidator;
-import adhdmc.villagerinfo.Config.Message;
+import adhdmc.villagerinfo.Config.VIMessage;
 import adhdmc.villagerinfo.Config.Perms;
 import adhdmc.villagerinfo.Config.ToggleSetting;
 import adhdmc.villagerinfo.VillagerInfo;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 
 public class VillagerHandler implements Listener {
-    private boolean usingPurpur = VillagerInfo.usingPurpur;
+    private final boolean usingPurpur = VillagerInfo.usingPurpur;
 
     MiniMessage miniMessage = VillagerInfo.getMiniMessage();
 
@@ -42,7 +42,7 @@ public class VillagerHandler implements Listener {
             return;
         }
         if (event.getRightClicked() instanceof Villager villager) {
-            if (!player.hasPermission(Perms.USE.getPerm())) {
+            if (!player.hasPermission(Perms.USE.getVIPerm())) {
                 return;
             }
             if (Arrays.stream(ToggleSetting.values()).noneMatch(ToggleSetting::isEnabled)) {
@@ -52,7 +52,7 @@ public class VillagerHandler implements Listener {
             event.setCancelled(true);
             processVillager(player, villager);
         } else if (event.getRightClicked() instanceof ZombieVillager zombieVillager) {
-            if (!player.hasPermission(Perms.USE.getPerm())) {
+            if (!player.hasPermission(Perms.USE.getVIPerm())) {
                 return;
             }
             if (Arrays.stream(ToggleSetting.values()).noneMatch(ToggleSetting::isEnabled)) {
@@ -123,11 +123,11 @@ public class VillagerHandler implements Listener {
             HighlightHandling.villagerJobsiteHighlight(villager.getPersistentDataContainer(), villager.getUniqueId(), villagerPOI);
         }
         //Messages
-        Component prefix = miniMessage.deserialize(Message.PREFIX.getMessage());
+        Component prefix = miniMessage.deserialize(VIMessage.PLUGIN_PREFIX.getMessage());
         player.playSound(player.getLocation(), ConfigValidator.getConfigSound(), ConfigValidator.getSoundVolume(), ConfigValidator.getSoundPitch());
         player.sendMessage(prefix);
         if (messageList.size() == 0) {
-            player.sendMessage(miniMessage.deserialize(Message.NO_INFORMATION.getMessage()));
+            player.sendMessage(miniMessage.deserialize(VIMessage.NO_INFORMATION.getMessage()));
             return;
         }
         for (Component component : messageList) {
@@ -155,11 +155,11 @@ public class VillagerHandler implements Listener {
         //    messageList.add(villagerPlayerReputation(zombieVillager.getReputation(player.getUniqueId())));
         //}
         //Messages
-        Component prefix = miniMessage.deserialize(Message.PREFIX.getMessage());
+        Component prefix = miniMessage.deserialize(VIMessage.PLUGIN_PREFIX.getMessage());
         player.playSound(player.getLocation(), ConfigValidator.getConfigSound(), ConfigValidator.getSoundVolume(), ConfigValidator.getSoundPitch());
         player.sendMessage(prefix);
         if (messageList.size() == 0) {
-            player.sendMessage(miniMessage.deserialize(Message.NO_INFORMATION.getMessage()));
+            player.sendMessage(miniMessage.deserialize(VIMessage.NO_INFORMATION.getMessage()));
             return;
         }
         for (Component component : messageList) {

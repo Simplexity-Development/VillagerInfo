@@ -1,7 +1,7 @@
 package adhdmc.villagerinfo.Commands.SubCommands;
 
 import adhdmc.villagerinfo.Commands.SubCommand;
-import adhdmc.villagerinfo.Config.Message;
+import adhdmc.villagerinfo.Config.VIMessage;
 import adhdmc.villagerinfo.Config.Perms;
 import adhdmc.villagerinfo.VillagerInfo;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -22,20 +22,20 @@ public class ToggleCommand extends SubCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(miniMessage.deserialize(Message.NOT_A_PLAYER.getMessage()));
+            sender.sendMessage(miniMessage.deserialize(VIMessage.NOT_A_PLAYER.getMessage()));
             return;
         }
-        if (!(sender.hasPermission(Perms.TOGGLE.getPerm()))) {
-            sender.sendMessage(miniMessage.deserialize(Message.NO_PERMISSION.getMessage()));
+        if (!(sender.hasPermission(Perms.TOGGLE.getVIPerm()))) {
+            sender.sendMessage(miniMessage.deserialize(VIMessage.NO_PERMISSION.getMessage()));
             return;
         }
         if (toggleSetting((Player) sender)) {
-            sender.sendMessage(miniMessage.deserialize(Message.PREFIX.getMessage())
-                    .append(miniMessage.deserialize(Message.TOGGLE_ON.getMessage())));
+            sender.sendMessage(miniMessage.deserialize(VIMessage.PLUGIN_PREFIX.getMessage())
+                    .append(miniMessage.deserialize(VIMessage.TOGGLE_ON.getMessage())));
             return;
         }
-        sender.sendMessage(miniMessage.deserialize(Message.PREFIX.getMessage())
-                .append(miniMessage.deserialize(Message.TOGGLE_OFF.getMessage())));
+        sender.sendMessage(miniMessage.deserialize(VIMessage.PLUGIN_PREFIX.getMessage())
+                .append(miniMessage.deserialize(VIMessage.TOGGLE_OFF.getMessage())));
     }
 
     private boolean toggleSetting(Player player) {
