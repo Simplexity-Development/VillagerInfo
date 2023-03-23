@@ -47,7 +47,6 @@ public class ConfigValidator {
             soundPitch = 1.5F;
         }
         ToggleSetting.reloadToggles();
-        LocaleConfig.getInstance().reloadLocale();
     }
 
     public static float getSoundPitch() {
