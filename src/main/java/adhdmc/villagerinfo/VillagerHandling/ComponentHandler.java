@@ -76,9 +76,9 @@ public class ComponentHandler {
     public static Component villagerProfession(Villager.Profession profession) {
         Component professionFinal;
         if (profession == Villager.Profession.NONE) {
-            professionFinal = miniMessage.deserialize(VIMessage.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", VIMessage.NONE.getMessage()));
+            professionFinal = miniMessage.deserialize(VIMessage.VILLAGER_PROFESSION_NONE.getMessage());
         } else {
-            professionFinal = miniMessage.deserialize(VIMessage.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", profession.toString()));
+            professionFinal = miniMessage.deserialize(VIMessage.VILLAGER_PROFESSION.getMessage(), Placeholder.parsed("profession", profession.toString().toLowerCase()));
         }
         return professionFinal;
     }
@@ -186,7 +186,7 @@ public class ComponentHandler {
             ItemStack[] inventoryItems = villager.getInventory().getContents();
             for (ItemStack items : inventoryItems) {
                 if (items == null) continue;
-                villagerInventory = villagerInventory.append(miniMessage.deserialize(inventoryOutput, Placeholder.parsed("item", items.getType().toString()), Placeholder.parsed("amount", String.valueOf(items.getAmount()))));
+                villagerInventory = villagerInventory.append(miniMessage.deserialize(inventoryOutput, Placeholder.parsed("item", items.getType().toString().toLowerCase()), Placeholder.parsed("amount", String.valueOf(items.getAmount()))));
             }
             villagerInventoryFinal = miniMessage.deserialize(VIMessage.VILLAGER_INVENTORY.getMessage(), Placeholder.component("contents", villagerInventory));
         }
@@ -214,8 +214,10 @@ public class ComponentHandler {
     public static Component villagerPlayerReputation(Reputation reputation) {
         Component villagerReputationFinal;
         int reputationRawTotal = reputationTotal(reputation);
-        String playerReputation = ReputationHandler.villagerReputation(reputationRawTotal);
-        villagerReputationFinal = miniMessage.deserialize(VIMessage.PLAYER_REPUTATION.getMessage(), Placeholder.unparsed("reputation", playerReputation));
+        villagerReputationFinal = miniMessage.deserialize(
+                VIMessage.PLAYER_REPUTATION.getMessage(),
+                Placeholder.unparsed("reputation", ReputationHandler.villagerReputation(reputationRawTotal)),
+                Placeholder.unparsed("reputation_number", String.valueOf(reputationRawTotal)));
         return villagerReputationFinal;
 
     }
