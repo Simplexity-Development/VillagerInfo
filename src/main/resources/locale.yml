@@ -21,7 +21,7 @@
 "VILLAGER_SLEPT": "<#05bff7><hover:show_text:'<aqua>Last Slept: <grey><sleeptime>'>[<#c4fff7>Last Slept</#c4fff7>]"
 "VILLAGER_INVENTORY": "<#05bff7><hover:show_text:'<aqua>Inventory: <grey><contents>'>[<#c4fff7>Villager Inventory</#c4fff7>]"
 "INVENTORY_CONTENTS": "\n • <lang:item.minecraft.<item>> (<amount>)"
-"PLAYER_REPUTATION": "<#05bff7><hover:show_text:'<#05bff7>[<#c4fff7>Player Reputation</#c4fff7>]'><reputation>"
+"PLAYER_REPUTATION": "<#05bff7><hover:show_text:'<#05bff7>[<#c4fff7>Player Reputation</#c4fff7>]'><reputation>" # <reputation> or <reputation_number>
 "TRUE": "<grey>True"
 "FALSE": "<grey>False"
 "NONE": "<grey>None"

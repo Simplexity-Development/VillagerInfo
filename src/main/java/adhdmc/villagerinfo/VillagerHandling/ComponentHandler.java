@@ -214,8 +214,10 @@ public class ComponentHandler {
     public static Component villagerPlayerReputation(Reputation reputation) {
         Component villagerReputationFinal;
         int reputationRawTotal = reputationTotal(reputation);
-        String playerReputation = ReputationHandler.villagerReputation(reputationRawTotal);
-        villagerReputationFinal = miniMessage.deserialize(VIMessage.PLAYER_REPUTATION.getMessage(), Placeholder.unparsed("reputation", playerReputation));
+        villagerReputationFinal = miniMessage.deserialize(
+                VIMessage.PLAYER_REPUTATION.getMessage(),
+                Placeholder.unparsed("reputation", ReputationHandler.villagerReputation(reputationRawTotal)),
+                Placeholder.unparsed("reputation_number", String.valueOf(reputationRawTotal)));
         return villagerReputationFinal;
 
     }
