@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Toggle extends SubCommand {
+public class ToggleCommand extends SubCommand {
     List<String> tabCompleteList = new ArrayList<>();
 
-    public Toggle() {
+    public ToggleCommand() {
         super(Perm.VILL_COMMAND_TOGGLE.getPerm(), ServerMessage.HELP_TOGGLE_BASE.getMessage());
     }
 

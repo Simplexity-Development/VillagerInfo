@@ -11,8 +11,8 @@ import simplexity.villagerinfo.util.Resolvers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Help extends SubCommand {
-    public Help() {
+public class HelpCommand extends SubCommand {
+    public HelpCommand() {
         super(Perm.VILL_COMMAND_BASE.getPerm(), ServerMessage.HELP_MAIN.getMessage());
     }
 

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class VillagerInfo implements TabExecutor {
+public class VillagerInfoCommand implements TabExecutor {
     List<String> villagerInfoTabComplete = new ArrayList<>();
 
     @Override

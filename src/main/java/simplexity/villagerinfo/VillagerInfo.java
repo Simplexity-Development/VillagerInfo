@@ -6,11 +6,12 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Villager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.objectweb.asm.commons.Method;
-import simplexity.villagerinfo.commands.VillReload;
+import simplexity.villagerinfo.commands.VillReloadCommand;
 import simplexity.villagerinfo.commands.util.SubCommand;
 import simplexity.villagerinfo.commands.util.SubCommandMaps;
-import simplexity.villagerinfo.commands.villagerinfo.subcommands.Help;
-import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.Toggle;
+import simplexity.villagerinfo.commands.villagerinfo.VillagerInfoCommand;
+import simplexity.villagerinfo.commands.villagerinfo.subcommands.HelpCommand;
+import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.ToggleCommand;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.HighlightToggle;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.OutputToggle;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.SoundToggle;
@@ -69,8 +70,8 @@ public final class VillagerInfo extends JavaPlugin {
     }
 
     public void registerCommands() {
-        Objects.requireNonNull(this.getCommand("villreload")).setExecutor(new VillReload());
-        Objects.requireNonNull(this.getCommand("villagerinfo")).setExecutor(new VillagerInfo());
+        Objects.requireNonNull(this.getCommand("villreload")).setExecutor(new VillReloadCommand());
+        Objects.requireNonNull(this.getCommand("villagerinfo")).setExecutor(new VillagerInfoCommand());
         populateToggleSubcommands();
         populateVillagerInfoSubCommands();
     }
@@ -84,8 +85,8 @@ public final class VillagerInfo extends JavaPlugin {
 
     public void populateVillagerInfoSubCommands() {
         HashMap<String, SubCommand> commandMap = SubCommandMaps.getInstance().getVillagerInfoSubCommands();
-        commandMap.put("help", new Help());
-        commandMap.put("toggle", new Toggle());
+        commandMap.put("help", new HelpCommand());
+        commandMap.put("toggle", new ToggleCommand());
 
     }
 

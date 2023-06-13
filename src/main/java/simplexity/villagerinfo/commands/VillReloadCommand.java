@@ -9,7 +9,7 @@ import simplexity.villagerinfo.configurations.locale.LocaleConfig;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.util.Resolvers;
 
-public class VillReload implements CommandExecutor {
+public class VillReloadCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         VillagerInfo.getInstance().reloadConfig();
