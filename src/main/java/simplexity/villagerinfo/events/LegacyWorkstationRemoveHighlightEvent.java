@@ -19,11 +19,22 @@ public class LegacyWorkstationRemoveHighlightEvent extends Event implements Canc
 
     private static final HandlerList handlers = new HandlerList();
 
+    /**
+     * Gets the handler list for this event
+     *
+     * @return HandlerList
+     */
     @Override
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
+    @SuppressWarnings("unused") //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -76,6 +87,7 @@ public class LegacyWorkstationRemoveHighlightEvent extends Event implements Canc
      * @return FallingBlock
      */
 
+    @SuppressWarnings("unused") //For API usage
     public FallingBlock getFallingBlock() {
         return fallingBlock;
     }

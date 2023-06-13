@@ -17,11 +17,22 @@ import simplexity.villagerinfo.VillagerInfo;
 public class WorkstationRemoveHighlightEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
     @Override
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
+    @SuppressWarnings("unused") //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -74,6 +85,7 @@ public class WorkstationRemoveHighlightEvent extends Event implements Cancellabl
      * @return BlockDisplay
      */
 
+    @SuppressWarnings("unused") //For API usage
     public BlockDisplay getBlockDisplay() {
         return blockDisplay;
     }

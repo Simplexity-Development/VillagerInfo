@@ -45,11 +45,22 @@ public class SoundEffectEvent extends Event implements Cancellable {
         cancelled = cancel;
     }
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
     @Override
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
+    @SuppressWarnings("unused") //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -118,6 +129,7 @@ public class SoundEffectEvent extends Event implements Cancellable {
      *
      * @param playerSoundToggleEnabled boolean
      */
+    @SuppressWarnings("unused") //For API usage
     public void setOverridePlayerSoundToggleEnabled(boolean playerSoundToggleEnabled) {
         this.playerSoundToggleEnabled = playerSoundToggleEnabled;
     }
@@ -127,6 +139,7 @@ public class SoundEffectEvent extends Event implements Cancellable {
      *
      * @return boolean
      */
+    @SuppressWarnings("unused") //For API usage
     public boolean isPlayerSoundToggleEnabled() {
         return playerSoundToggleEnabled;
     }

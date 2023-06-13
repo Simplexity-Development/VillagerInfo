@@ -20,11 +20,17 @@ import simplexity.villagerinfo.configurations.locale.ServerMessage;
 public class PlayerToggleEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
     @Override
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
+    @SuppressWarnings("unused") //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -102,6 +108,7 @@ public class PlayerToggleEvent extends Event implements Cancellable {
      *
      * @return String
      */
+    @SuppressWarnings("unused") //For API usage
     public String getToggleType() {
         return toggleType;
     }

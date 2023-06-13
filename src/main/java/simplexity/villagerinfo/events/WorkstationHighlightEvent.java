@@ -74,11 +74,22 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
         cancelled = cancel;
     }
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
     @Override
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
+    @SuppressWarnings("unused") //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -245,6 +256,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      *
      * @param blockLight int
      */
+    @SuppressWarnings("unused") //For API usage
     public void setBlockLight(int blockLight) {
         this.blockLight = blockLight;
     }
@@ -256,6 +268,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      * @param skyLight int
      */
 
+    @SuppressWarnings("unused") //For API usage
     public void setSkyLight(int skyLight) {
         this.skyLight = skyLight;
     }
@@ -267,6 +280,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      * @param xScaleOffset float
      */
 
+    @SuppressWarnings("unused") //For API usage
     public void setXScaleOffset(float xScaleOffset) {
         this.xScaleOffset = xScaleOffset;
     }
@@ -278,6 +292,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      * @param yScaleOffset float
      */
 
+    @SuppressWarnings("unused") //For API usage
     public void setYScaleOffset(float yScaleOffset) {
         this.yScaleOffset = yScaleOffset;
     }
@@ -289,6 +304,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      * @param zScaleOffset float
      */
 
+    @SuppressWarnings("unused") //For API usage
     public void setZScaleOffset(float zScaleOffset) {
         this.zScaleOffset = zScaleOffset;
     }
@@ -300,6 +316,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      * @param defaultColor Color
      */
 
+    @SuppressWarnings("unused") //For API usage
     public void setDefaultColor(Color defaultColor) {
         this.defaultColor = defaultColor;
     }
@@ -315,6 +332,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
 
     /**
      * Checks if player's highlight toggle is shown as enabled
+     *
      * @return boolean
      */
     public boolean getPlayerHighlightToggleEnabled() {
@@ -326,6 +344,7 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      *
      * @param playerHighlightToggleEnabled boolean
      */
+    @SuppressWarnings("unused") //For API usage
     public void overridePlayerHighlightToggleEnabled(boolean playerHighlightToggleEnabled) {
         this.playerHighlightToggleEnabled = playerHighlightToggleEnabled;
     }

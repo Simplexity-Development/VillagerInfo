@@ -27,11 +27,22 @@ import java.util.Objects;
 public class ZombieVillagerOutputEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
     @Override
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * Gets the handler list for this evene
+     *
+     * @return HandlerList
+     */
+    @SuppressWarnings("unused") //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -206,6 +217,7 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
      * @return Component
      */
 
+    @SuppressWarnings("unused") //For API usage
     public Component getOutputComponent() {
         return outputComponent;
     }
@@ -244,6 +256,7 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
      * @return ZombieVillager
      */
 
+    @SuppressWarnings("unused") //For API usage
     public ZombieVillager getZombieVillager() {
         return zombieVillager;
     }
@@ -263,6 +276,7 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
      *
      * @return boolean
      */
+    @SuppressWarnings("unused") //For API usage
     public boolean isPlayerOutputToggleEnabled() {
         return playerOutputToggleEnabled;
     }
@@ -272,6 +286,7 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
      *
      * @param playerOutputToggleEnabled boolean
      */
+    @SuppressWarnings("unused") //For API usage
     public void setOverridePlayerOutputToggleEnabled(boolean playerOutputToggleEnabled) {
         this.playerOutputToggleEnabled = playerOutputToggleEnabled;
     }
