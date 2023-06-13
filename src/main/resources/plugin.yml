@@ -1,23 +1,54 @@
 name: VillagerInfo
+version: '${version}'
+main: "simplexity.villagerinfo.VillagerInfo"
+api-version: "1.20"
+load: STARTUP
+website: https://github.com/Simplexity-Development/VillagerInfo
+description: A plugin designed to make the information about villagers more available
 authors:
   - Rhythmic
   - Peashooter101
-description: Easier access to information from villager's brains generally only accessable through the /data command.
-version: '${project.version}'
-main: adhdmc.villagerinfo.VillagerInfo
-api-version: 1.19
-website: https://github.com/ADHDMC/VillagerInfo
 commands:
-  vill:
-    description: base command for VillagerInfo
-    permission: villagerinfo.use
+  villreload:
+    permission: villagerinfo.reload
+    description: Reloads the VillagerInfo configurations
+  villagerinfo:
+    aliases:
+      - vinfo
+      - villinfo
+      - vi
+    permission: villagerinfo.commands
+    description: Base command for adjusting player toggles about specific behaviors in VillagerInfo
 permissions:
   villagerinfo.reload:
-    description: reload VillagerInfo config
+    description: Allows the Player to use /villreload to reload the VillagerInfo configurations
     default: op
-  villagerinfo.use:
-    description: get the villager information by crouch-right-clicking on a villager
-    default: op
-  villagerinfo.toggle:
-    description: allows toggling functionality on/off
-    default: op
+  villagerinfo.output:
+    default: true
+    description: Allows the player to see the information from a villager using crouch-interact
+  villagerinfo.commands:
+    default: true
+    description: Allows the player to use commands to adjust their preferences on how VillagerInfo will behave for them
+  villagerinfo.commands.help:
+    default: true
+    description: Allows the player to use the help command to see how the plugin functions
+    children:
+      villagerinfo.commands: true
+  villagerinfo.commands.toggle:
+    default: true
+    description: Allows the player to use commands to toggle certain behaviors in the VillagerInfo plugin
+  villagerinfo.commands.toggle.output:
+    default: true
+    description: Allows the player to toggle whether they want VillagerInfo to output on crouch-interact or not
+    children:
+      villagerinfo.commands.toggle: true
+  villagerinfo.commands.toggle.highlight:
+    default: true
+    description: Allows the player to toggle whether they want VillagerInfo to highlight a villager's workstation on crouch-interact or not
+    children:
+      villagerinfo.commands.toggle: true
+  villagerinfo.commands.toggle.sound:
+    default: true
+    description: Allows the player to toggle whether they want VillagerInfo to output on crouch-interact or not
+    children:
+      villagerinfo.commands.toggle: true

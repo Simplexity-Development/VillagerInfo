@@ -1,25 +1,42 @@
 #Villager Info
-
+output-enabled: true
 #Information Toggles
 #True to enable the information to display when requested, false for it not to display
-purpur-lobotomized: false
-baby-age: true
-zombie-conversion: true
-health: true
-profession: true
-job-site: true
-last-worked: true
-bed-location: true
-last-slept: true
-inventory: true
-restocks: true
-reputation: true
-highlight-workstation: true
-sound-toggle: true
+toggles:
+  "DISPLAY_PURPUR_LOBOTOMIZED": false
+  "DISPLAY_BABY_VILLAGER_AGE": true
+  "DISPLAY_ZOMBIE_VILLAGER_CONVERSION_TIME": true
+  "DISPLAY_HEALTH": true
+  "DISPLAY_PROFESSION": true
+  "DISPLAY_JOB_SITE_LOCATION": true
+  "DISPLAY_LAST_WORK_TIME": true
+  "DISPLAY_BED_LOCATION": true
+  "DISPLAY_LAST_SLEEP_TIME": true
+  "DISPLAY_VILLAGER_INVENTORY": true
+  "DISPLAY_RESTOCKS_TODAY": true
+  "DISPLAY_PLAYER_REPUTATION": true
 #Sound must be from this list https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 #Volume and pitch can range from 0.0-2.0
+play-sound-on-output: true
 sound: BLOCK_AMETHYST_BLOCK_BREAK
 sound-volume: 0.5
 sound-pitch: 1.5
 #Length of time to highlight the villager's workstation (if enabled)
+highlight-workstation-on-output: true
 highlight-time: 10
+#NOTE: These colors will only apply on versions after 1.19.4 (When block displays were introduced to the game) - if you are using a version before this, all glow colors will be white
+#RR,GG,BB format
+workstation-highlight-color:
+  "LECTERN": [255, 0, 0]
+  "COMPOSTER": [0, 153, 0]
+  "GRINDSTONE": [64, 64, 64]
+  "BLAST_FURNACE": [0, 76, 153]
+  "SMOKER": [102, 255, 255]
+  "FLETCHING_TABLE": [255, 128, 0]
+  "CARTOGRAPHY_TABLE": [255, 51, 255]
+  "BREWING_STAND": [153, 51, 255]
+  "SMITHING_TABLE": [51, 51, 255]
+  "CAULDRON": [255, 255, 0]
+  "BARREL": [153, 76, 0]
+  "LOOM": [255, 255, 255]
+  "STONECUTTER": [32, 32, 32]
