@@ -51,7 +51,7 @@ server-messages:
   "HELP_TOGGLE_HIGHLIGHT": "\n<#4dd5ff><click:suggest_command:'/vi toggle highlight'><hover:show_text:'<#4dd5ff>/vi toggle highlight'><u> • /vi toggle highlight</u>\n<grey>Sets your preference on whether or not you would like the plugin to highlight a villager's workstation when you crouch-interact with them"
   "HELP_TOGGLE_SOUND": "\n<#4dd5ff><click:suggest_command:'/vi toggle sound'><hover:show_text:'<#4dd5ff>/vi toggle sound'><u> • /vi toggle sound</u></hover></click>\n<grey>Sets your preference on whether or not you would like a sound to play when you crouch-interact with a villager"
   "HELP_TOGGLE_OUTPUT": "\n<#4dd5ff><click:suggest_command:'/vi toggle output'><hover:show_text:'<#4dd5ff>/vi toggle output'><u> • /vi toggle output</u></hover></click>\n<grey>Sets your preference on whether or not you would like text output to display when you crouch-interact with a villager"
-  "NOT_A_PLAYER": "<plugin_prefix> <red>Sorry, you must be a player to use this command"
+  "NOT_A_PLAYER": "<red>Sorry, you must be a player to use this command"
   "CONFIGURATION_ERROR_PREFIX": "Configuration Error: "
   "CONFIGURED_SOUND_ERROR": " is not a valid sound! Setting sound to 'BLOCK_AMETHYST_BLOCK_BREAK' until a valid sound is provided"
   "CONFIGURED_HIGHLIGHT_TIME_ERROR": "Invalid highlight time. If you would like to disable this feature, please set 'highlight-workstation' to 'false'. Otherwise please use an integer greater than zero. Setting value to 10s until a valid number is supplied"

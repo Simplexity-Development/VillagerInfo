@@ -21,6 +21,7 @@ import simplexity.villagerinfo.interaction.listeners.PlayerInteractEntityListene
 import simplexity.villagerinfo.interaction.logic.HighlightLogic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -34,8 +35,11 @@ public final class VillagerInfo extends JavaPlugin {
     }
 
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private final List<String> legacyVersions = List.of("1.19", "1.19.1", "1.19.2", "1.19.3");
+    private final List<String> nmsSupportedVersions = List.of("1.20", "1.20.1");
     private boolean usingPurpur = true;
     private boolean legacyVersion = false;
+    private boolean nmsUnsupported = false;
 
     @Override
     public void onEnable() {
@@ -53,11 +57,15 @@ public final class VillagerInfo extends JavaPlugin {
             usingPurpur = false;
         }
         String serverVersion = this.getServer().getMinecraftVersion();
-        if (serverVersion.equalsIgnoreCase("1.19") || serverVersion.equalsIgnoreCase("1.19.1") || serverVersion.equalsIgnoreCase("1.19.2") || serverVersion.equalsIgnoreCase("1.19.3")) {
+        if (legacyVersions.contains(serverVersion)) {
             legacyVersion = true;
             this.getVillagerInfoLogger().severe("You are on an old version, some options will not work as intended. Please update to the current minecraft version for full config options. Unsupported options in your version: ");
             this.getVillagerInfoLogger().warning("RGB Highlighting on workstations (1.19.4 implementation)");
             this.getVillagerInfoLogger().warning("Block displays for workstations (1.19.4 implementation)");
+        }
+        if (!nmsSupportedVersions.contains(serverVersion)) {
+            nmsUnsupported = true;
+            this.getVillagerInfoLogger().warning("Please note that the VillagerInfo version you are running is coded to run on Minecraft version " + nmsSupportedVersions + ". Methods that rely on NMS will be set to use legacy methods.");
         }
         reloadVillInfoConfigs();
         registerCommands();
@@ -101,6 +109,9 @@ public final class VillagerInfo extends JavaPlugin {
     public boolean isLegacyVersion() {
         return legacyVersion;
     }
+    public boolean isNmsUnsupported() {
+        return nmsUnsupported;
+    }
 
     public HashMap<Villager, FallingBlock> getLegacyCurrentlyHighlighted() {
         return legacyCurrentlyHighlighted;
@@ -118,4 +129,6 @@ public final class VillagerInfo extends JavaPlugin {
     public void onDisable() {
         HighlightLogic.getInstance().clearAllCurrentHighlights();
     }
+    
+    
 }

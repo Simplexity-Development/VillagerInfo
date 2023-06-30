@@ -5,7 +5,7 @@ plugins {
     }
 
 group = "simplexity"
-version = "3.0.2"
+version = "3.0.3"
 
 dependencies {
     paperweight.devBundle("org.purpurmc.purpur", "1.20-R0.1-SNAPSHOT")

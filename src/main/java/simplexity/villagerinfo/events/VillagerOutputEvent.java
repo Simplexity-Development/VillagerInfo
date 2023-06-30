@@ -38,8 +38,9 @@ import java.util.Objects;
  */
 
 public class VillagerOutputEvent extends Event implements Cancellable {
+    
     private static final HandlerList handlers = new HandlerList();
-
+    
     /**
      * Gets the handler list for this evene
      *
@@ -49,7 +50,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
-
+    
     /**
      * Gets the handler list for this evene
      *
@@ -59,7 +60,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
+    
     private final Villager villager;
     private final Player player;
     private boolean cancelled;
@@ -68,22 +69,22 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     private boolean playerOutputToggleEnabled;
     private Component outputComponent;
     private final MiniMessage miniMessage = VillagerInfo.getInstance().getMiniMessage();
-
+    
     public VillagerOutputEvent(Villager villager, Player player) {
         this.villager = villager;
         this.player = player;
     }
-
+    
     /**
      * Gets the current game time
      *
      * @return Long
      */
-
+    
     public Long getCurrentGameTime() {
         return villager.getWorld().getGameTime();
     }
-
+    
     /**
      * Gets whether the villager has been lobotomized by Purpur's lobotomize setting
      *
@@ -92,7 +93,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public Boolean getLobotomized() {
         return villager.isLobotomized();
     }
-
+    
     /**
      * Gets the Component for the Lobotomized Message
      * <br>Uses PURPUR_LOBOTOMIZED from VillagerMessage enum
@@ -100,7 +101,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      *
      * @return Component
      */
-
+    
     public Component getLobotomizedMessageComponent() {
         if (!(ConfigToggle.DISPLAY_PURPUR_LOBOTOMIZED.isEnabled() && VillagerInfo.getInstance().isUsingPurpur()))
             return null;
@@ -113,28 +114,28 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         }
         return miniMessage.deserialize(VillagerMessage.PURPUR_LOBOTOMIZED.getMessage(), Placeholder.parsed("state", status));
     }
-
+    
     /**
      * Gets how many ticks until the villager becomes an adult
      * <br>Returns 0 if the villager is already an adult
      *
      * @return Long
      */
-
+    
     public Long getChildVillagerAge() {
         if (villager.isAdult()) return 0L;
         long villagerAge = villager.getAge();
         villagerAge = villagerAge * -1;
         return villagerAge;
     }
-
+    
     /**
      * Gets the Component for the Child Villager Age Message
      * <br>Uses BABY_VILLAGER_AGE message from VillagerMessage enum
      *
      * @return Component
      */
-
+    
     public Component getChildVillagerAgeMessageComponent() {
         if (!(ConfigToggle.DISPLAY_BABY_VILLAGER_AGE.isEnabled() && getChildVillagerAge() > 0)) return null;
         outputHasInfo = true;
@@ -142,26 +143,26 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         Long ageInSeconds = getChildVillagerAge() / 20;
         return miniMessage.deserialize(VillagerMessage.BABY_VILLAGER_AGE.getMessage(), Resolvers.getInstance().timeFormatter(ageInSeconds));
     }
-
+    
     /**
      * Gets the GameTime tick when the villager last worked at a workstation
      * <br>Returns 0L if they have never worked at a workstation
      *
      * @return Long
      */
-
+    
     public Long getVillagerLastWorkedGameTime() {
         Long lastWorked = villager.getMemory(MemoryKey.LAST_WORKED_AT_POI);
         return Objects.requireNonNullElse(lastWorked, 0L);
     }
-
+    
     /**
      * Gets the Component for the Villager Last Worked message
      * <br>Uses VILLAGER_LAST_WORKED message from VillagerMessage enum
      *
      * @return Component
      */
-
+    
     public Component getVillagerLastWorkedGameTimeMessageComponent() {
         if (!ConfigToggle.DISPLAY_LAST_WORK_TIME.isEnabled() || !villHasProfession) return null;
         outputHasInfo = true;
@@ -169,26 +170,26 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         return miniMessage.deserialize(VillagerMessage.VILLAGER_LAST_WORKED.getMessage(),
                 Resolvers.getInstance().timeFormatter(lastWorkedGameTimeDifference));
     }
-
+    
     /**
      * Gets the GameTime tick when the villager last slept
      * <br>Returns 0L if they have never slept
      *
      * @return Long
      */
-
+    
     public Long getVillagerLastSleptGameTime() {
         Long lastSlept = villager.getMemory(MemoryKey.LAST_SLEPT);
         return Objects.requireNonNullElse(lastSlept, 0L);
     }
-
+    
     /**
      * Gets the Component for the Villager Last Slept message
      * <br>Uses VILLAGER_LAST_SLEPT from VillagerMessage enum
      *
      * @return Component
      */
-
+    
     public Component getVillagerLastSleptGameTimeMessageComponent() {
         if (!ConfigToggle.DISPLAY_LAST_SLEEP_TIME.isEnabled()) return null;
         outputHasInfo = true;
@@ -196,17 +197,17 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         return miniMessage.deserialize(VillagerMessage.VILLAGER_LAST_SLEPT.getMessage(),
                 Resolvers.getInstance().timeFormatter(lastWorkedGameTimeDifference));
     }
-
+    
     /**
      * Gets the villager's current health
      *
      * @return Double
      */
-
+    
     public Double getVillagerCurrentHealth() {
         return villager.getHealth();
     }
-
+    
     /**
      * Gets the villager's max health
      *
@@ -215,14 +216,14 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public Double getVillagerMaxHealth() {
         return Objects.requireNonNull(villager.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
     }
-
+    
     /**
      * Gets the Component for the Villager Health message
      * <br>Uses VILLAGER_HEALTH message from VillagerMessage enum
      *
      * @return Component
      */
-
+    
     public Component getVillagerHealthMessageComponent() {
         if (!ConfigToggle.DISPLAY_HEALTH.isEnabled()) return null;
         outputHasInfo = true;
@@ -232,43 +233,43 @@ public class VillagerOutputEvent extends Event implements Cancellable {
                 Placeholder.parsed("value", currentHealth.toString()),
                 Placeholder.parsed("value2", maxHealth.toString()));
     }
-
+    
     /**
      * Gets the number of times the villager has restocked today
      *
      * @return Integer
      */
-
+    
     public Integer getVillagerRestocksToday() {
         return villager.getRestocksToday();
     }
-
+    
     /**
      * Gets the Component for the Villager Restocks Today message
      * <br>Uses the VILLAGER_RESTOCKS_TODAY message from VillagerMessage enum
      *
      * @return Component
      */
-
+    
     public Component getVillagerRestocksTodayMessageComponent() {
         if (!ConfigToggle.DISPLAY_RESTOCKS_TODAY.isEnabled() || !villHasProfession) return null;
         outputHasInfo = true;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_RESTOCKS_TODAY.getMessage(), Placeholder.parsed("value", getVillagerRestocksToday().toString()));
     }
-
+    
     /**
      * Gets the player's reputation with this villager
      *
      * @return Integer
      */
-
+    
     public Integer getPlayerReputation() {
-        if (isLegacyOutput()) return getLegacyPlayerReputation();
+        if (isLegacyOutput() || isNMSUnsupported()) return getLegacyPlayerReputation();
         net.minecraft.world.entity.npc.Villager nmsVillager = ((CraftVillager) villager).getHandle();
         net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer) player).getHandle();
         return nmsVillager.getPlayerReputation(nmsPlayer);
     }
-
+    
     /**
      * Manually calculates the player's reputation on older versions. May have inaccurate results.
      *
@@ -285,7 +286,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         //5MP+P+T-N-5MN = Total Reputation Score. Maxes at -700, 725
         return (reputationMP * 5) + reputationP + reputationT - reputationN - (reputationMN * 5);
     }
-
+    
     /**
      * Gets the Component for the Player Reputation message
      * <br>Uses REPUTATION_TOTAL_FORMAT message from MessageInsert enum
@@ -293,7 +294,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      *
      * @return Component
      */
-
+    
     public Component getPlayerReputationMessageComponent() {
         if (!ConfigToggle.DISPLAY_PLAYER_REPUTATION.isEnabled()) return null;
         String reputationValue = String.valueOf(getPlayerReputation());
@@ -303,24 +304,24 @@ public class VillagerOutputEvent extends Event implements Cancellable {
                 Resolvers.getInstance().playerReputationResolver(getPlayerReputation()),
                 Placeholder.component("reputation_number", reputationTotalComponent));
     }
-
+    
     /**
      * Gets this villager's profession
      *
      * @return Villager.Profession
      */
-
+    
     public Villager.Profession getVillagerProfession() {
         return villager.getProfession();
     }
-
+    
     /**
      * Gets the Component for the Villager Profession message
      * <br>Uses VILLAGER_PROFESSION message from VillagerMessage enum
      *
      * @return Component
      */
-
+    
     public Component getVillagerProfessionMessageComponent() {
         if (!ConfigToggle.DISPLAY_PROFESSION.isEnabled() || getChildVillagerAge() != 0) return null;
         outputHasInfo = true;
@@ -330,26 +331,27 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         return miniMessage.deserialize(VillagerMessage.VILLAGER_PROFESSION.getMessage(),
                 Placeholder.parsed("value", professionString));
     }
-
-
+    
+    
     /**
      * Gets this villager's inventory object
      *
      * @return Inventory
      */
-
+    
     public Inventory getVillagerInventory() {
         return villager.getInventory();
     }
-
+    
     /**
      * Gets the Component for an item in a villager's inventory
      * <br> Uses VILLAGER_INVENTORY_ITEM_FORMAT from VillagerMessage enum
      *
      * @param itemStack ItemStack
+     *
      * @return Component
      */
-
+    
     public Component villagerInventoryItem(ItemStack itemStack) {
         Component itemComponent;
         Material itemMaterial = itemStack.getType();
@@ -360,9 +362,9 @@ public class VillagerOutputEvent extends Event implements Cancellable {
                 Placeholder.parsed("item", itemString),
                 Placeholder.parsed("value", Integer.toString(itemCount)));
         return itemComponent;
-
+        
     }
-
+    
     /**
      * Gets the Component for the Villager Inventory message
      * <br>Uses VILLAGER_INVENTORY from VillagerMessage enum
@@ -371,7 +373,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      *
      * @return Component
      */
-
+    
     public Component getVillagerInventoryMessageComponent() {
         if (!ConfigToggle.DISPLAY_VILLAGER_INVENTORY.isEnabled()) return null;
         outputHasInfo = true;
@@ -387,7 +389,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         }
         return miniMessage.deserialize(VillagerMessage.VILLAGER_INVENTORY.getMessage(), Placeholder.component("contents", inventoryComponent));
     }
-
+    
     /**
      * Gets the location of this villager's workstation
      *
@@ -396,14 +398,14 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public Location getVillagerJobsiteLocation() {
         return villager.getMemory(MemoryKey.JOB_SITE);
     }
-
+    
     public Component getVillagerJobsiteLocationMessageComponent() {
         if (!ConfigToggle.DISPLAY_JOB_SITE_LOCATION.isEnabled() || !villHasProfession) return null;
         outputHasInfo = true;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_JOBSITE_LOCATION.getMessage(),
                 Resolvers.getInstance().locationBuilder(getVillagerJobsiteLocation()));
     }
-
+    
     /**
      * Gets the location of this villager's bed
      *
@@ -412,7 +414,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public Location getVillagerBedLocation() {
         return villager.getMemory(MemoryKey.HOME);
     }
-
+    
     /**
      * Gets the Component for the Villager Bed Location message
      * <br>Uses VILLAGER_BED_LOCATION from VillagerMessage enum
@@ -424,12 +426,15 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         outputHasInfo = true;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_BED_LOCATION.getMessage(), Resolvers.getInstance().locationBuilder(getVillagerBedLocation()));
     }
-
+    
     /**
-     * Uses a legacyNewLine = miniMessage.deserialize("\n"); for older versions, because apparently .appendNewLine() is new
-     * <br>Builds Output Component from getLobotomizedMessageComponent(), getChildVillagerAgeMessageComponent(), getVillagerHealthMessageComponent(),
-     * getVillagerProfessionMessageComponent(), getVillagerJobsiteLocationMessageComponent(), getVillagerLastWorkedGameTimeMessageComponent(),
-     * getVillagerRestocksTodayMessageComponent(), getVillagerBedLocationMessageComponent(), getVillagerLastSleptGameTimeMessageComponent(),
+     * Uses a legacyNewLine = miniMessage.deserialize("\n"); for older versions, because apparently .appendNewLine() is
+     * new
+     * <br>Builds Output Component from getLobotomizedMessageComponent(), getChildVillagerAgeMessageComponent(),
+     * getVillagerHealthMessageComponent(),
+     * getVillagerProfessionMessageComponent(), getVillagerJobsiteLocationMessageComponent(),
+     * getVillagerLastWorkedGameTimeMessageComponent(), getVillagerRestocksTodayMessageComponent(),
+     * getVillagerBedLocationMessageComponent(), getVillagerLastSleptGameTimeMessageComponent(),
      * getVillagerInventoryMessageComponent(), and getPlayerReputationMessageComponent()
      * <br>Uses PLUGIN_PREFIX from ServerMessage enum
      * <br>If all those methods return null, uses NO_INFORMATION_TO_DISPLAY from VillagerMessage enum
@@ -475,12 +480,14 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         }
         setOutputComponent(tempOutputComponent);
     }
-
+    
     /**
-     * Builds Output Component from getLobotomizedMessageComponent(), getChildVillagerAgeMessageComponent(), getVillagerHealthMessageComponent(),
-     * getVillagerProfessionMessageComponent(), getVillagerJobsiteLocationMessageComponent(), getVillagerLastWorkedGameTimeMessageComponent(),
-     * getVillagerRestocksTodayMessageComponent(), getVillagerBedLocationMessageComponent(), getVillagerLastSleptGameTimeMessageComponent(),
-     * getVillagerInventoryMessageComponent(), and getPlayerReputationMessageComponent()
+     * Builds Output Component from getLobotomizedMessageComponent(), getChildVillagerAgeMessageComponent(),
+     * getVillagerHealthMessageComponent(), getVillagerProfessionMessageComponent(),
+     * getVillagerJobsiteLocationMessageComponent(), getVillagerLastWorkedGameTimeMessageComponent(),
+     * getVillagerRestocksTodayMessageComponent(), getVillagerBedLocationMessageComponent(),
+     * getVillagerLastSleptGameTimeMessageComponent(), getVillagerInventoryMessageComponent(), and
+     * getPlayerReputationMessageComponent()
      * <br>Uses PLUGIN_PREFIX from ServerMessage enum
      * <br>If all those methods return null, uses NO_INFORMATION_TO_DISPLAY from VillagerMessage enum
      */
@@ -524,11 +531,11 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         }
         setOutputComponent(tempOutputComponent);
     }
-
+    
     /**
      * Sends outputComponent to player if the player's toggle is enabled
      */
-
+    
     public void sendOutputToPlayer() {
         checkPlayerPDC();
         if (!playerOutputToggleEnabled) {
@@ -542,27 +549,27 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         }
         player.sendMessage(outputComponent);
     }
-
+    
     /**
      * Gets this villager
      *
      * @return org.bukkit.entity.Villager
      */
-
+    
     public Villager getVillager() {
         return villager;
     }
-
+    
     /**
      * Gets the player involved in this event
      *
      * @return org.bukkit.entity.Player
      */
-
+    
     public Player getPlayer() {
         return player;
     }
-
+    
     /**
      * Checks player's output toggle state and sets playerOutputToggleEnabled
      */
@@ -570,7 +577,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         byte outputToggleState = player.getPersistentDataContainer().getOrDefault(PDCTag.PLAYER_TOGGLE_OUTPUT_ENABLED.getPdcTag(), PersistentDataType.BYTE, (byte) 0);
         playerOutputToggleEnabled = outputToggleState != (byte) 1;
     }
-
+    
     /**
      * Gets playerOutputToggleEnabled
      *
@@ -580,7 +587,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public boolean isPlayerOutputToggleEnabled() {
         return playerOutputToggleEnabled;
     }
-
+    
     /**
      * Overrides the playerOutputToggleEnabled value, sets it to a new value regardless of the player's settings
      *
@@ -590,29 +597,29 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public void setOverridePlayerOutputToggleEnabled(boolean playerOutputToggleEnabled) {
         this.playerOutputToggleEnabled = playerOutputToggleEnabled;
     }
-
+    
     /**
      * Gets whether this event has been cancelled
      *
      * @return boolean
      */
-
+    
     @Override
     public boolean isCancelled() {
         return cancelled;
     }
-
+    
     /**
      * Sets whether this event should be cancelled
      *
      * @param cancel true if you wish to cancel this event
      */
-
+    
     @Override
     public void setCancelled(boolean cancel) {
         cancelled = cancel;
     }
-
+    
     /**
      * Set the component that should be sent to the player
      *
@@ -621,25 +628,34 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     public void setOutputComponent(Component outputComponent) {
         this.outputComponent = outputComponent;
     }
-
+    
     /**
      * Get the Component that is to be sent to the player
      *
      * @return Component
      */
-
+    
     @SuppressWarnings("unused") //For API usage
     public Component getOutputComponent() {
         return outputComponent;
     }
-
+    
     /**
      * Gets whether to use legacy output or not (pre-1.19.4)
      *
      * @return boolean
      */
-
+    
     public boolean isLegacyOutput() {
         return VillagerInfo.getInstance().isLegacyVersion();
+    }
+    
+    /**
+     * Gets whether the server is running the same version that the plugin runs on
+     *
+     * @return boolean
+     */
+    public boolean isNMSUnsupported() {
+        return VillagerInfo.getInstance().isNmsUnsupported();
     }
 }
