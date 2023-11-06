@@ -35,8 +35,8 @@ public final class VillagerInfo extends JavaPlugin {
     }
 
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
-    private final List<String> legacyVersions = List.of("1.19", "1.19.1", "1.19.2", "1.19.3");
-    private final List<String> nmsSupportedVersions = List.of("1.20", "1.20.1");
+    private final List<String> legacyVersions = List.of("1.19", "1.19.1", "1.19.2", "1.19.3", "1.20.0", "1.20.1");
+    private final List<String> nmsSupportedVersions = List.of("1.20.2");
     private boolean usingPurpur = true;
     private boolean legacyVersion = false;
     private boolean nmsUnsupported = false;
