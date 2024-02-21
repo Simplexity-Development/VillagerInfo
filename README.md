@@ -131,13 +131,3 @@ dependencies {
     compileOnly 'maven.modrinth:villager-info:3.0.1'
 }
 ```
-## Todo:
-- [x] Toggle for information output
-- [x] Personal options for output(?)
-- [ ] Add a command to clear all current highlights and reset all villager highlight PDC data
-- [ ] Adjust the functionality of the workstation highlights so that if someone starts the highlight again, it's not strictly ignores, but starts the time over again
-- [ ] Add different info modes
-- [ ] Add more information like if the villager has been healed previously, and if so, by whom
-- [ ] Use pages for the information so that it's not all in one big list
-- [ ] Use click events to trigger the block highlights
-- [ ] Highlight for bed location, Village center

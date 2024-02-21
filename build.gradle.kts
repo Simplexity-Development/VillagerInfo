@@ -5,10 +5,10 @@ plugins {
     }
 
 group = "simplexity"
-version = "3.0.4"
+version = "3.0.5"
 
 dependencies {
-    paperweight.devBundle("org.purpurmc.purpur", "1.20.2-R0.1-SNAPSHOT")
+    paperweight.devBundle("org.purpurmc.purpur", "1.20.4-R0.1-SNAPSHOT")
 }
 repositories {
     maven("https://repo.purpurmc.org/snapshots")
