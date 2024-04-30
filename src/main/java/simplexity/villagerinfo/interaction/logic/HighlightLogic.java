@@ -3,14 +3,12 @@ package simplexity.villagerinfo.interaction.logic;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Villager;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import simplexity.villagerinfo.VillagerInfo;
 import simplexity.villagerinfo.configurations.functionality.ConfigToggle;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
-import simplexity.villagerinfo.events.LegacyWorkstationRemoveHighlightEvent;
 import simplexity.villagerinfo.events.WorkstationHighlightEvent;
 import simplexity.villagerinfo.events.WorkstationRemoveHighlightEvent;
 import simplexity.villagerinfo.util.PDCTag;
@@ -19,8 +17,6 @@ import java.util.HashMap;
 
 public class HighlightLogic {
     NamespacedKey workstationTag = PDCTag.VILLAGER_WORKSTATION_CURRENTLY_HIGHLIGHTED.getPdcTag();
-
-    private final boolean isLegacyHighlight = VillagerInfo.getInstance().isLegacyVersion();
 
     private static HighlightLogic instance;
 
@@ -39,13 +35,8 @@ public class HighlightLogic {
         highlightEvent.highlightVillagerWorkstation();
         if (highlightEvent.isCancelled()) return;
         Bukkit.getScheduler().runTaskLater(VillagerInfo.getInstance(), () -> {
-            if (isLegacyHighlight) {
-                callLegacyWorkstationRemoveHighlightEvent(villager, highlightEvent);
-            } else {
-                callWorkstationRemoveHighlightEvent(villager, highlightEvent);
-            }
+            callWorkstationRemoveHighlightEvent(villager, highlightEvent);
         }, 20L * VillConfig.getInstance().getConfiguredHighlightTime());
-
     }
 
     public WorkstationHighlightEvent callHighlightEvent(Villager villager, org.bukkit.entity.Player player) {
@@ -53,13 +44,6 @@ public class HighlightLogic {
         Bukkit.getServer().getPluginManager().callEvent(highlightEvent);
         if (highlightEvent.isCancelled()) return null;
         return highlightEvent;
-    }
-
-    public void callLegacyWorkstationRemoveHighlightEvent(Villager villager, WorkstationHighlightEvent highlightEvent) {
-        LegacyWorkstationRemoveHighlightEvent legacyRemoveEvent = new LegacyWorkstationRemoveHighlightEvent(villager, highlightEvent.getLegacyFallingBlockEntity(), PDCTag.VILLAGER_WORKSTATION_CURRENTLY_HIGHLIGHTED.getPdcTag());
-        Bukkit.getServer().getPluginManager().callEvent(legacyRemoveEvent);
-        if (legacyRemoveEvent.isCancelled()) return;
-        legacyRemoveEvent.killFallingBlock();
     }
 
     public void callWorkstationRemoveHighlightEvent(Villager villager, WorkstationHighlightEvent highlightEvent) {
@@ -75,18 +59,10 @@ public class HighlightLogic {
     }
 
     public void clearAllCurrentHighlights() {
-        if (isLegacyHighlight) {
-            HashMap<Villager, FallingBlock> fallingBlocks = VillagerInfo.getInstance().getLegacyCurrentlyHighlighted();
-            fallingBlocks.forEach((villager, fallingBlock) -> {
-                fallingBlock.remove();
-                villagerPDCHighlightsSetOff(villager);
-            });
-        } else {
-            HashMap<Villager, BlockDisplay> blockDisplays = VillagerInfo.getInstance().getCurrentlyHighlighted();
-            blockDisplays.forEach((villager, blockDisplay) -> {
-                blockDisplay.remove();
-                villagerPDCHighlightsSetOff(villager);
-            });
-        }
+        HashMap<Villager, BlockDisplay> blockDisplays = VillagerInfo.getInstance().getCurrentlyHighlighted();
+        blockDisplays.forEach((villager, blockDisplay) -> {
+            blockDisplay.remove();
+            villagerPDCHighlightsSetOff(villager);
+        });
     }
 }

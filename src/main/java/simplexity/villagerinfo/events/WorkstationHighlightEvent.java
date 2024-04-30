@@ -5,7 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.Cancellable;
@@ -29,7 +28,6 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
     private final Player player;
     private final Villager villager;
     private BlockDisplay blockDisplayEntity;
-    private FallingBlock legacyFallingBlockEntity;
     private final NamespacedKey namespacedKey;
     private boolean playerHighlightToggleEnabled;
     private int blockLight = 15;
@@ -45,14 +43,6 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
         this.player = player;
     }
 
-    /**
-     * Gets whether to use legacy highlighting or not (pre-1.19.4)
-     *
-     * @return boolean
-     */
-    public boolean isLegacyHighlight() {
-        return VillagerInfo.getInstance().isLegacyVersion();
-    }
 
     /**
      * Gets whether this event has been cancelled
@@ -153,37 +143,10 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
             cancelled = true;
             return;
         }
-        if (isLegacyHighlight()) {
-            summonFallingBlockEntity();
-        } else {
-            summonBlockDisplayEntity();
-        }
+        summonBlockDisplayEntity();
         setVillagerPDCSwitchOn();
-        if (isLegacyHighlight()) {
-            addVillagerAndFallingBlockToMap();
-        } else {
-            addVillagerAndBlockDisplayToMap();
-        }
-    }
+        addVillagerAndBlockDisplayToMap();
 
-    /**
-     * Summons a falling block entity for versions before 1.19.4
-     * <br>May experience visual glitches
-     * <br>Cannot have color applied
-     */
-
-    public void summonFallingBlockEntity() {
-        Block block = getJobBlock();
-        BlockData blockData = block.getBlockData();
-        Location fallingBlockLocation = block.getLocation().add(0.5, -0.001, 0.5);
-        FallingBlock fallingBlock = block.getWorld().spawnFallingBlock(fallingBlockLocation, blockData);
-        fallingBlock.setGlowing(true);
-        fallingBlock.setGravity(false);
-        fallingBlock.setDropItem(false);
-        fallingBlock.setPersistent(true);
-        fallingBlock.setInvulnerable(true);
-        fallingBlock.setFallDistance(-2147483648);
-        legacyFallingBlockEntity = fallingBlock;
     }
 
     /**
@@ -207,10 +170,6 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
      */
     public void addVillagerAndBlockDisplayToMap() {
         VillagerInfo.getInstance().getCurrentlyHighlighted().put(villager, blockDisplayEntity);
-    }
-
-    public void addVillagerAndFallingBlockToMap() {
-        VillagerInfo.getInstance().getLegacyCurrentlyHighlighted().put(villager, legacyFallingBlockEntity);
     }
 
     /**
@@ -319,15 +278,6 @@ public class WorkstationHighlightEvent extends Event implements Cancellable {
     @SuppressWarnings("unused") //For API usage
     public void setDefaultColor(Color defaultColor) {
         this.defaultColor = defaultColor;
-    }
-
-    /**
-     * Gets the falling block entity if the server is on a version before 1.19.4
-     *
-     * @return FallingBlock
-     */
-    public FallingBlock getLegacyFallingBlockEntity() {
-        return legacyFallingBlockEntity;
     }
 
     /**
