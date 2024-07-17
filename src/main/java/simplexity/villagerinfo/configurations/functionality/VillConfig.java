@@ -29,6 +29,9 @@ public class VillConfig {
     private final HashMap<Material, Color> poiBlockHighlightColorsMap = new HashMap<>();
     String error = ServerMessage.CONFIGURATION_ERROR_PREFIX.getMessage();
 
+    private boolean isWhitelist;
+    private Set<Material> itemSet = new HashSet<>();
+
     private final Logger logger = VillagerInfo.getInstance().getVillagerInfoLogger();
 
     public void reloadVillConfig(FileConfiguration config) {
@@ -38,6 +41,7 @@ public class VillConfig {
         reloadHighlightTime(config);
         reloadToggles(config);
         reloadColors(config);
+        reloadItemList(config);
     }
 
     public void reloadSound(FileConfiguration config) {
@@ -128,6 +132,19 @@ public class VillConfig {
         }
     }
 
+    public void reloadItemList(FileConfiguration config) {
+        isWhitelist = config.getBoolean("whitelist", false);
+        for (String item : config.getStringList("items")) {
+            Material material = Material.getMaterial(item);
+            if (material != null) {
+                itemSet.add(material);
+                continue;
+            }
+            Logger logger = VillagerInfo.getInstance().getVillagerInfoLogger();
+            logger.warning("Invalid material in item list: " + item);
+        }
+    }
+
     public Sound getConfiguredSound() {
         return configuredSound;
     }
@@ -146,5 +163,9 @@ public class VillConfig {
 
     public Map<Material, Color> getPoiBlockHighlightColorsMap() {
         return Collections.unmodifiableMap(poiBlockHighlightColorsMap);
+    }
+
+    public boolean isValidItem(Material material) {
+        return itemSet.contains(material) == isWhitelist;
     }
 }

@@ -1,5 +1,6 @@
 package simplexity.villagerinfo.interaction.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.ZombieVillager;
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import simplexity.villagerinfo.configurations.functionality.ConfigToggle;
+import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.interaction.logic.HighlightLogic;
 import simplexity.villagerinfo.interaction.logic.OutputLogic;
 import simplexity.villagerinfo.interaction.logic.SoundLogic;
@@ -21,6 +23,8 @@ public class PlayerInteractEntityListener implements Listener {
     public void onVillagerInteract(PlayerInteractEntityEvent interactEntityEvent) {
         if (interactEntityEvent.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         Player player = interactEntityEvent.getPlayer();
+        Material material = player.getEquipment().getItemInMainHand().getType();
+        if (!VillConfig.getInstance().isValidItem(material)) return;
         if (!player.isSneaking()) return;
         if (!((interactEntityEvent.getRightClicked() instanceof Villager) || (interactEntityEvent.getRightClicked() instanceof ZombieVillager)))
             return;

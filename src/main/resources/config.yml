@@ -40,3 +40,8 @@ workstation-highlight-color:
   "BARREL": [153, 76, 0]
   "LOOM": [255, 255, 255]
   "STONECUTTER": [32, 32, 32]
+
+# Item Blacklist / Whitelist
+# Defaults to no items blacklisted.
+whitelist: false
+items: []
