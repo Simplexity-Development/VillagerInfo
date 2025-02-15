@@ -17,7 +17,6 @@ import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcomma
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.configurations.locale.LocaleConfig;
 import simplexity.villagerinfo.interaction.listeners.PlayerInteractEntityListener;
-import simplexity.villagerinfo.interaction.logic.HighlightLogic;
 import simplexity.villagerinfo.interaction.logic.KillDisplay;
 
 import java.util.HashMap;
@@ -99,7 +98,7 @@ public final class VillagerInfo extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        KillDisplay.getInstance().clearAllCurrentHighlights(HighlightLogic.getInstance());
+        KillDisplay.getInstance().clearAllCurrentHighlights();
     }
 
 

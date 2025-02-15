@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import simplexity.villagerinfo.VillagerInfo;
-import simplexity.villagerinfo.configurations.functionality.ConfigToggle;
+import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.configurations.locale.VillagerMessage;
@@ -101,7 +101,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getLobotomizedMessageComponent() {
-        if (!(ConfigToggle.DISPLAY_PURPUR_LOBOTOMIZED.isEnabled() && VillagerInfo.getInstance().isUsingPurpur()))
+        if (!(VillConfig.getInstance().displayPurpurLobotomized() && VillagerInfo.getInstance().isUsingPurpur()))
             return null;
         outputHasInfo = true;
         String status;
@@ -135,7 +135,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getChildVillagerAgeMessageComponent() {
-        if (!(ConfigToggle.DISPLAY_BABY_VILLAGER_AGE.isEnabled() && getChildVillagerAge() > 0)) return null;
+        if (!(!VillConfig.getInstance().displayBabyVillagerAge() && getChildVillagerAge() > 0)) return null;
         outputHasInfo = true;
         villHasProfession = false;
         Long ageInSeconds = getChildVillagerAge() / 20;
@@ -162,7 +162,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getVillagerLastWorkedGameTimeMessageComponent() {
-        if (!ConfigToggle.DISPLAY_LAST_WORK_TIME.isEnabled() || !villHasProfession) return null;
+        if (!VillConfig.getInstance().displayLastWorkTime() || !villHasProfession) return null;
         outputHasInfo = true;
         Long lastWorkedGameTimeDifference = (getCurrentGameTime() - getVillagerLastWorkedGameTime()) / 20;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_LAST_WORKED.getMessage(),
@@ -189,7 +189,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getVillagerLastSleptGameTimeMessageComponent() {
-        if (!ConfigToggle.DISPLAY_LAST_SLEEP_TIME.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayLastSleepTime()) return null;
         outputHasInfo = true;
         Long lastWorkedGameTimeDifference = (getCurrentGameTime() - getVillagerLastSleptGameTime()) / 20;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_LAST_SLEPT.getMessage(),
@@ -223,7 +223,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getVillagerHealthMessageComponent() {
-        if (!ConfigToggle.DISPLAY_HEALTH.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayHealth()) return null;
         outputHasInfo = true;
         Double currentHealth = getVillagerCurrentHealth();
         Double maxHealth = getVillagerMaxHealth();
@@ -250,7 +250,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getVillagerRestocksTodayMessageComponent() {
-        if (!ConfigToggle.DISPLAY_RESTOCKS_TODAY.isEnabled() || !villHasProfession) return null;
+        if (!VillConfig.getInstance().displayRestocksToday() || !villHasProfession) return null;
         outputHasInfo = true;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_RESTOCKS_TODAY.getMessage(), Placeholder.parsed("value", getVillagerRestocksToday().toString()));
     }
@@ -281,7 +281,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getPlayerReputationMessageComponent() {
-        if (!ConfigToggle.DISPLAY_PLAYER_REPUTATION.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayPlayerReputation()) return null;
         String reputationValue = String.valueOf(getPlayerReputation());
         Component reputationTotalComponent = miniMessage.deserialize(MessageInsert.REPUTATION_TOTAL_FORMAT.getMessage(),
                 Placeholder.parsed("value", reputationValue));
@@ -308,7 +308,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getVillagerProfessionMessageComponent() {
-        if (!ConfigToggle.DISPLAY_PROFESSION.isEnabled() || getChildVillagerAge() != 0) return null;
+        if (!VillConfig.getInstance().displayProfession() || getChildVillagerAge() != 0) return null;
         outputHasInfo = true;
         Villager.Profession profession = getVillagerProfession();
         if (profession.equals(Villager.Profession.NONE)) villHasProfession = false;
@@ -359,7 +359,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getVillagerInventoryMessageComponent() {
-        if (!ConfigToggle.DISPLAY_VILLAGER_INVENTORY.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayVillagerInventory()) return null;
         outputHasInfo = true;
         Component inventoryComponent = Component.empty();
         if (getVillagerInventory().isEmpty()) {
@@ -384,7 +384,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
     }
 
     public Component getVillagerJobsiteLocationMessageComponent() {
-        if (!ConfigToggle.DISPLAY_JOB_SITE_LOCATION.isEnabled() || !villHasProfession) return null;
+        if (!VillConfig.getInstance().displayJobSiteLocation() || !villHasProfession) return null;
         outputHasInfo = true;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_JOBSITE_LOCATION.getMessage(),
                 Resolvers.getInstance().locationBuilder(getVillagerJobsiteLocation()));
@@ -406,7 +406,7 @@ public class VillagerOutputEvent extends Event implements Cancellable {
      * @return Component
      */
     public Component getVillagerBedLocationMessageComponent() {
-        if (!ConfigToggle.DISPLAY_BED_LOCATION.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayBedLocation()) return null;
         outputHasInfo = true;
         return miniMessage.deserialize(VillagerMessage.VILLAGER_BED_LOCATION.getMessage(), Resolvers.getInstance().locationBuilder(getVillagerBedLocation()));
     }

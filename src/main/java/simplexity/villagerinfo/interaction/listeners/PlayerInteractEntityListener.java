@@ -9,7 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import simplexity.villagerinfo.configurations.functionality.ConfigToggle;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.interaction.logic.HighlightLogic;
 import simplexity.villagerinfo.interaction.logic.OutputLogic;
@@ -29,26 +28,29 @@ public class PlayerInteractEntityListener implements Listener {
         if (!((interactEntityEvent.getRightClicked() instanceof Villager) || (interactEntityEvent.getRightClicked() instanceof ZombieVillager)))
             return;
         if (!player.hasPermission(Perm.VILL_INFO_OUTPUT.getPerm())) return;
-        if (!(ConfigToggle.OUTPUT_ENABLED.isEnabled() || ConfigToggle.HIGHLIGHT_VILLAGER_WORKSTATION_ON_OUTPUT.isEnabled() || ConfigToggle.PLAY_SOUND_ON_INFO_DISPLAY.isEnabled()))
+        if (!(VillConfig.getInstance().isOutputEnabled() || VillConfig.getInstance().shouldHighlightWorkstationOnOutput() || VillConfig.getInstance().isHighlightBedOnOutput()))
             return;
         interactEntityEvent.setCancelled(true);
         if (interactEntityEvent.getRightClicked() instanceof Villager villager) {
-            if (ConfigToggle.OUTPUT_ENABLED.isEnabled()) {
+            if (VillConfig.getInstance().isOutputEnabled()) {
                 OutputLogic.getInstance().runVillagerOutput(villager, player);
             }
-            if (ConfigToggle.HIGHLIGHT_VILLAGER_WORKSTATION_ON_OUTPUT.isEnabled()) {
-                HighlightLogic.getInstance().runHighlightWorkstationBlock(villager, player);
+            if (VillConfig.getInstance().shouldHighlightWorkstationOnOutput()) {
+                HighlightLogic.handleWorkstationHighlight(villager);
             }
-            if (ConfigToggle.PLAY_SOUND_ON_INFO_DISPLAY.isEnabled()) {
+            if (VillConfig.getInstance().isHighlightBedOnOutput()) {
+                HighlightLogic.handleBedHighlight(villager);
+            }
+            if (VillConfig.getInstance().shouldPlaySoundOnOutput()) {
                 SoundLogic.getInstance().runSoundEffect(player);
             }
             return;
         }
         if (interactEntityEvent.getRightClicked() instanceof ZombieVillager zombieVillager) {
-            if (ConfigToggle.OUTPUT_ENABLED.isEnabled()) {
+            if (VillConfig.getInstance().isOutputEnabled()) {
                 OutputLogic.getInstance().runZombieVillagerOutput(zombieVillager, player);
             }
-            if (ConfigToggle.PLAY_SOUND_ON_INFO_DISPLAY.isEnabled()) {
+            if (VillConfig.getInstance().shouldPlaySoundOnOutput()) {
                 SoundLogic.getInstance().runSoundEffect(player);
             }
         }

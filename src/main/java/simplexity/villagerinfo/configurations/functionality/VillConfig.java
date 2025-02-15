@@ -32,8 +32,9 @@ public class VillConfig {
             profession, jobSiteLocation, lastWorkTime, bedLocation, lastSleepTime, villagerInventory, restocksToday,
             playerReputation, highlightWorkstationOnOutput, playSoundOnOutput, highlightBedOnOutput;
     private Sound configuredSound;
-    private int configuredHighlightTime;
-    private float configuredSoundVolume, configuredSoundPitch;
+    private Color defaultColor;
+    private int configuredHighlightTime, blockLight, skyLight;
+    private float configuredSoundVolume, configuredSoundPitch, xOffset, yOffset, zOffset;
     private final HashMap<Material, Color> poiBlockHighlightColorsMap = new HashMap<>();
     String error = ServerMessage.CONFIGURATION_ERROR_PREFIX.getMessage();
 
@@ -43,6 +44,7 @@ public class VillConfig {
     private final Logger logger = VillagerInfo.getInstance().getVillagerInfoLogger();
 
     public void reloadVillConfig(FileConfiguration config) {
+        reloadBlockDisplayDefaults(config);
         reloadSound(config);
         reloadSoundPitch(config);
         reloadSoundVolume(config);
@@ -50,6 +52,20 @@ public class VillConfig {
         reloadToggles(config);
         reloadColors(config);
         reloadItemList(config);
+    }
+
+    public void reloadBlockDisplayDefaults(FileConfiguration config) {
+        xOffset = (float) config.getDouble("defaults.scale-offset.x-offset", -0.03);
+        yOffset = (float) config.getDouble("defaults.scale-offset.y-offset", -0.03);
+        zOffset = (float) config.getDouble("defaults.scale-offset.z-offset", -0.03);
+        List<Integer> rawColor = config.getIntegerList("defaults.color");
+        if (rawColor.size() != 3) {
+            defaultColor = Color.WHITE;
+        } else {
+            defaultColor = Color.fromRGB(rawColor.get(0), rawColor.get(1), rawColor.get(2));
+        }
+        blockLight = config.getInt("defaults.block-light", 15);
+        skyLight = config.getInt("defaults.sky-light", 15);
     }
 
     public void reloadSound(FileConfiguration config) {
@@ -189,27 +205,23 @@ public class VillConfig {
         return outputEnabled;
     }
 
-    public boolean isPurpurLobotomized() {
+    public boolean displayPurpurLobotomized() {
         return purpurLobotomized;
     }
 
-    public boolean isBabyVillagerAge() {
+    public boolean displayBabyVillagerAge() {
         return babyVillagerAge;
     }
 
-    public boolean isZombieVillagerConversionTime() {
+    public boolean displayZombieVillagerConversionTime() {
         return zombieVillagerConversionTime;
     }
 
-    public boolean isHealth() {
+    public boolean displayHealth() {
         return health;
     }
 
-    public void setHealth(boolean health) {
-        this.health = health;
-    }
-
-    public boolean isRestocksToday() {
+    public boolean displayRestocksToday() {
         return restocksToday;
     }
 
@@ -217,39 +229,63 @@ public class VillConfig {
         return highlightBedOnOutput;
     }
 
-    public boolean isVillagerInventory() {
+    public boolean displayVillagerInventory() {
         return villagerInventory;
     }
 
-    public boolean isLastSleepTime() {
+    public boolean displayLastSleepTime() {
         return lastSleepTime;
     }
 
-    public boolean isPlaySoundOnOutput() {
+    public boolean shouldPlaySoundOnOutput() {
         return playSoundOnOutput;
     }
 
-    public boolean isBedLocation() {
+    public boolean displayBedLocation() {
         return bedLocation;
     }
 
-    public boolean isLastWorkTime() {
+    public boolean displayLastWorkTime() {
         return lastWorkTime;
     }
 
-    public boolean isHighlightWorkstationOnOutput() {
+    public boolean shouldHighlightWorkstationOnOutput() {
         return highlightWorkstationOnOutput;
     }
 
-    public boolean isJobSiteLocation() {
+    public boolean displayJobSiteLocation() {
         return jobSiteLocation;
     }
 
-    public boolean isProfession() {
+    public boolean displayProfession() {
         return profession;
     }
 
-    public boolean isPlayerReputation() {
+    public boolean displayPlayerReputation() {
         return playerReputation;
+    }
+
+    public Color getDefaultColor() {
+        return defaultColor;
+    }
+
+    public int getBlockLight() {
+        return blockLight;
+    }
+
+    public int getSkyLight() {
+        return skyLight;
+    }
+
+    public float getXOffset() {
+        return xOffset;
+    }
+
+    public float getYOffset() {
+        return yOffset;
+    }
+
+    public float getZOffset() {
+        return zOffset;
     }
 }

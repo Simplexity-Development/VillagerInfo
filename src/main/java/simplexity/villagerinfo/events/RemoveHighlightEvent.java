@@ -1,11 +1,12 @@
 package simplexity.villagerinfo.events;
 
 import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.Villager;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 /**
  * Called when a workstation highlight is to be removed
@@ -13,30 +14,30 @@ import org.jetbrains.annotations.NotNull;
 public class RemoveHighlightEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private Villager villager;
+    private UUID villagerUUID;
     private BlockDisplay blockDisplay;
 
-    public RemoveHighlightEvent(Villager villager, BlockDisplay blockDisplay) {
-        this.villager = villager;
+    public RemoveHighlightEvent(UUID villagerUUID, BlockDisplay blockDisplay) {
+        this.villagerUUID = villagerUUID;
         this.blockDisplay = blockDisplay;
     }
 
     /**
-     * Gets the villager involved in this event
+     * Gets the UUID of the villager involved in this event
      *
-     * @return org.bukkit.entity.Villager
+     * @return UUID the UUID of the villager in this event
      */
 
-    public Villager getVillager() {
-        return villager;
+    public UUID getVillagerUUID() {
+        return villagerUUID;
     }
 
     /**
-     * Sets the Villager associated with this event, used to remove the block display from cache
-     * @param villager Villager connected to event
+     * Sets the UUID of the villager associated with this event, used to remove the block display from cache
+     * @param villagerUUID UUID of the villager connected to event
      */
-    public void setVillager(Villager villager) {
-        this.villager = villager;
+    public void setVillagerUUID(UUID villagerUUID) {
+        this.villagerUUID = villagerUUID;
     }
 
     /**

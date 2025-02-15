@@ -13,7 +13,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import simplexity.villagerinfo.VillagerInfo;
-import simplexity.villagerinfo.configurations.functionality.ConfigToggle;
+import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.configurations.locale.VillagerMessage;
 import simplexity.villagerinfo.util.PDCTag;
@@ -102,7 +102,7 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getZombieVillagerHealthMessageComponent() {
-        if (!ConfigToggle.DISPLAY_HEALTH.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayHealth()) return null;
         outputHasInfo = true;
         Double currentHealth = getZombieVillagerCurrentHealth();
         Double maxHealth = getZombieVillagerMaxHealth();
@@ -129,7 +129,7 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
      * @return Component
      */
     public Component getZombieVillagerProfessionMessageComponent() {
-        if (!ConfigToggle.DISPLAY_PROFESSION.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayProfession()) return null;
         outputHasInfo = true;
         Villager.Profession profession = getZombieVillagerProfession();
         String professionString = profession.name().toLowerCase();
@@ -155,7 +155,7 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
      */
 
     public Component getTimeUntilConvertedMessageComponent() {
-        if (!ConfigToggle.DISPLAY_ZOMBIE_VILLAGER_CONVERSION_TIME.isEnabled()) return null;
+        if (!VillConfig.getInstance().displayZombieVillagerConversionTime()) return null;
         outputHasInfo = true;
         if (!isConverting())
             return miniMessage.deserialize(VillagerMessage.ZOMBIE_VILLAGER_NOT_CURRENTLY_CONVERTING.getMessage());

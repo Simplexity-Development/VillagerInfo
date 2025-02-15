@@ -1,10 +1,8 @@
 package simplexity.villagerinfo.interaction.logic;
 
 import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.Villager;
-import simplexity.villagerinfo.VillagerInfo;
 
-import java.util.HashMap;
+import java.util.UUID;
 
 public class KillDisplay {
     private static KillDisplay instance;
@@ -19,12 +17,12 @@ public class KillDisplay {
         return instance;
     }
 
-    public void clearAllCurrentHighlights(HighlightLogic highlightLogic) {
-        HashMap<Villager, BlockDisplay> blockDisplays = VillagerInfo.getInstance().getCurrentlyHighlighted();
-        blockDisplays.forEach((villager, blockDisplay) -> {
+    public void clearAllCurrentHighlights() {
+        for(UUID uuid: HighlightLogic.villagerBlockDisplayMap.keySet()) {
+            BlockDisplay blockDisplay = HighlightLogic.villagerBlockDisplayMap.get(uuid);
             blockDisplay.remove();
-            highlightLogic.villagerPDCHighlightsSetOff(villager);
-        });
+            HighlightLogic.villagerBlockDisplayMap.remove(uuid);
+        }
     }
 
 }

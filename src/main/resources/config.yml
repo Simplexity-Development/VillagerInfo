@@ -23,6 +23,7 @@ sound-volume: 0.5
 sound-pitch: 1.5
 #Length of time to highlight the villager's workstation (if enabled)
 highlight-workstation-on-output: true
+highlight-bed-on-output: true
 highlight-time: 10
 #NOTE: These colors will only apply on versions after 1.19.4 (When block displays were introduced to the game) - if you are using a version before this, all glow colors will be white
 #RR,GG,BB format

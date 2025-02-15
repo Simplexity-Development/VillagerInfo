@@ -2,11 +2,12 @@ package simplexity.villagerinfo.events;
 
 import org.bukkit.Color;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Villager;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 /**
  * Called when a workstation is going to be highlighted, requires Bukkit Villager object and Bukkit Block object
@@ -14,12 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public class HighlightEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private Villager villager;
+    private UUID villagerUUID;
     private Block block;
     private Color color;
 
-    public HighlightEvent(Villager villager, Block block, Color color) {
-        this.villager = villager;
+    public HighlightEvent(UUID villagerUUID, Block block, Color color) {
+        this.villagerUUID = villagerUUID;
         this.block = block;
         this.color = color;
     }
@@ -66,22 +67,22 @@ public class HighlightEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the villager from this event
+     * Gets the UUID of the villager from this event
      *
-     * @return Villager
+     * @return UUID Villager's UUID
      */
 
-    public Villager getVillager() {
-        return villager;
+    public UUID getVillagerUUID() {
+        return villagerUUID;
     }
 
     /**
-     * Sets the villager that will be used in this event - ties this villager to the highlighted block,
+     * Sets the UUID of the villager that will be used in this event - ties this villager to the highlighted block,
      * disallowing the event from being run again on this villager until the highlight expires
-     * @param villager Villager that this event should be tied to
+     * @param villagerUUID UUID of the villager that this event should be tied to
      */
-    public void setVillager(Villager villager) {
-        this.villager = villager;
+    public void setVillagerUUID(UUID villagerUUID) {
+        this.villagerUUID = villagerUUID;
     }
 
     /**
