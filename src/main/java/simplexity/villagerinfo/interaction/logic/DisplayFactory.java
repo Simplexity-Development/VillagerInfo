@@ -13,7 +13,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
 
-public class ShowDisplay {
+public class DisplayFactory {
 
     /**
      * Summons the block display
@@ -31,16 +31,20 @@ public class ShowDisplay {
         return blockDisplay;
     }
 
+    /**
+     * Summons a display entity to highlight the provided bed block
+     *
+     * @param highlightColor color to highlight the block with
+     * @param bedBlock       bed block to highlight
+     * @return Block Display that is produced
+     */
+
     private static BlockDisplay summonBedDisplayEntity(Color highlightColor, Block bedBlock) {
         if (!(bedBlock.getBlockData() instanceof Bed bedData)) {
             return null;
         }
         BlockFace facing = bedData.getFacing();
         Location bedLocation = bedBlock.getLocation();
-        if (bedData.getPart().equals(Bed.Part.FOOT)) {
-            bedLocation = getHeadLocation(bedLocation, facing);
-        }
-        if (bedLocation == null) return null;
         BlockDisplay blockDisplay = (BlockDisplay) bedLocation.getWorld().spawnEntity(bedLocation, EntityType.BLOCK_DISPLAY);
         rotateDisplay(facing, blockDisplay);
         modifyDisplayEntity(blockDisplay, highlightColor, bedBlock);
@@ -48,7 +52,7 @@ public class ShowDisplay {
     }
 
     /**
-     * Modifies the summoned entity to fit the specifications of the default config and
+     * Modifies the summoned entity to fit the specifications of the default config
      *
      * @param blockDisplay BlockDisplay that was summoned
      * @param glowColor    Color that this display will be highlighted as
@@ -67,17 +71,17 @@ public class ShowDisplay {
         blockDisplay.setGlowColorOverride(glowColor);
     }
 
-
-    private static Location getHeadLocation(Location location, BlockFace facing) {
-        return switch (facing) {
-            case NORTH -> location.add(0, 0, -1);
-            case EAST -> location.add(1, 0, 0);
-            case SOUTH -> location.add(0, 0, 1);
-            case WEST -> location.add(-1, 0, 0);
-            default -> null;
-        };
-    }
-
+    /**
+     * ROTATES THE DISPLAY BECAUSE FOR SOME
+     * REASON THE STUPID BED BLOCK DOES NOT HOLD THE INFORMATION ON WHICH
+     * <p>
+     * WAY
+     * <p>
+     * IT IS FACING WHAT ON EARTH
+     *
+     * @param facing       BlockFace of the bed block
+     * @param blockDisplay Block display to rotate
+     */
     private static void rotateDisplay(BlockFace facing, BlockDisplay blockDisplay) {
         Transformation transformation = null;
         switch (facing) {
@@ -100,6 +104,16 @@ public class ShowDisplay {
         if (transformation == null) return;
         blockDisplay.setTransformation(transformation);
     }
+
+    /**
+     * The math for the transformation, it works and I'm not touching it.
+     *
+     * @param headX         Number of blocks on the x-axis the bed needs to move
+     * @param headY         Number of blocks on the y-axis the bed needs to move
+     * @param headZ         Number of blocks on the z-axis the bed needs to move
+     * @param rotationAngle The rotation angle IN RADIANS!!!!!!!!!! that the bed needs to rotate. Pro tip, use java.lang.Math.toRadians(number)
+     * @return Transformation magic to adjust the bed
+     */
 
     public static Transformation bedDisplayTransformation(int headX, int headY, int headZ, float rotationAngle) {
         Vector3f translationToOrigin = new Vector3f().add(headX, headY, headZ);

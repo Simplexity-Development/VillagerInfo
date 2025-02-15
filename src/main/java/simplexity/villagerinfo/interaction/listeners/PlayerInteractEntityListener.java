@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
-import simplexity.villagerinfo.interaction.logic.HighlightLogic;
+import simplexity.villagerinfo.interaction.logic.DisplayManager;
 import simplexity.villagerinfo.interaction.logic.OutputLogic;
 import simplexity.villagerinfo.interaction.logic.SoundLogic;
 import simplexity.villagerinfo.util.Perm;
@@ -36,10 +36,10 @@ public class PlayerInteractEntityListener implements Listener {
                 OutputLogic.getInstance().runVillagerOutput(villager, player);
             }
             if (VillConfig.getInstance().shouldHighlightWorkstationOnOutput()) {
-                HighlightLogic.handleWorkstationHighlight(villager);
+                DisplayManager.handleWorkstationHighlight(villager);
             }
             if (VillConfig.getInstance().isHighlightBedOnOutput()) {
-                HighlightLogic.handleBedHighlight(villager);
+                DisplayManager.handleBedHighlight(villager);
             }
             if (VillConfig.getInstance().shouldPlaySoundOnOutput()) {
                 SoundLogic.getInstance().runSoundEffect(player);

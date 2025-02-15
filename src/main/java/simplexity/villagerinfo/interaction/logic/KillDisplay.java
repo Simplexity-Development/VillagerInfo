@@ -5,23 +5,17 @@ import org.bukkit.entity.BlockDisplay;
 import java.util.UUID;
 
 public class KillDisplay {
-    private static KillDisplay instance;
 
-    public KillDisplay() {
+    public static void removeHighlight(UUID villagerUUID){
+        BlockDisplay blockDisplay = DisplayManager.villagerBlockDisplayMap.get(villagerUUID);
+        if (blockDisplay == null) return;
+        blockDisplay.remove();
+        DisplayManager.villagerBlockDisplayMap.remove(villagerUUID);
     }
 
-    public static KillDisplay getInstance() {
-        if (instance == null) {
-            instance = new KillDisplay();
-        }
-        return instance;
-    }
-
-    public void clearAllCurrentHighlights() {
-        for(UUID uuid: HighlightLogic.villagerBlockDisplayMap.keySet()) {
-            BlockDisplay blockDisplay = HighlightLogic.villagerBlockDisplayMap.get(uuid);
-            blockDisplay.remove();
-            HighlightLogic.villagerBlockDisplayMap.remove(uuid);
+    public static void clearAllCurrentHighlights() {
+        for (UUID uuid: DisplayManager.villagerBlockDisplayMap.keySet()) {
+            removeHighlight(uuid);
         }
     }
 

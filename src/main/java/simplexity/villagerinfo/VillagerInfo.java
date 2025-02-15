@@ -98,7 +98,7 @@ public final class VillagerInfo extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        KillDisplay.getInstance().clearAllCurrentHighlights();
+        KillDisplay.clearAllCurrentHighlights();
     }
 
 
