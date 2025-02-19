@@ -86,12 +86,12 @@ public class HighlightEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the villager's workstation block provided to the event
+     * Gets the block that will be highlighted in this event
      *
      * @return Block
      */
 
-    public Block getJobBlock() {
+    public Block getHighlightedBlock() {
         return block;
     }
 
@@ -99,7 +99,7 @@ public class HighlightEvent extends Event implements Cancellable {
      * Sets the block that will be highlighted for this event
      * @param block Block to be highlighted
      */
-    public void setJobBlock(Block block) {
+    public void setHighlightedBlock(Block block) {
         this.block = block;
     }
 

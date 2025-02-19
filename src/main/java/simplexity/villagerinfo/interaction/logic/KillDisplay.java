@@ -2,20 +2,24 @@ package simplexity.villagerinfo.interaction.logic;
 
 import org.bukkit.entity.BlockDisplay;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class KillDisplay {
 
-    public static void removeHighlight(UUID villagerUUID){
-        BlockDisplay blockDisplay = DisplayManager.villagerBlockDisplayMap.get(villagerUUID);
+    public static void removeHighlight(UUID villagerUUID, HashMap<UUID, BlockDisplay> mapToRemoveFrom){
+        BlockDisplay blockDisplay = mapToRemoveFrom.get(villagerUUID);
         if (blockDisplay == null) return;
         blockDisplay.remove();
-        DisplayManager.villagerBlockDisplayMap.remove(villagerUUID);
+        mapToRemoveFrom.remove(villagerUUID);
     }
 
     public static void clearAllCurrentHighlights() {
-        for (UUID uuid: DisplayManager.villagerBlockDisplayMap.keySet()) {
-            removeHighlight(uuid);
+        for (UUID uuid: DisplayManager.workStationVillagerMap.keySet()) {
+            removeHighlight(uuid, DisplayManager.workStationVillagerMap);
+        }
+        for (UUID uuid: DisplayManager.bedVillagerMap.keySet()) {
+            removeHighlight(uuid, DisplayManager.bedVillagerMap);
         }
     }
 

@@ -17,41 +17,58 @@ import simplexity.villagerinfo.events.HighlightEvent;
 import java.util.HashMap;
 import java.util.UUID;
 
+@SuppressWarnings("DuplicatedCode")
 public class DisplayManager {
-    public static HashMap<UUID, BlockDisplay> villagerBlockDisplayMap = new HashMap<>();
+    public static HashMap<UUID, BlockDisplay> workStationVillagerMap = new HashMap<>();
+    public static HashMap<UUID, BlockDisplay> bedVillagerMap = new HashMap<>();
 
     public static void handleWorkstationHighlight(Villager villager) {
-        Block block = getJobBlock(villager);
-        if (block == null) return;
-        handleHighlight(villager.getUniqueId(), block);
+        Block jobBlock = getJobBlock(villager);
+        if (jobBlock == null) return;
+        Color highlightColor = getColor(jobBlock);
+        UUID villagerUuid = villager.getUniqueId();
+        HighlightEvent highlightEvent = callHighlightEvent(villagerUuid, jobBlock, highlightColor);
+        if (highlightEvent == null) return;
+        villagerUuid = highlightEvent.getVillagerUUID();
+        highlightColor = highlightEvent.getHighlightColor();
+        jobBlock = highlightEvent.getHighlightedBlock();
+        BlockDisplay blockDisplay = DisplayFactory.summonBlockDisplayEntity(
+                highlightColor,
+                jobBlock);
+        workStationVillagerMap.put(villagerUuid, blockDisplay);
+        scheduleRemoval(villagerUuid, workStationVillagerMap);
     }
 
     public static void handleBedHighlight(Villager villager) {
-        Block block = getHomeBlock(villager);
-        if (block == null) return;
-        if (!(block.getBlockData() instanceof Bed bedBlockData)) return;
+        Block homeBlock = getHomeBlock(villager);
+        if (homeBlock == null) return;
+        if (!(homeBlock.getBlockData() instanceof Bed bedBlockData)) return;
         Bed.Part bedPart = bedBlockData.getPart();
         if (bedPart == Bed.Part.FOOT) {
-            Location headLocation = getHeadLocation(block.getLocation(), bedBlockData.getFacing());
+            Location headLocation = getHeadLocation(homeBlock.getLocation(), bedBlockData.getFacing());
             if (headLocation == null) return;
-            block = headLocation.getBlock();
+            homeBlock = headLocation.getBlock();
         }
-        handleHighlight(villager.getUniqueId(), block);
+        Color highlightColor = getColor(homeBlock);
+        UUID villagerUuid = villager.getUniqueId();
+        HighlightEvent highlightEvent = callHighlightEvent(villagerUuid, homeBlock, highlightColor);
+        if (highlightEvent == null) return;
+        villagerUuid = highlightEvent.getVillagerUUID();
+        highlightColor = highlightEvent.getHighlightColor();
+        homeBlock = highlightEvent.getHighlightedBlock();
+        BlockDisplay blockDisplay = DisplayFactory.summonBedDisplayEntity(
+                highlightColor,
+                homeBlock);
+        bedVillagerMap.put(villagerUuid, blockDisplay);
+        scheduleRemoval(villagerUuid, bedVillagerMap);
     }
 
-    private static void handleHighlight(UUID villagerUUID, Block block) {
-        Color highlightColor = getColor(block);
-        if (highlightColor == null) return;
-        if (highlightEventCancelled(villagerUUID, block, highlightColor)) return;
-        BlockDisplay blockDisplay = DisplayFactory.summonBlockDisplayEntity(highlightColor, block);
-        villagerBlockDisplayMap.put(villagerUUID, blockDisplay);
-        scheduleRemoval(villagerUUID);
-    }
 
-    private static boolean highlightEventCancelled(UUID villagerUUID, Block block, Color color) {
+    private static HighlightEvent callHighlightEvent(UUID villagerUUID, Block block, Color color) {
         HighlightEvent highlightEvent = new HighlightEvent(villagerUUID, block, color);
         Bukkit.getServer().getPluginManager().callEvent(highlightEvent);
-        return highlightEvent.isCancelled();
+        if (highlightEvent.isCancelled()) return null;
+        return highlightEvent;
     }
 
     private static Block getJobBlock(Villager villager) {
@@ -87,9 +104,9 @@ public class DisplayManager {
         };
     }
 
-    private static void scheduleRemoval(UUID villagerUUID) {
+    private static void scheduleRemoval(UUID villagerUUID, HashMap<UUID, BlockDisplay> mapToRemoveFrom) {
         Bukkit.getScheduler().runTaskLater(VillagerInfo.getInstance(), () -> {
-            KillDisplay.removeHighlight(villagerUUID);
+            KillDisplay.removeHighlight(villagerUUID, mapToRemoveFrom);
         }, VillConfig.getInstance().getConfiguredHighlightTime() * 20L);
     }
 

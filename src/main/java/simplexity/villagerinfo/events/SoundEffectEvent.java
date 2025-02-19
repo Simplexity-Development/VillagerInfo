@@ -21,7 +21,7 @@ public class SoundEffectEvent extends Event implements Cancellable {
     private boolean playerSoundToggleEnabled;
     private final Player player;
 
-    public SoundEffectEvent(Player player) {
+    public SoundEffectEvent(Player player, Sound sound) {
         this.player = player;
     }
 
@@ -46,7 +46,7 @@ public class SoundEffectEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the handler list for this evene
+     * Gets the handler list for this event
      *
      * @return HandlerList
      */
@@ -56,11 +56,11 @@ public class SoundEffectEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the handler list for this evene
+     * Gets the handler list for this event
      *
      * @return HandlerList
      */
-    @SuppressWarnings("unused") //Required by bukkit
+    //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -124,22 +124,13 @@ public class SoundEffectEvent extends Event implements Cancellable {
         player.playSound(getPlayerLocation(), getSound(), getSoundVolume(), getSoundPitch());
     }
 
-    /**
-     * Overrides the playerOutputToggleEnabled value, sets it to a new value regardless of the player's settings
-     *
-     * @param playerSoundToggleEnabled boolean
-     */
-    @SuppressWarnings("unused") //For API usage
-    public void setOverridePlayerSoundToggleEnabled(boolean playerSoundToggleEnabled) {
-        this.playerSoundToggleEnabled = playerSoundToggleEnabled;
-    }
 
     /**
      * Gets if the player's sound toggle is enabled
      *
      * @return boolean
      */
-    @SuppressWarnings("unused") //For API usage
+    //For API usage
     public boolean isPlayerSoundToggleEnabled() {
         return playerSoundToggleEnabled;
     }

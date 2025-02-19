@@ -23,9 +23,6 @@ public class DisplayFactory {
      * @param highlightBlock Block to highlight
      */
     public static BlockDisplay summonBlockDisplayEntity(Color highlightColor, Block highlightBlock) {
-        if (highlightBlock.getBlockData() instanceof Bed) {
-            return summonBedDisplayEntity(highlightColor, highlightBlock);
-        }
         BlockDisplay blockDisplay = (BlockDisplay) highlightBlock.getLocation().getWorld().spawnEntity(highlightBlock.getLocation(), EntityType.BLOCK_DISPLAY);
         modifyDisplayEntity(blockDisplay, highlightColor, highlightBlock);
         return blockDisplay;
@@ -39,7 +36,7 @@ public class DisplayFactory {
      * @return Block Display that is produced
      */
 
-    private static BlockDisplay summonBedDisplayEntity(Color highlightColor, Block bedBlock) {
+    public static BlockDisplay summonBedDisplayEntity(Color highlightColor, Block bedBlock) {
         if (!(bedBlock.getBlockData() instanceof Bed bedData)) {
             return null;
         }
