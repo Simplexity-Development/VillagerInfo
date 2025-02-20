@@ -104,4 +104,21 @@ public class Resolvers {
         }
         return TagResolver.resolver(Placeholder.component("time", finalTimeComponent));
     }
+
+    public TagResolver booleanStateResolver(boolean state){
+        if (state) {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.TRUE_MESSAGE_FORMAT.getMessage()));
+        } else {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.FALSE_MESSAGE_FORMAT.getMessage()));
+        }
+    }
+
+    public TagResolver enabledStateResolver(boolean state){
+        if (state) {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.ENABLED_MESSAGE_FORMAT.getMessage()));
+        } else {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.DISABLED_MESSAGE_FORMAT.getMessage()));
+        }
+    }
+
 }

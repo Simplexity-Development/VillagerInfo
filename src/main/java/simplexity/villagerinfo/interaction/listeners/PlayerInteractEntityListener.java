@@ -27,17 +27,15 @@ public class PlayerInteractEntityListener implements Listener {
         Player player = interactEntityEvent.getPlayer();
         if (!passPlayerChecks(player)) return;
         interactEntityEvent.setCancelled(true);
-        if (entity instanceof Villager villager) OutputManager.VillagerOutput(player, player, villager);
-        if (entity instanceof ZombieVillager zombieVillager) OutputManager.zombieVillagerOutput(player, zombieVillager);
+        if (entity instanceof Villager villager) OutputManager.handleVillagerOutput(player, player, villager);
+        if (entity instanceof ZombieVillager zombieVillager) OutputManager.handleZombieVillagerOutput(player, zombieVillager);
     }
 
     private boolean passPlayerChecks(Player player) {
         Material material = player.getEquipment().getItemInMainHand().getType();
         if (!player.isSneaking()) return false;
         if (!VillConfig.getInstance().isValidItem(material)) return false;
-        if (!player.hasPermission(Perm.VILL_INFO_OUTPUT.getPerm())) return false;
-        //todo get player's currently toggled settings
-        return true;
+        return player.hasPermission(Perm.VILL_INFO_OUTPUT.getPerm());
     }
 
     private boolean passEntityChecks(Entity entity) {

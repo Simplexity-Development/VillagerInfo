@@ -1,5 +1,6 @@
 package simplexity.villagerinfo.events;
 
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -18,8 +19,9 @@ public class SoundEffectEvent extends Event implements Cancellable {
     private Player player;
     private float volume;
     private float pitch;
+    private Location location;
 
-    public SoundEffectEvent(Player player, Sound sound, float volume, float pitch) {
+    public SoundEffectEvent(Player player, Sound sound, float volume, float pitch, Location location) {
         this.sound = sound;
         this.player = player;
         this.volume = volume;
@@ -99,6 +101,25 @@ public class SoundEffectEvent extends Event implements Cancellable {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    /**
+     * Get the location this sound will be played at.
+     *
+     * @return Location the sound will be played at
+     */
+    public Location getLocation() {
+        return location;
+    }
+
+
+    /**
+     * Set the location for this sound to be played at
+     *
+     * @param location Location the sound will be played at
+     */
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     /**
