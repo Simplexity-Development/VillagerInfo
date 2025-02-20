@@ -88,10 +88,6 @@ public final class VillagerInfo extends JavaPlugin {
         return miniMessage;
     }
 
-    public HashMap<Villager, BlockDisplay> getCurrentlyHighlighted() {
-        return currentlyHighlighted;
-    }
-
     public boolean isUsingPurpur() {
         return usingPurpur;
     }

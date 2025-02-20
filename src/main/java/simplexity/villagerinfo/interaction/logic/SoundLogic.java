@@ -1,8 +1,5 @@
 package simplexity.villagerinfo.interaction.logic;
 
-import org.bukkit.Bukkit;
-import simplexity.villagerinfo.events.SoundEffectEvent;
-
 public class SoundLogic {
     private static SoundLogic instance;
 
@@ -14,16 +11,16 @@ public class SoundLogic {
         return instance;
     }
 
-    public void runSoundEffect(org.bukkit.entity.Player player) {
-        SoundEffectEvent soundEvent = callSoundEvent(player);
-        if (soundEvent == null) return;
-        soundEvent.playSoundEffect();
-    }
+   // public void runSoundEffect(org.bukkit.entity.Player player) {
+   //     SoundEffectEvent soundEvent = callSoundEvent(player);
+    //    if (soundEvent == null) return;
+        //soundEvent.playSoundEffect();
+    //}
 
-    public SoundEffectEvent callSoundEvent(org.bukkit.entity.Player player) {
-        SoundEffectEvent soundEffectEvent = new SoundEffectEvent(player);
-        Bukkit.getServer().getPluginManager().callEvent(soundEffectEvent);
-        if (soundEffectEvent.isCancelled()) return null;
-        return soundEffectEvent;
-    }
+    //public SoundEffectEvent callSoundEvent(org.bukkit.entity.Player player) {
+        //SoundEffectEvent soundEffectEvent = new SoundEffectEvent(player);
+        //Bukkit.getServer().getPluginManager().callEvent(soundEffectEvent);
+        //if (soundEffectEvent.isCancelled()) return null;
+        //return soundEffectEvent;
+    //}
 }

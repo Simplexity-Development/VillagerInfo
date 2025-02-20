@@ -1,15 +1,11 @@
 package simplexity.villagerinfo.events;
 
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import simplexity.villagerinfo.configurations.functionality.VillConfig;
-import simplexity.villagerinfo.util.PDCTag;
 
 /**
  * Called when a sound effect is going to be sent to the player
@@ -18,10 +14,90 @@ import simplexity.villagerinfo.util.PDCTag;
 public class SoundEffectEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private boolean playerSoundToggleEnabled;
-    private final Player player;
+    private Sound sound;
+    private Player player;
+    private float volume;
+    private float pitch;
 
-    public SoundEffectEvent(Player player, Sound sound) {
+    public SoundEffectEvent(Player player, Sound sound, float volume, float pitch) {
+        this.sound = sound;
+        this.player = player;
+        this.volume = volume;
+        this.pitch = pitch;
+    }
+
+    /**
+     * Gets the sound that is tied to this event
+     *
+     * @return Sound
+     */
+    public Sound getSound() {
+        return sound;
+    }
+
+    /**
+     * Gets the volume of the sound for this event
+     *
+     * @return float
+     */
+    public float getVolume() {
+        return volume;
+    }
+
+    /**
+     * Gets the pitch of the sound for this event
+     *
+     * @return float
+     */
+    public float getPitch() {
+        return pitch;
+    }
+
+    /**
+     * Gets the player the sound will be played to
+     *
+     * @return Player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Sets the sound to be used in this event
+     *
+     * @param sound Sound to be used in this event
+     */
+
+    public void setSound(Sound sound) {
+        this.sound = sound;
+    }
+
+    /**
+     * Sets the volume of the sound in this event
+     *
+     * @param volume float between 0.0 and 2.0
+     */
+    public void setVolume(float volume) {
+        this.volume = volume;
+    }
+
+    /**
+     * Sets the pitch of the sound in this event
+     *
+     * @param pitch float between 0.0 and 2.0
+     */
+
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
+
+    /**
+     * Sets the player that this sound will be played to
+     *
+     * @param player Player to play sound to
+     */
+
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -60,87 +136,7 @@ public class SoundEffectEvent extends Event implements Cancellable {
      *
      * @return HandlerList
      */
-    //Required by bukkit
     public static HandlerList getHandlerList() {
         return handlers;
-    }
-
-
-    /**
-     * Checks player's PersistentDataContainer to see their current sound toggle state
-     */
-
-    public void checkPlayerPDC() {
-        byte soundToggleState = player.getPersistentDataContainer().getOrDefault(PDCTag.PLAYER_TOGGLE_SOUND_ENABLED.getPdcTag(), PersistentDataType.BYTE, (byte) 0);
-        playerSoundToggleEnabled = soundToggleState != (byte) 1;
-    }
-
-    /**
-     * Gets the sound that has been configured
-     *
-     * @return org.bukkit.Sound
-     */
-    public Sound getSound() {
-        return VillConfig.getInstance().getConfiguredSound();
-    }
-
-    /**
-     * Gets the volume that has been configured
-     *
-     * @return float
-     */
-    public float getSoundVolume() {
-        return VillConfig.getInstance().getConfiguredSoundVolume();
-    }
-
-    /**
-     * Gets the pitch that has been configured
-     *
-     * @return float
-     */
-    public float getSoundPitch() {
-        return VillConfig.getInstance().getConfiguredSoundPitch();
-    }
-
-    /**
-     * Gets the location of the Player this sound will be sent to
-     *
-     * @return Location
-     */
-    public Location getPlayerLocation() {
-        return player.getLocation();
-    }
-
-    /**
-     * Plays the sound effect for the player
-     * <br>Uses getPlayerLocation(), getSound(), getSoundVolume(), and getSoundPitch()
-     */
-    public void playSoundEffect() {
-        checkPlayerPDC();
-        if (!playerSoundToggleEnabled) {
-            cancelled = true;
-            return;
-        }
-        player.playSound(getPlayerLocation(), getSound(), getSoundVolume(), getSoundPitch());
-    }
-
-
-    /**
-     * Gets if the player's sound toggle is enabled
-     *
-     * @return boolean
-     */
-    //For API usage
-    public boolean isPlayerSoundToggleEnabled() {
-        return playerSoundToggleEnabled;
-    }
-
-    /**
-     * Gets the player the sound will be played to
-     *
-     * @return Player
-     */
-    public Player getPlayer() {
-        return player;
     }
 }

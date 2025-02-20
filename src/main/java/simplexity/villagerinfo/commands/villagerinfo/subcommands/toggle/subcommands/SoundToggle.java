@@ -1,14 +1,9 @@
 package simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import simplexity.villagerinfo.commands.util.SubCommand;
-import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
-import simplexity.villagerinfo.events.PlayerToggleEvent;
-import simplexity.villagerinfo.util.PDCTag;
 import simplexity.villagerinfo.util.Perm;
-import simplexity.villagerinfo.util.Resolvers;
 
 import java.util.List;
 
@@ -18,7 +13,8 @@ public class SoundToggle extends SubCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {}
+    /*
         if (!(sender instanceof org.bukkit.entity.Player player)) {
             sender.sendMessage(Resolvers.getInstance().prefixResolver(ServerMessage.NOT_A_PLAYER.getMessage()));
             return;
@@ -40,7 +36,7 @@ public class SoundToggle extends SubCommand {
         Bukkit.getServer().getPluginManager().callEvent(toggleSoundEvent);
         if (toggleSoundEvent.isCancelled()) return null;
         return toggleSoundEvent;
-    }
+    }*/
 
     @Override
     public List<String> subCommandTabCompletions(CommandSender sender) {

@@ -3,9 +3,9 @@ package simplexity.villagerinfo.interaction.logic;
 import com.destroystokyo.paper.entity.villager.Reputation;
 import com.destroystokyo.paper.entity.villager.ReputationType;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.inventory.Inventory;
@@ -30,7 +30,7 @@ public class VillagerData {
     private Reputation playerReputation;
 
 
-    public VillagerData(Villager villager, Player player) {
+    public VillagerData(Villager villager, OfflinePlayer player) {
         AttributeInstance maxHealth = villager.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         Boolean golemDetected = villager.getMemory(MemoryKey.GOLEM_DETECTED_RECENTLY);
         Long lastWorked = villager.getMemory(MemoryKey.LAST_WORKED_AT_POI);

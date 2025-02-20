@@ -12,31 +12,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when preparing output on a villager. Requires a Bukkit Villager object and Bukkit Player object
  */
-@SuppressWarnings("unused")
+
 public class VillagerOutputEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-
-    /**
-     * Gets the handler list for this evene
-     *
-     * @return HandlerList
-     */
-    @Override
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    /**
-     * Gets the handler list for this evene
-     *
-     * @return HandlerList
-     */
-    //required by bukkit
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     private Villager villager;
     private Player outputPlayer;
     private OfflinePlayer playerToProcess;
@@ -145,6 +124,26 @@ public class VillagerOutputEvent extends Event implements Cancellable {
 
     public Component getOutputComponent() {
         return outputComponent;
+    }
+
+    /**
+     * Gets the handler list for this event
+     *
+     * @return HandlerList
+     */
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
+
+    /**
+     * Gets the handler list for this event
+     *
+     * @return HandlerList
+     */
+    //required by bukkit
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
 }

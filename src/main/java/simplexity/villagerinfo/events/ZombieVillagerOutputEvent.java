@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when information is to be displayed on a zombie villager
  */
-@SuppressWarnings("unused")
+
 public class ZombieVillagerOutputEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;

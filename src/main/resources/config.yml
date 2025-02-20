@@ -68,6 +68,7 @@ defaults:
   color: [255, 255, 255]
   block-light: 15
   sky-light: 15
+
 # Item Blacklist / Whitelist
 # Defaults to no items blacklisted.
 whitelist: false

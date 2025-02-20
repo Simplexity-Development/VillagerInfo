@@ -1,14 +1,9 @@
 package simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import simplexity.villagerinfo.commands.util.SubCommand;
-import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
-import simplexity.villagerinfo.events.PlayerToggleEvent;
-import simplexity.villagerinfo.util.PDCTag;
 import simplexity.villagerinfo.util.Perm;
-import simplexity.villagerinfo.util.Resolvers;
 
 import java.util.List;
 
@@ -20,7 +15,7 @@ public class HighlightToggle extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (!(sender instanceof org.bukkit.entity.Player player)) {
+        /*if (!(sender instanceof org.bukkit.entity.Player player)) {
             sender.sendMessage(Resolvers.getInstance().prefixResolver(ServerMessage.NOT_A_PLAYER.getMessage()));
             return;
         }
@@ -41,6 +36,9 @@ public class HighlightToggle extends SubCommand {
         Bukkit.getServer().getPluginManager().callEvent(toggleHighlightEvent);
         if (toggleHighlightEvent.isCancelled()) return null;
         return toggleHighlightEvent;
+    }
+
+         */
     }
 
     @Override

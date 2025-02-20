@@ -25,47 +25,6 @@ public class HighlightEvent extends Event implements Cancellable {
         this.color = color;
     }
 
-
-    /**
-     * Gets whether this event has been cancelled
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    /**
-     * Sets whether this event should be cancelled
-     *
-     * @param cancel true if you wish to cancel this event
-     */
-    @Override
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
-
-    /**
-     * Gets the handler list for this evene
-     *
-     * @return HandlerList
-     */
-    @Override
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    /**
-     * Gets the handler list for this event
-     *
-     * @return HandlerList
-     */
-    @SuppressWarnings("unused") //Required by bukkit
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     /**
      * Gets the UUID of the villager from this event
      *
@@ -79,8 +38,10 @@ public class HighlightEvent extends Event implements Cancellable {
     /**
      * Sets the UUID of the villager that will be used in this event - ties this villager to the highlighted block,
      * disallowing the event from being run again on this villager until the highlight expires
+     *
      * @param villagerUUID UUID of the villager that this event should be tied to
      */
+
     public void setVillagerUUID(UUID villagerUUID) {
         this.villagerUUID = villagerUUID;
     }
@@ -119,6 +80,45 @@ public class HighlightEvent extends Event implements Cancellable {
      */
     public void setHighlightColor(Color color) {
         this.color = color;
+    }
+
+    /**
+     * Gets whether this event has been cancelled
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    /**
+     * Sets whether this event should be cancelled
+     *
+     * @param cancel true if you wish to cancel this event
+     */
+    @Override
+    public void setCancelled(boolean cancel) {
+        cancelled = cancel;
+    }
+
+    /**
+     * Gets the handler list for this event
+     *
+     * @return HandlerList
+     */
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
+
+    /**
+     * Gets the handler list for this event
+     *
+     * @return HandlerList
+     */
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
 }
