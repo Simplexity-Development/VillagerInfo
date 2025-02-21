@@ -41,7 +41,7 @@ public class Resolvers {
         return TagResolver.resolver(Placeholder.component("location", locationComponent));
     }
 
-    public TagResolver playerReputationResolver(int repNum) {
+    public TagResolver playerReputationBarResolver(int repNum) {
         Component reputationComponent = Component.empty();
         int minVal = -14;
         int maxVal = 15;
@@ -71,7 +71,7 @@ public class Resolvers {
     }
 
 
-    public TagResolver timeFormatter(Long timeDifferenceInSeconds) {
+    public TagResolver timeFormatterPast(Long timeDifferenceInSeconds) {
         Component finalTimeComponent;
         if (timeDifferenceInSeconds == null) {
             finalTimeComponent = miniMessage.deserialize(MessageInsert.NEVER_MESSAGE_FORMAT.getMessage());
@@ -104,4 +104,53 @@ public class Resolvers {
         }
         return TagResolver.resolver(Placeholder.component("time", finalTimeComponent));
     }
+
+    public TagResolver timeFormatter(Long timeDifferenceInSeconds) {
+        Component finalTimeComponent;
+        if (timeDifferenceInSeconds == null) {
+            finalTimeComponent = miniMessage.deserialize(MessageInsert.NEVER_MESSAGE_FORMAT.getMessage());
+        } else {
+            long s = timeDifferenceInSeconds % 60;
+            long m = (timeDifferenceInSeconds / 60) % 60;
+            long h = (timeDifferenceInSeconds / (60 * 60)) % 24;
+            finalTimeComponent = Component.empty();
+            boolean componentEmpty = true;
+            if (h > 0) {
+                componentEmpty = false;
+                String hours = String.valueOf(h);
+                finalTimeComponent = finalTimeComponent.append(miniMessage.deserialize(MessageInsert.HOUR_MESSAGE_FORMAT.getMessage(), Placeholder.parsed("value", hours)));
+            }
+            if (m > 0) {
+                componentEmpty = false;
+                String minutes = String.valueOf(m);
+                finalTimeComponent = finalTimeComponent.append(miniMessage.deserialize(MessageInsert.MINUTE_MESSAGE_FORMAT.getMessage(), Placeholder.parsed("value", minutes)));
+            }
+            if (s > 0) {
+                componentEmpty = false;
+                String seconds = String.valueOf(s);
+                finalTimeComponent = finalTimeComponent.append(miniMessage.deserialize(MessageInsert.SECOND_MESSAGE_FORMAT.getMessage(), Placeholder.parsed("value", seconds)));
+            }
+            if (componentEmpty) {
+                finalTimeComponent = finalTimeComponent.append(miniMessage.deserialize(MessageInsert.JUST_NOW_FORMAT.getMessage()));
+            }
+        }
+        return TagResolver.resolver(Placeholder.component("time", finalTimeComponent));
+    }
+
+    public TagResolver booleanStateResolver(boolean state){
+        if (state) {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.TRUE_MESSAGE_FORMAT.getMessage()));
+        } else {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.FALSE_MESSAGE_FORMAT.getMessage()));
+        }
+    }
+
+    public TagResolver enabledStateResolver(boolean state){
+        if (state) {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.ENABLED_MESSAGE_FORMAT.getMessage()));
+        } else {
+            return TagResolver.resolver(Placeholder.parsed("state", MessageInsert.DISABLED_MESSAGE_FORMAT.getMessage()));
+        }
+    }
+
 }

@@ -23,6 +23,7 @@ sound-volume: 0.5
 sound-pitch: 1.5
 #Length of time to highlight the villager's workstation (if enabled)
 highlight-workstation-on-output: true
+highlight-bed-on-output: true
 highlight-time: 10
 #NOTE: These colors will only apply on versions after 1.19.4 (When block displays were introduced to the game) - if you are using a version before this, all glow colors will be white
 #RR,GG,BB format
@@ -40,6 +41,33 @@ workstation-highlight-color:
   "BARREL": [153, 76, 0]
   "LOOM": [255, 255, 255]
   "STONECUTTER": [32, 32, 32]
+bed-highlight-color:
+  "RED_BED": [255, 0, 0]
+  "ORANGE_BED": [255, 125, 0]
+  "YELLOW_BED": [255, 210, 0]
+  "LIME_BED": [170, 255, 0]
+  "GREEN_BED": [0, 255, 0]
+  "CYAN_BED": [0, 212, 163]
+  "LIGHT_BLUE_BED": [0, 255, 250]
+  "BLUE_BED": [0, 133, 255]
+  "PURPLE_BED": [115, 0, 255]
+  "MAGENTA_BED": [180, 0, 255]
+  "PINK_BED": [255, 117, 240]
+  "WHITE_BED": [255, 255, 255]
+  "LIGHT_GRAY_BED": [200, 200, 200]
+  "GRAY_BED": [100, 100, 100]
+  "BLACK_BED": [30, 30, 30]
+  "BROWN_BED": [82, 52, 28]
+
+# Allows the block display to not z-fight so much
+defaults:
+  scale-offset:
+    x-offset: 0.05
+    y-offset: 0.05
+    z-offset: 0.05
+  color: [255, 255, 255]
+  block-light: 15
+  sky-light: 15
 
 # Item Blacklist / Whitelist
 # Defaults to no items blacklisted.

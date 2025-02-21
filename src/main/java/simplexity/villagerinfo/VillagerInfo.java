@@ -17,7 +17,7 @@ import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcomma
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.configurations.locale.LocaleConfig;
 import simplexity.villagerinfo.interaction.listeners.PlayerInteractEntityListener;
-import simplexity.villagerinfo.interaction.logic.HighlightLogic;
+import simplexity.villagerinfo.interaction.logic.KillDisplay;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -54,9 +54,11 @@ public final class VillagerInfo extends JavaPlugin {
     }
 
     public void reloadVillInfoConfigs() {
-        getInstance().saveDefaultConfig();
+        saveDefaultConfig();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
         LocaleConfig.getInstance().reloadLocale();
-        VillConfig.getInstance().reloadVillConfig(this.getConfig());
+        VillConfig.getInstance().reloadVillConfig(getConfig());
     }
 
     public void registerCommands() {
@@ -88,17 +90,13 @@ public final class VillagerInfo extends JavaPlugin {
         return miniMessage;
     }
 
-    public HashMap<Villager, BlockDisplay> getCurrentlyHighlighted() {
-        return currentlyHighlighted;
-    }
-
     public boolean isUsingPurpur() {
         return usingPurpur;
     }
 
     @Override
     public void onDisable() {
-        HighlightLogic.getInstance().clearAllCurrentHighlights();
+        KillDisplay.clearAllCurrentHighlights();
     }
 
 

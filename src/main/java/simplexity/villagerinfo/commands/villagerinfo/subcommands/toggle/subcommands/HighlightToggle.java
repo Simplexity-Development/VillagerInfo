@@ -1,12 +1,11 @@
 package simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands;
 
-import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import simplexity.villagerinfo.commands.util.SubCommand;
 import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
-import simplexity.villagerinfo.events.PlayerToggleEvent;
-import simplexity.villagerinfo.util.PDCTag;
+import simplexity.villagerinfo.interaction.logic.PlayerToggle;
 import simplexity.villagerinfo.util.Perm;
 import simplexity.villagerinfo.util.Resolvers;
 
@@ -16,7 +15,7 @@ public class HighlightToggle extends SubCommand {
     public HighlightToggle() {
         super(Perm.VILL_COMMAND_TOGGLE_HIGHLIGHT.getPerm(), ServerMessage.HELP_TOGGLE_HIGHLIGHT.getMessage());
     }
-
+    public static final NamespacedKey highlightEnabledKey = new NamespacedKey("vill-info", "vill-highlight-enabled");
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -24,24 +23,17 @@ public class HighlightToggle extends SubCommand {
             sender.sendMessage(Resolvers.getInstance().prefixResolver(ServerMessage.NOT_A_PLAYER.getMessage()));
             return;
         }
-        PlayerToggleEvent toggleHighlightEvent = callHighlightToggleEvent(player);
-        if (toggleHighlightEvent == null) return;
-        byte toggleState = toggleHighlightEvent.getCurrentToggleState();
-        if (toggleState == (byte) 0) {
-            toggleHighlightEvent.setDisabled();
-            return;
-        }
-        if (toggleState == (byte) 1) {
-            toggleHighlightEvent.setEnabled();
+        String toggleType = MessageInsert.TOGGLE_TYPE_HIGHLIGHT.getMessage();
+        boolean isToggleEnabled = PlayerToggle.isPdcToggleEnabled(player, highlightEnabledKey);
+        if (isToggleEnabled) {
+            PlayerToggle.setPdcToggleDisabled(player, highlightEnabledKey);
+            PlayerToggle.sendPlayerFeedback(false, player, toggleType);
+        } else {
+            PlayerToggle.setPdcToggleEnabled(player, highlightEnabledKey);
+            PlayerToggle.sendPlayerFeedback(true, player, toggleType);
         }
     }
 
-    public PlayerToggleEvent callHighlightToggleEvent(org.bukkit.entity.Player player) {
-        PlayerToggleEvent toggleHighlightEvent = new PlayerToggleEvent(player, PDCTag.PLAYER_TOGGLE_HIGHLIGHT_ENABLED.getPdcTag(), MessageInsert.TOGGLE_TYPE_HIGHLIGHT.getMessage());
-        Bukkit.getServer().getPluginManager().callEvent(toggleHighlightEvent);
-        if (toggleHighlightEvent.isCancelled()) return null;
-        return toggleHighlightEvent;
-    }
 
     @Override
     public List<String> subCommandTabCompletions(CommandSender sender) {
