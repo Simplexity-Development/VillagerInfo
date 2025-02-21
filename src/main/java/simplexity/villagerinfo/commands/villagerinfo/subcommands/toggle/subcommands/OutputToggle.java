@@ -4,6 +4,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplexity.villagerinfo.commands.util.SubCommand;
+import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.interaction.logic.PlayerToggle;
 import simplexity.villagerinfo.util.Perm;
@@ -25,11 +26,14 @@ public class OutputToggle extends SubCommand {
             sender.sendMessage(Resolvers.getInstance().prefixResolver(ServerMessage.NOT_A_PLAYER.getMessage()));
             return;
         }
+        String toggleType = MessageInsert.TOGGLE_TYPE_OUTPUT.getMessage();
         boolean isToggleEnabled = PlayerToggle.isPdcToggleEnabled(player, outputEnabledKey);
         if (isToggleEnabled) {
             PlayerToggle.setPdcToggleDisabled(player, outputEnabledKey);
+            PlayerToggle.sendPlayerFeedback(false, player, toggleType);
         } else {
             PlayerToggle.setPdcToggleEnabled(player, outputEnabledKey);
+            PlayerToggle.sendPlayerFeedback(true, player, toggleType);
         }
     }
 

@@ -4,6 +4,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplexity.villagerinfo.commands.util.SubCommand;
+import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.interaction.logic.PlayerToggle;
 import simplexity.villagerinfo.util.Perm;
@@ -24,11 +25,14 @@ public class SoundToggle extends SubCommand {
             sender.sendMessage(Resolvers.getInstance().prefixResolver(ServerMessage.NOT_A_PLAYER.getMessage()));
             return;
         }
+        String toggleType = MessageInsert.TOGGLE_TYPE_SOUND.getMessage();
         boolean isToggleEnabled = PlayerToggle.isPdcToggleEnabled(player, soundEnabledKey);
         if (isToggleEnabled) {
             PlayerToggle.setPdcToggleDisabled(player, soundEnabledKey);
+            PlayerToggle.sendPlayerFeedback(false, player, toggleType);
         } else {
             PlayerToggle.setPdcToggleEnabled(player, soundEnabledKey);
+            PlayerToggle.sendPlayerFeedback(true, player, toggleType);
         }
     }
 

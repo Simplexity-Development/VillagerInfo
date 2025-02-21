@@ -25,6 +25,7 @@ public class DisplayManager {
     public static void handleWorkstationHighlight(Villager villager) {
         Block jobBlock = getJobBlock(villager);
         if (jobBlock == null) return;
+        if (workStationVillagerMap.containsKey(villager.getUniqueId())) return;
         Color highlightColor = getColor(jobBlock);
         UUID villagerUuid = villager.getUniqueId();
         HighlightEvent highlightEvent = callHighlightEvent(villagerUuid, jobBlock, highlightColor);
@@ -42,6 +43,7 @@ public class DisplayManager {
     public static void handleBedHighlight(Villager villager) {
         Block homeBlock = getHomeBlock(villager);
         if (homeBlock == null) return;
+        if (bedVillagerMap.containsKey(villager.getUniqueId())) return;
         if (!(homeBlock.getBlockData() instanceof Bed bedBlockData)) return;
         Bed.Part bedPart = bedBlockData.getPart();
         if (bedPart == Bed.Part.FOOT) {

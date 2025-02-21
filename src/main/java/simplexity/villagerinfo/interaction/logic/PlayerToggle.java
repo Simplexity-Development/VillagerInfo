@@ -8,6 +8,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import simplexity.villagerinfo.VillagerInfo;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
+import simplexity.villagerinfo.util.Resolvers;
 
 public class PlayerToggle {
 
@@ -38,10 +39,10 @@ public class PlayerToggle {
      * @param state String
      */
 
-    private static void sendPlayerFeedback(String state, Player player, String toggleType) {
+    public static void sendPlayerFeedback(boolean state, Player player, String toggleType) {
         player.sendMessage(VillagerInfo.getInstance().getMiniMessage().deserialize(ServerMessage.TOGGLE_COMMAND_FEEDBACK.getMessage(),
                 Placeholder.parsed("plugin_prefix", ServerMessage.PLUGIN_PREFIX.getMessage()),
                 Placeholder.parsed("value", toggleType),
-                Placeholder.parsed("state", state)));
+                Resolvers.getInstance().enabledStateResolver(state)));
     }
 }

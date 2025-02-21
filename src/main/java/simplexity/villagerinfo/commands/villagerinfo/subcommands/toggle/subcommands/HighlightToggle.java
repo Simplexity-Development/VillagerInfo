@@ -3,6 +3,7 @@ package simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcomm
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import simplexity.villagerinfo.commands.util.SubCommand;
+import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.interaction.logic.PlayerToggle;
 import simplexity.villagerinfo.util.Perm;
@@ -22,11 +23,14 @@ public class HighlightToggle extends SubCommand {
             sender.sendMessage(Resolvers.getInstance().prefixResolver(ServerMessage.NOT_A_PLAYER.getMessage()));
             return;
         }
+        String toggleType = MessageInsert.TOGGLE_TYPE_HIGHLIGHT.getMessage();
         boolean isToggleEnabled = PlayerToggle.isPdcToggleEnabled(player, highlightEnabledKey);
         if (isToggleEnabled) {
             PlayerToggle.setPdcToggleDisabled(player, highlightEnabledKey);
+            PlayerToggle.sendPlayerFeedback(false, player, toggleType);
         } else {
             PlayerToggle.setPdcToggleEnabled(player, highlightEnabledKey);
+            PlayerToggle.sendPlayerFeedback(true, player, toggleType);
         }
     }
 
