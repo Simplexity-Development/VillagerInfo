@@ -54,9 +54,11 @@ public final class VillagerInfo extends JavaPlugin {
     }
 
     public void reloadVillInfoConfigs() {
-        getInstance().saveDefaultConfig();
+        saveDefaultConfig();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
         LocaleConfig.getInstance().reloadLocale();
-        VillConfig.getInstance().reloadVillConfig(this.getConfig());
+        VillConfig.getInstance().reloadVillConfig(getConfig());
     }
 
     public void registerCommands() {
