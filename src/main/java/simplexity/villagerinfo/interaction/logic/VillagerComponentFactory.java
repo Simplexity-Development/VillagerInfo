@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import simplexity.villagerinfo.VillagerInfo;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.configurations.locale.MessageInsert;
+import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.configurations.locale.VillagerMessage;
 import simplexity.villagerinfo.util.Resolvers;
 
@@ -31,26 +32,27 @@ public class VillagerComponentFactory {
         boolean isAdult = false;
         if (purpurLobotomizedComponent != null) outputComponent = outputComponent.append(purpurLobotomizedComponent);
         if (villagerHealthComponent != null)
-            outputComponent = outputComponent.appendNewline().append(villagerHealthComponent);
+            outputComponent = outputComponent.append(villagerHealthComponent);
         if (babyVillagerAgeComponent != null) {
-            outputComponent = outputComponent.appendNewline().append(babyVillagerAgeComponent);
+            outputComponent = outputComponent.append(babyVillagerAgeComponent);
         } else {
             isAdult = true;
         }
         if (professionComponent != null && isAdult)
-            outputComponent = outputComponent.appendNewline().append(professionComponent);
+            outputComponent = outputComponent.append(professionComponent);
         if (jobSiteComponent != null && isAdult)
-            outputComponent = outputComponent.appendNewline().append(jobSiteComponent);
+            outputComponent = outputComponent.append(jobSiteComponent);
         if (lastWorkedComponent != null && isAdult)
-            outputComponent = outputComponent.appendNewline().append(lastWorkedComponent);
+            outputComponent = outputComponent.append(lastWorkedComponent);
         if (restocksTodayComponent != null && isAdult)
-            outputComponent = outputComponent.appendNewline().append(restocksTodayComponent);
+            outputComponent = outputComponent.append(restocksTodayComponent);
         if (bedLocationComponent != null)
-            outputComponent = outputComponent.appendNewline().append(bedLocationComponent);
-        if (lastSleptComponent != null) outputComponent = outputComponent.appendNewline().append(lastSleptComponent);
-        if (inventoryComponent != null) outputComponent = outputComponent.appendNewline().append(inventoryComponent);
-        if (reputationComponent != null) outputComponent = outputComponent.appendNewline().append(reputationComponent);
-        return outputComponent;
+            outputComponent = outputComponent.append(bedLocationComponent);
+        if (lastSleptComponent != null) outputComponent = outputComponent.append(lastSleptComponent);
+        if (inventoryComponent != null) outputComponent = outputComponent.append(inventoryComponent);
+        if (reputationComponent != null) outputComponent = outputComponent.append(reputationComponent);
+        if (outputComponent.equals(Component.empty())) outputComponent = miniMessage.deserialize(VillagerMessage.NO_INFORMATION_TO_DISPLAY.getMessage());
+        return outputWithPrefix(outputComponent);
     }
 
     private static Component purpurLobotomized(VillagerData villagerData) {
@@ -170,8 +172,15 @@ public class VillagerComponentFactory {
         if (villagerData.getPlayerReputation() == null) return null;
         return miniMessage.deserialize(
                 VillagerMessage.PLAYER_REPUTATION_MESSAGE.getMessage(),
-                Resolvers.getInstance().playerReputationResolver(villagerData.getPlayerReputation())
+                Placeholder.parsed("reputation_number", String.valueOf(villagerData.getPlayerReputation())),
+                Resolvers.getInstance().playerReputationBarResolver(villagerData.getPlayerReputation())
         );
+    }
+
+    private static Component outputWithPrefix(Component component) {
+        Component prefixComponent = miniMessage.deserialize(ServerMessage.PLUGIN_PREFIX.getMessage());
+        prefixComponent = prefixComponent.append(component);
+        return prefixComponent;
     }
 
 

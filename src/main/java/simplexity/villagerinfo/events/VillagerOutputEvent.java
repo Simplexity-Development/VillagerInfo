@@ -1,7 +1,6 @@
 package simplexity.villagerinfo.events;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.Cancellable;
@@ -16,16 +15,14 @@ import org.jetbrains.annotations.NotNull;
 public class VillagerOutputEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private Villager villager;
+    private final Villager villager;
     private Player outputPlayer;
-    private OfflinePlayer playerToProcess;
     private boolean cancelled;
     private Component outputComponent;
 
-    public VillagerOutputEvent(Villager villager, Player outputPlayer, OfflinePlayer playerToProcess, Component outputComponent) {
+    public VillagerOutputEvent(Villager villager, Player outputPlayer, Component outputComponent) {
         this.villager = villager;
         this.outputPlayer = outputPlayer;
-        this.playerToProcess = playerToProcess;
         this.outputComponent = outputComponent;
     }
 
@@ -39,14 +36,6 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         return villager;
     }
 
-    /**
-     * Sets the villager to get information from
-     *
-     * @param villager Villager
-     */
-    public void setVillager(Villager villager) {
-        this.villager = villager;
-    }
 
     /**
      * Gets the player who is associated with this event. I.e. The player to output to.
@@ -67,23 +56,6 @@ public class VillagerOutputEvent extends Event implements Cancellable {
         this.outputPlayer = outputPlayer;
     }
 
-    /**
-     * Gets the player that will be processed for things like player reputation.
-     *
-     * @return OfflinePlayer that will be processed
-     */
-    public OfflinePlayer getPlayerToProcess() {
-        return playerToProcess;
-    }
-
-    /**
-     * Sets the player that will be processed for things like player reputation
-     *
-     * @param playerToProcess OfflinePlayer - player to process.
-     */
-    public void setPlayerToProcess(OfflinePlayer playerToProcess) {
-        this.playerToProcess = playerToProcess;
-    }
 
     /**
      * Gets whether this event has been cancelled

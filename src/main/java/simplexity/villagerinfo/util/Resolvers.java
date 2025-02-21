@@ -41,7 +41,7 @@ public class Resolvers {
         return TagResolver.resolver(Placeholder.component("location", locationComponent));
     }
 
-    public TagResolver playerReputationResolver(int repNum) {
+    public TagResolver playerReputationBarResolver(int repNum) {
         Component reputationComponent = Component.empty();
         int minVal = -14;
         int maxVal = 15;

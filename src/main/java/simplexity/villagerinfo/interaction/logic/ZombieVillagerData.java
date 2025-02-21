@@ -19,16 +19,19 @@ public class ZombieVillagerData {
 
     public ZombieVillagerData(ZombieVillager zombieVillager) {
         AttributeInstance maxHealthAttribute = zombieVillager.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        conversionTime = zombieVillager.getConversionTime();
+        isConverting = zombieVillager.isConverting();
+        if (isConverting) {
+            conversionTime = zombieVillager.getConversionTime();
+            convertingPlayer = zombieVillager.getConversionPlayer();
+        }
         currentHealth = zombieVillager.getHealth();
         profession = zombieVillager.getVillagerProfession();
         villagerType = zombieVillager.getVillagerType();
-        isConverting = zombieVillager.isConverting();
-        convertingPlayer = zombieVillager.getConversionPlayer();
         if (maxHealthAttribute != null) maxHealth = maxHealthAttribute.getValue();
     }
 
     public Integer getConversionTimeLeftSeconds() {
+        if (conversionTime == null) return null;
         return conversionTime / 20;
     }
 

@@ -62,9 +62,9 @@ bed-highlight-color:
 # Allows the block display to not z-fight so much
 defaults:
   scale-offset:
-    x-offset: -0.03
-    y-offset: -0.03
-    z-offset: -0.03
+    x-offset: 0.05
+    y-offset: 0.05
+    z-offset: 0.05
   color: [255, 255, 255]
   block-light: 15
   sky-light: 15

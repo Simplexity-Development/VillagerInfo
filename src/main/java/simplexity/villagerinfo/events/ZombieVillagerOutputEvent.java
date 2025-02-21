@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class ZombieVillagerOutputEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private ZombieVillager zombieVillager;
+    private final ZombieVillager zombieVillager;
     private Player outputPlayer;
     private Component outputComponent;
 
@@ -76,15 +76,6 @@ public class ZombieVillagerOutputEvent extends Event implements Cancellable {
     public void setOutputComponent(Component outputComponent) {
         this.outputComponent = outputComponent;
     }
-
-    /**
-     * Set the zombie villager to pull information from
-     * @param zombieVillager ZombieVillager
-     */
-    public void setZombieVillager(ZombieVillager zombieVillager) {
-        this.zombieVillager = zombieVillager;
-    }
-
 
 
     /**
