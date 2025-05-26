@@ -12,11 +12,13 @@ import simplexity.villagerinfo.commands.villagerinfo.VillagerInfoCommand;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.HelpCommand;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.ToggleCommand;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.HighlightToggle;
+import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.InteractTypeToggle;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.OutputToggle;
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.SoundToggle;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.configurations.locale.LocaleConfig;
 import simplexity.villagerinfo.interaction.listeners.PlayerInteractEntityListener;
+import simplexity.villagerinfo.interaction.listeners.PrePlayerAttackEntityListener;
 import simplexity.villagerinfo.interaction.logic.KillDisplay;
 
 import java.util.HashMap;
@@ -44,6 +46,7 @@ public final class VillagerInfo extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
         }
         this.getServer().getPluginManager().registerEvents(new PlayerInteractEntityListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PrePlayerAttackEntityListener(), this);
         try {
             Method.getMethod(Villager.class.getMethod("isLobotomized"));
         } catch (NoSuchMethodException e) {
@@ -73,13 +76,13 @@ public final class VillagerInfo extends JavaPlugin {
         commandMap.put("output", new OutputToggle());
         commandMap.put("highlight", new HighlightToggle());
         commandMap.put("sound", new SoundToggle());
+        commandMap.put("interact-type", new InteractTypeToggle());
     }
 
     public void populateVillagerInfoSubCommands() {
         HashMap<String, SubCommand> commandMap = SubCommandMaps.getInstance().getVillagerInfoSubCommands();
         commandMap.put("help", new HelpCommand());
         commandMap.put("toggle", new ToggleCommand());
-
     }
 
     public Logger getVillagerInfoLogger() {

@@ -5,6 +5,7 @@ package simplexity.villagerinfo.configurations.locale;
  */
 public enum ServerMessage {
     TOGGLE_COMMAND_FEEDBACK("<plugin_prefix> <gray><value> Toggled <u><state>"),
+    TOGGLE_INTERACT_FEEDBACK("<plugin_prefix> <gray>Interact type has been set to: <state>"),
     LOGGER_INVALID_LOCALE_KEY("Invalid locale key found: "),
     LOGGER_INVALID_TOGGLE_KEY("Invalid toggle key found: "),
     NOT_ENOUGH_ARGUMENTS("<red>Not enough arguments were provided."),
@@ -16,6 +17,7 @@ public enum ServerMessage {
     HELP_TOGGLE_HIGHLIGHT("\n<#4dd5ff><click:suggest_command:'/vi toggle highlight'><hover:show_text:'<#4dd5ff>/vi toggle highlight'><u> • /vi toggle highlight</u>\n<grey>Sets your preference on whether or not you would like the plugin to highlight a villager's workstation when you crouch-interact with them"),
     HELP_TOGGLE_SOUND("\n<#4dd5ff><click:suggest_command:'/vi toggle sound'><hover:show_text:'<#4dd5ff>/vi toggle sound'><u> • /vi toggle sound</u></hover></click>\n<grey>Sets your preference on whether or not you would like a sound to play when you crouch-interact with a villager"),
     HELP_TOGGLE_OUTPUT("\n<#4dd5ff><click:suggest_command:'/vi toggle output'><hover:show_text:'<#4dd5ff>/vi toggle output'><u> • /vi toggle output</u></hover></click>\n<grey>Sets your preference on whether or not you would like text output to display when you crouch-interact with a villager"),
+    HELP_TOGGLE_INTERACT_TYPE("\n<#4dd5ff><click:suggest_command:'/vi toggle interact-type '><hover:show_text:'<#4dd5ff>/vi toggle output'><u> • /vi toggle interact-type [punch | interact | both]</u></hover></click>\n<grey>Sets your preference on what interaction will trigger the villager info output"),
     NOT_A_PLAYER("<red>Sorry, you must be a player to use this command"),
     CONFIGURATION_ERROR_PREFIX("Configuration Error: "),
     CONFIGURED_SOUND_ERROR(" is not a valid sound! Setting sound to 'BLOCK_AMETHYST_BLOCK_BREAK' until a valid sound is provided"),
@@ -27,6 +29,7 @@ public enum ServerMessage {
     NO_COLOR_SECTION_FOUND("No highlight colors section was found in your config."),
     ERROR_NOT_A_MATERIAL(" is not a material. Please be sure to check your syntax."),
     ERROR_CHECK_FOR_TABS("Please check that you did not use TAB instead of SPACE"),
+    ERROR_INVALID_ARGUMENT("<red><value> is an invalid argument"),
     ERROR_COLOR_DECLARED_INCORRECTLY("There was not 3 elements in your configuration for your highlight color. Please check that you have declared this in the RR, GG, BB format. Error caused by: "),
     ERROR_NO_FUNCTIONALITY_ENABLED(" Your config settings have 'output-enabled', 'play-sound-on-output', and 'highlight-workstation-on-output' all set to false - this disables all functionality within this plugin."),
     PLUGIN_PREFIX("<#3256a8><bold>[</bold><#4dd5ff>Villager Info<#3256a8><bold>]<reset>");

@@ -46,18 +46,26 @@ public class ToggleCommand extends SubCommand {
     }
 
     @Override
-    public List<String> subCommandTabCompletions(CommandSender sender) {
+    public List<String> subCommandTabCompletions(CommandSender sender, String[] args) {
         tabCompleteList.clear();
         HashMap<String, SubCommand> toggleSubCommands = SubCommandMaps.getInstance().getToggleSubCommands();
         if (!sender.hasPermission(Perm.VILL_COMMAND_TOGGLE.getPerm())) {
             return tabCompleteList;
         }
-        toggleSubCommands.forEach((string, subcommand) -> {
-            String permission = subcommand.getPermission();
-            if (sender.hasPermission(permission)) {
-                tabCompleteList.add(string);
-            }
-        });
-        return tabCompleteList;
+        if (args.length <= 2) {
+            toggleSubCommands.forEach((string, subcommand) -> {
+                String permission = subcommand.getPermission();
+                if (sender.hasPermission(permission)) {
+                    tabCompleteList.add(string);
+                }
+            });
+            return tabCompleteList;
+        }
+        String currentSubCommandString = args[1].toLowerCase();
+        SubCommand currentSubCommand = toggleSubCommands.get(currentSubCommandString);
+        if (currentSubCommand == null) {
+            return List.of();
+        }
+        return currentSubCommand.subCommandTabCompletions(sender, args);
     }
 }

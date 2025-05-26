@@ -1,18 +1,18 @@
 package simplexity.villagerinfo.interaction.logic;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import simplexity.villagerinfo.VillagerInfo;
+import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.InteractType;
+import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.InteractTypeToggle;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
 import simplexity.villagerinfo.util.Resolvers;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class PlayerToggle {
-
-    private static final MiniMessage miniMessage = VillagerInfo.getInstance().getMiniMessage();
 
     public static void setPdcToggleDisabled(Player player, NamespacedKey namespacedKey) {
         PersistentDataContainer playerPDC = player.getPersistentDataContainer();
@@ -29,6 +29,21 @@ public class PlayerToggle {
         return playerPDC.getOrDefault(namespacedKey, PersistentDataType.BYTE, (byte) 0) == 0;
     }
 
+    /**
+     * Checks if this interaction type is allowed based on the player's settings
+     *
+     * @param player Player
+     * @param type   InteractType
+     * @return boolean
+     */
+    public static boolean interactTypeAllowed(Player player, InteractType type) {
+        PersistentDataContainer playerPdc = player.getPersistentDataContainer();
+        String typeString = playerPdc.getOrDefault(InteractTypeToggle.interactTypeKey, PersistentDataType.STRING, InteractType.RIGHT_CLICK.getCommandName());
+        InteractType setType = InteractType.getInteractType(typeString);
+        if (setType == null) return false;
+        if (setType.equals(InteractType.BOTH)) return true;
+        return setType.equals(type);
+    }
 
 
     /**

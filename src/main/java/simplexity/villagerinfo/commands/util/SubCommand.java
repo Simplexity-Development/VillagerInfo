@@ -22,6 +22,6 @@ public abstract class SubCommand {
     }
 
     public abstract void execute(CommandSender sender, String[] args);
-    public abstract List<String> subCommandTabCompletions(CommandSender sender);
+    public abstract List<String> subCommandTabCompletions(CommandSender sender, String[] args);
     
 }

@@ -2,7 +2,6 @@ name: VillagerInfo
 version: '${version}'
 main: "simplexity.villagerinfo.VillagerInfo"
 api-version: "1.20.5"
-load: STARTUP
 website: https://github.com/Simplexity-Development/VillagerInfo
 description: A plugin designed to make the information about villagers more available
 authors:
@@ -14,7 +13,6 @@ commands:
     description: Reloads the VillagerInfo configurations
   villagerinfo:
     aliases:
-      - vinfo
       - villinfo
       - vi
     permission: villagerinfo.commands
@@ -50,5 +48,10 @@ permissions:
   villagerinfo.commands.toggle.sound:
     default: true
     description: Allows the player to toggle whether they want VillagerInfo to output on crouch-interact or not
+    children:
+      villagerinfo.commands.toggle: true
+  villagerinfo.commands.toggle.interact-type:
+    default: true
+    description: Allows the player to toggle what type of interaction should trigger output for Villager Info
     children:
       villagerinfo.commands.toggle: true

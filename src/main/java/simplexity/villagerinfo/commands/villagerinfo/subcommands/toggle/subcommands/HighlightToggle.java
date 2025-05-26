@@ -36,7 +36,7 @@ public class HighlightToggle extends SubCommand {
 
 
     @Override
-    public List<String> subCommandTabCompletions(CommandSender sender) {
+    public List<String> subCommandTabCompletions(CommandSender sender, String[] args) {
         return List.of();
     }
 }

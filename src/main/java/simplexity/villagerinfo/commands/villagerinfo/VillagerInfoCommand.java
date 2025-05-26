@@ -60,7 +60,7 @@ public class VillagerInfoCommand implements TabExecutor {
             if (!subCommands.containsKey(args[0])) {
                 return villagerInfoTabComplete;
             }
-            return subCommands.get(args[0]).subCommandTabCompletions(sender);
+            return subCommands.get(args[0]).subCommandTabCompletions(sender, args);
         }
         return villagerInfoTabComplete;
     }
