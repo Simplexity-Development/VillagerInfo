@@ -56,12 +56,9 @@ public class VillagerInfoCommand implements TabExecutor {
         }
         villagerInfoTabComplete.clear();
         HashMap<String, SubCommand> subCommands = SubCommandMaps.getInstance().getVillagerInfoSubCommands();
-        if (args.length == 2) {
-            if (!subCommands.containsKey(args[0])) {
-                return villagerInfoTabComplete;
-            }
-            return subCommands.get(args[0]).subCommandTabCompletions(sender, args);
+        if (!subCommands.containsKey(args[0])) {
+            return villagerInfoTabComplete;
         }
-        return villagerInfoTabComplete;
+        return subCommands.get(args[0]).subCommandTabCompletions(sender, args);
     }
 }
