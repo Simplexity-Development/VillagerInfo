@@ -35,7 +35,8 @@ public class DisplayManager {
         jobBlock = highlightEvent.getHighlightedBlock();
         BlockDisplay blockDisplay = DisplayFactory.summonBlockDisplayEntity(
                 highlightColor,
-                jobBlock);
+                jobBlock,
+                villagerUuid);
         workStationVillagerMap.put(villagerUuid, blockDisplay);
         scheduleRemoval(villagerUuid, workStationVillagerMap);
     }
@@ -60,7 +61,8 @@ public class DisplayManager {
         homeBlock = highlightEvent.getHighlightedBlock();
         BlockDisplay blockDisplay = DisplayFactory.summonBedDisplayEntity(
                 highlightColor,
-                homeBlock);
+                homeBlock,
+                villagerUuid);
         bedVillagerMap.put(villagerUuid, blockDisplay);
         scheduleRemoval(villagerUuid, bedVillagerMap);
     }

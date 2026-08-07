@@ -1,7 +1,6 @@
 package simplexity.villagerinfo;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Villager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.objectweb.asm.commons.Method;
@@ -17,6 +16,7 @@ import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcomma
 import simplexity.villagerinfo.commands.villagerinfo.subcommands.toggle.subcommands.SoundToggle;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
 import simplexity.villagerinfo.configurations.locale.LocaleConfig;
+import simplexity.villagerinfo.interaction.listeners.OrphanedHighlightListener;
 import simplexity.villagerinfo.interaction.listeners.PlayerInteractEntityListener;
 import simplexity.villagerinfo.interaction.listeners.PrePlayerAttackEntityListener;
 import simplexity.villagerinfo.interaction.logic.KillDisplay;
@@ -26,7 +26,6 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class VillagerInfo extends JavaPlugin {
-    private final HashMap<Villager, BlockDisplay> currentlyHighlighted = new HashMap<>();
     private static VillagerInfo instance;
 
     public static VillagerInfo getInstance() {
@@ -47,6 +46,7 @@ public final class VillagerInfo extends JavaPlugin {
         }
         this.getServer().getPluginManager().registerEvents(new PlayerInteractEntityListener(), this);
         this.getServer().getPluginManager().registerEvents(new PrePlayerAttackEntityListener(), this);
+        this.getServer().getPluginManager().registerEvents(new OrphanedHighlightListener(), this);
         try {
             Method.getMethod(Villager.class.getMethod("isLobotomized"));
         } catch (NoSuchMethodException e) {

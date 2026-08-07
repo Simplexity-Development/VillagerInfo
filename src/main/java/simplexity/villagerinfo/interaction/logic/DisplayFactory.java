@@ -2,18 +2,36 @@ package simplexity.villagerinfo.interaction.logic;
 
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import simplexity.villagerinfo.configurations.functionality.VillConfig;
+import simplexity.villagerinfo.util.HighlightType;
+
+import java.util.UUID;
 
 public class DisplayFactory {
+
+    /**
+     * PDC key holding the string form of the villager's UUID a highlight entity was spawned for. Used by
+     * {@code OrphanedHighlightListener} to identify a stale highlight entity purely from world data (e.g.
+     * after a server restart wipes the in-memory tracking maps in {@code DisplayManager}).
+     */
+    public static final NamespacedKey HIGHLIGHT_VILLAGER_KEY = new NamespacedKey("vill-info", "highlight-villager");
+
+    /**
+     * PDC key holding the name of the {@link HighlightType} (workstation or bed) a highlight entity represents.
+     */
+    public static final NamespacedKey HIGHLIGHT_TYPE_KEY = new NamespacedKey("vill-info", "highlight-type");
 
     /**
      * Summons the block display
@@ -21,10 +39,12 @@ public class DisplayFactory {
      *
      * @param highlightColor Color to highlight the block
      * @param highlightBlock Block to highlight
+     * @param villagerUuid   UUID of the villager this highlight belongs to, tagged onto the entity for later orphan cleanup
      */
-    public static BlockDisplay summonBlockDisplayEntity(Color highlightColor, Block highlightBlock) {
+    public static BlockDisplay summonBlockDisplayEntity(Color highlightColor, Block highlightBlock, UUID villagerUuid) {
         BlockDisplay blockDisplay = (BlockDisplay) highlightBlock.getLocation().getWorld().spawnEntity(highlightBlock.getLocation(), EntityType.BLOCK_DISPLAY);
         modifyDisplayEntity(blockDisplay, highlightColor, highlightBlock);
+        tagHighlightEntity(blockDisplay, villagerUuid, HighlightType.WORKSTATION);
         return blockDisplay;
     }
 
@@ -33,10 +53,11 @@ public class DisplayFactory {
      *
      * @param highlightColor color to highlight the block with
      * @param bedBlock       bed block to highlight
+     * @param villagerUuid   UUID of the villager this highlight belongs to, tagged onto the entity for later orphan cleanup
      * @return Block Display that is produced
      */
 
-    public static BlockDisplay summonBedDisplayEntity(Color highlightColor, Block bedBlock) {
+    public static BlockDisplay summonBedDisplayEntity(Color highlightColor, Block bedBlock, UUID villagerUuid) {
         if (!(bedBlock.getBlockData() instanceof Bed bedData)) {
             return null;
         }
@@ -45,7 +66,24 @@ public class DisplayFactory {
         BlockDisplay blockDisplay = (BlockDisplay) bedLocation.getWorld().spawnEntity(bedLocation, EntityType.BLOCK_DISPLAY);
         rotateDisplay(facing, blockDisplay);
         modifyDisplayEntity(blockDisplay, highlightColor, bedBlock);
+        tagHighlightEntity(blockDisplay, villagerUuid, HighlightType.BED);
         return blockDisplay;
+    }
+
+    /**
+     * Tags a spawned highlight entity with the villager UUID and {@link HighlightType} it represents, so it
+     * can be identified as one of ours (and matched back to its tracking map entry, or recognized as an
+     * orphan) purely from world/entity data, independent of the in-memory tracking maps in
+     * {@code DisplayManager}.
+     *
+     * @param blockDisplay the spawned highlight entity to tag
+     * @param villagerUuid UUID of the villager this highlight belongs to
+     * @param highlightType whether this is a workstation or bed highlight
+     */
+    private static void tagHighlightEntity(BlockDisplay blockDisplay, UUID villagerUuid, HighlightType highlightType) {
+        PersistentDataContainer pdc = blockDisplay.getPersistentDataContainer();
+        pdc.set(HIGHLIGHT_VILLAGER_KEY, PersistentDataType.STRING, villagerUuid.toString());
+        pdc.set(HIGHLIGHT_TYPE_KEY, PersistentDataType.STRING, highlightType.name());
     }
 
     /**
