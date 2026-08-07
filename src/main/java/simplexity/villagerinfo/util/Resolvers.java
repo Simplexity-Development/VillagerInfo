@@ -5,9 +5,14 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import simplexity.villagerinfo.VillagerInfo;
 import simplexity.villagerinfo.configurations.locale.MessageInsert;
 import simplexity.villagerinfo.configurations.locale.ServerMessage;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Resolvers {
     MiniMessage miniMessage = VillagerInfo.getInstance().getMiniMessage();
@@ -135,6 +140,29 @@ public class Resolvers {
             }
         }
         return TagResolver.resolver(Placeholder.component("time", finalTimeComponent));
+    }
+
+    /**
+     * Builds the {@code value}/{@code value2} placeholders used by the health hover text, truncating (not
+     * rounding) each value to 1 decimal place. Raw {@link Double} health/attribute values routinely carry long
+     * floating-point tails (e.g. {@code 19.799999999999997}) that are meaningless to display as-is.
+     *
+     * @param currentHealth the entity's current health, or {@code null} if unknown
+     * @param maxHealth     the entity's max health attribute value, or {@code null} if unknown
+     * @return a {@link TagResolver} resolving {@code value} and {@code value2} to truncated health strings
+     */
+    @NotNull
+    public TagResolver healthResolver(@Nullable Double currentHealth, @Nullable Double maxHealth) {
+        return TagResolver.resolver(
+                Placeholder.parsed("value", truncateHealth(currentHealth)),
+                Placeholder.parsed("value2", truncateHealth(maxHealth))
+        );
+    }
+
+    @NotNull
+    private String truncateHealth(@Nullable Double health) {
+        if (health == null) return "0";
+        return BigDecimal.valueOf(health).setScale(1, RoundingMode.DOWN).toPlainString();
     }
 
     public TagResolver booleanStateResolver(boolean state){

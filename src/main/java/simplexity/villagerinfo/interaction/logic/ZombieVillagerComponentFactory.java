@@ -40,8 +40,7 @@ public class ZombieVillagerComponentFactory {
         if (!VillConfig.getInstance().displayHealth()) return null;
         return miniMessage.deserialize(
                 VillagerMessage.VILLAGER_HEALTH.getMessage(),
-                Placeholder.parsed("value", zombieVillagerData.getCurrentHealth().toString()),
-                Placeholder.parsed("value2", zombieVillagerData.getMaxHealth().toString())
+                Resolvers.getInstance().healthResolver(zombieVillagerData.getCurrentHealth(), zombieVillagerData.getMaxHealth())
         );
     }
 
@@ -49,7 +48,7 @@ public class ZombieVillagerComponentFactory {
         if (!VillConfig.getInstance().displayProfession()) return null;
         return miniMessage.deserialize(
                 VillagerMessage.VILLAGER_PROFESSION.getMessage(),
-                Placeholder.parsed("value", zombieVillagerData.getProfession().toString().toLowerCase())
+                Placeholder.parsed("value", zombieVillagerData.getProfession().getKey().getKey().toLowerCase())
         );
     }
 

@@ -81,7 +81,7 @@ public class VillagerComponentFactory {
         );
         return miniMessage.deserialize(
                 VillagerMessage.VILLAGER_PROFESSION.getMessage(),
-                Placeholder.parsed("value", villagerData.getProfession().toString().toLowerCase())
+                Placeholder.parsed("value", villagerData.getProfession().getKey().getKey().toLowerCase())
         );
     }
 
@@ -89,8 +89,7 @@ public class VillagerComponentFactory {
         if (!VillConfig.getInstance().displayHealth()) return null;
         return miniMessage.deserialize(
                 VillagerMessage.VILLAGER_HEALTH.getMessage(),
-                Placeholder.parsed("value", villagerData.getVillagerCurrentHealth().toString()),
-                Placeholder.parsed("value2", villagerData.getVillagerMaxHealth().toString())
+                Resolvers.getInstance().healthResolver(villagerData.getVillagerCurrentHealth(), villagerData.getVillagerMaxHealth())
         );
     }
 
